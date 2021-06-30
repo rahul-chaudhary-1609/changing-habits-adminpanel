@@ -1,0 +1,8 @@
+input[type='radio']:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+/*For Bootstrap*/
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: none !important;
+}
