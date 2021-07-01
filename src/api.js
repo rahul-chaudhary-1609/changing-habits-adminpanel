@@ -7,6 +7,8 @@ export const api = axios.create({
   baseURL: `http://54.158.24.113/changinghabits`,
 });
 
+export const api2 = "http://54.158.24.113/changinghabits";
+
 export const SavePost = (body) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -617,6 +619,28 @@ export const updateStaticContent = (body) => {
         body,
         {
           headers: header(),
+        }
+      );
+
+      if (response.data.success) {
+        resolve(response.data);
+      } else {
+        reject(response.data);
+      }
+    } catch (error) {
+      apiError(error);
+    }
+  });
+};
+
+export const ToggleFaqStatus = (faq_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = fetch(
+        `${api2}/${apiConstant.ToggleFaqStatus}/${faq_id}`,
+        {
+          headers: header(),
+          method: "PUT",
         }
       );
 

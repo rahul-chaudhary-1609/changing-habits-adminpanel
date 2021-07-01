@@ -25,6 +25,7 @@ const apiConstant = {
   GetFaqById: "/api/v1/admin/getFaq",
   EditFaqs: "/api/v1/admin/editFaq",
   addFaq: "/api/v1/admin/addFaq",
+  ToggleFaqStatus: "/api/v1/admin/toggleFaqStatus",
 };
 
 export default apiConstant;

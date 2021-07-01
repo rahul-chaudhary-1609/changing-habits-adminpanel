@@ -16,7 +16,6 @@ const ViewStaticContent = () => {
           const Details = getFileContent(
             data.staticContentDetails.page_url
           ).then((Details) => {
-            debugger;
             document.getElementById("doc").innerHTML = Details;
             console.log(Details);
           });
