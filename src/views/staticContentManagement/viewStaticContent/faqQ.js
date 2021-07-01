@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Collapse } from "react-collapse";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
-import { DeleteFaq, getFaqs } from "../../../api";
+import { DeleteFaq, getFaqs, ToggleFaqStatus } from "../../../api";
 import { useHistory, useParams } from "react-router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { freeSet, cibWindows } from "@coreui/icons";
 import _ from "lodash";
 import {
   CPagination,
@@ -15,7 +14,10 @@ import {
   CModalFooter,
   CModalBody,
   CModalTitle,
+  CSwitch,
+  CTooltip,
 } from "@coreui/react";
+import CIcon from "@coreui/icons-react";
 
 const FAQS = () => {
   const history = useHistory();
@@ -30,10 +32,14 @@ const FAQS = () => {
   const [deleteModal, setDeleteModal] = useState(false);
 
   const [questionId, setQuestionId] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [enableModal, setEnableModal] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const [show, setShow] = useState(null);
   const [error, setError] = useState(null);
   const [pageSize, setPageSize] = useState(10);
+  const [active, setActive] = useState(null);
   const [activePage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
   const [startId, setStartId] = useState(0);
@@ -46,12 +52,29 @@ const FAQS = () => {
     setStatusOpened(updatedStatus);
   };
 
+  const toggleEnable = (id, status) => {
+    setUserId(id);
+    setActive(status);
+    setEnableModal(!enableModal);
+  };
+
+  const handleEnable = async () => {
+    try {
+      setEnableModal(!enableModal);
+      await ToggleFaqStatus(userId);
+      setRefresh(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     handleQuestions();
-  }, [topicid, activePage]);
+    debugger;
+  }, [refresh, activePage]);
 
   const handleQuestions = async () => {
-    const data = await getFaqs(activePage);
+    const data = await getFaqs(activePage ? activePage : 1);
     if (data.status == 200) {
       setError(null);
       let rows = data.faqsData.rows;
@@ -105,6 +128,32 @@ const FAQS = () => {
           </CButton>
         </CModalFooter>
       </CModal>
+
+      <CModal
+        show={enableModal}
+        centered={true}
+        color="warning"
+        onClose={setEnableModal}
+        backdrop={true}
+        style={{ fontFamily: "Poppins" }}
+      >
+        <CModalHeader style={{ height: "3rem" }}>
+          <CModalTitle>{active ? "Disable Faq?" : "Enable Faq?"}</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          {active
+            ? "Are you sure you want to disable this Faq?"
+            : "Are you sure you want to enable this Faq?"}
+        </CModalBody>
+        <CModalFooter style={{ height: "4rem" }}>
+          <CButton color="success" onClick={handleEnable}>
+            Yes
+          </CButton>{" "}
+          <CButton color="secondary" onClick={() => setEnableModal(false)}>
+            Cancel
+          </CButton>
+        </CModalFooter>
+      </CModal>
       <div
         className="main-content pb-16 md:pb-5 flex-1 pt-20 px-2"
         style={{ height: "100vh" }}
@@ -112,7 +161,7 @@ const FAQS = () => {
         <div id="recipients" className="p-4 md:p-8 mt-6 lg:mt-0 rounded  ">
           <h1 className="text-3xl">FAQs</h1>
           <br />
-          <div style={{ marginLeft: "80%", marginTop: "-88px" }}>
+          <div style={{ marginLeft: "76%", marginTop: "-88px" }}>
             <CButton
               style={{ height: "3rem" }}
               onClick={() => history.goBack()}
@@ -197,26 +246,58 @@ const FAQS = () => {
                             >
                               <p style={{ fontSize: "17px" }}>{ques.answer}</p>
                               <div style={{ textAlign: "right" }}>
-                                <FontAwesomeIcon
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() =>
-                                    history.push(
-                                      `/viewStaticContent/${id}/faqs/${ques.id}/editFaqs`
-                                    )
+                                <CTooltip
+                                  content={"edit Faq"}
+                                  placement={"top-start"}
+                                >
+                                  <CIcon
+                                    onClick={() =>
+                                      history.push(
+                                        `/viewStaticContent/${id}/faqs/${ques.id}/editFaqs`
+                                      )
+                                    }
+                                    style={{
+                                      color: "red",
+                                      cursor: "pointer",
+                                      marginBottom: "10px",
+                                    }}
+                                    size="lg"
+                                    content={freeSet.cilPencil}
+                                  />
+                                </CTooltip>
+
+                                <CTooltip
+                                  content={`Delete ${ques.id} Faq
+                          `}
+                                  placement={"top-start"}
+                                  interactive={true}
+                                  trigger="mouseenter"
+                                >
+                                  <CIcon
+                                    onClick={() => {
+                                      setShow("question");
+                                      setDeleteModal(true);
+                                      setQuestionId(ques.id);
+                                    }}
+                                    size="lg"
+                                    style={{
+                                      color: "red",
+                                      cursor: "pointer",
+                                      outline: "none",
+                                      boxShadow: "none",
+                                      marginBottom: "10px",
+                                    }}
+                                    content={freeSet.cilTrash}
+                                  />
+                                </CTooltip>
+                                <CSwitch
+                                  onChange={() =>
+                                    toggleEnable(ques.id, ques.status)
                                   }
-                                  className="text-red-600 trash w-5 h-5"
-                                  color="red"
-                                  icon={faPencilAlt}
-                                />
-                                <FontAwesomeIcon
-                                  className="text-red-600 trash w-5 h-5 ml-4"
-                                  color="red"
-                                  onClick={() => {
-                                    setShow("question");
-                                    setDeleteModal(true);
-                                    setQuestionId(ques.id);
-                                  }}
-                                  icon={faTrashAlt}
+                                  size="sm"
+                                  variant={"3d"}
+                                  color={"success"}
+                                  checked={ques.status}
                                 />
                               </div>
                             </div>

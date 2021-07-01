@@ -7,6 +7,8 @@ export const api = axios.create({
   baseURL: `http://54.158.24.113/changinghabits`,
 });
 
+export const api2 = "http://54.158.24.113/changinghabits";
+
 export const SavePost = (body) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -95,9 +97,7 @@ export const UpdateEmailOrPhone = (userId, email) => {
 export const UpdateProfile = (bodyFormData) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(bodyFormData);
-
-      const response = await api.post(`${apiConstant.UpdateProfile}`,
+     const response = await api.post(`${apiConstant.UpdateProfile}`,
         JSON.stringify(bodyFormData),
         {
           headers: {
@@ -620,13 +620,35 @@ export const updateStaticContent = (body) => {
     try {
       const response = await api.put(
         `${apiConstant.updateStaticContent}`,
-        JSON.stringify(body),
+       JSON.stringify(body),
         {
           headers: {
             Accept: "application/json",
             Authorization: store.getState().auth.isSignedIn,
             "Content-Type": "application/json",
           },
+        }
+      );
+
+      if (response.data.success) {
+        resolve(response.data);
+      } else {
+        reject(response.data);
+      }
+    } catch (error) {
+      apiError(error);
+    }
+  });
+};
+
+export const ToggleFaqStatus = (faq_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = fetch(
+        `${api2}/${apiConstant.ToggleFaqStatus}/${faq_id}`,
+        {
+          headers: header(),
+          method: "PUT",
         }
       );
 
