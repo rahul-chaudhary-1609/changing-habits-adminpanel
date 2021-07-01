@@ -2,24 +2,20 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import { getStaticContentDetails, getFileContent } from "../../../api";
 import { CButton } from "@coreui/react";
+import StaticContentFrame from "../getFrame";
+import apiConstant from "src/apiConstants";
 const ViewStaticContent = () => {
   const history = useHistory();
   const params = useParams();
 
   const [staticContentDetails, setStaticContentDetails] = useState([]);
-
+let [srcURL, setSrcURL] = useState(null); 
   useEffect(() => {
     const getDetails = async () => {
       try {
-        const data = getStaticContentDetails(Number(params.id)).then((data) => {
+        getStaticContentDetails(Number(params.id)).then((data) => {
           setStaticContentDetails(data.staticContentDetails);
-          const Details = getFileContent(
-            data.staticContentDetails.page_url
-          ).then((Details) => {
-            debugger;
-            document.getElementById("doc").innerHTML = Details;
-            console.log(Details);
-          });
+          setSrcURL(`${apiConstant.baseURL}/${apiConstant.getTextFromHTML}?file_url=${data.staticContentDetails.page_url}`)
         });
       } catch (error) {
         console.log(error);
@@ -69,16 +65,7 @@ const ViewStaticContent = () => {
               <div className="flex mt-10 ">
                 <div className="flex flex-col ml-40">
                   <br />
-                  <div
-                    id="doc"
-                    style={{
-                      maxHeight: "230px",
-                      height: "300px",
-                      overflow: "auto",
-                      border: "1px solid black",
-                      padding: "10px",
-                    }}
-                  ></div>
+                  <StaticContentFrame srcURL={ srcURL}/>
                 </div>
               </div>
             </div>

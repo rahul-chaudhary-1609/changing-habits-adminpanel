@@ -8,11 +8,14 @@ import {
 } from "../../../api";
 import Loader from "../../../globalComponent/loader";
 import { CButton } from "@coreui/react";
+import StaticContentFrame from "../getFrame";
+import apiConstant from "src/apiConstants";
 
 const EditStaticContent = () => {
   const history = useHistory();
   const params = useParams();
   const [staticContentDetails, setStaticContentDetails] = useState(null);
+  let [srcURL, setSrcURL] = useState(null);
 
   const [error, setError] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
@@ -23,15 +26,12 @@ const EditStaticContent = () => {
   useEffect(() => {
     const getContent = async () => {
       try {
-        const data = getStaticContentDetails(Number(params.id)).then((data) => {
-          const Details = getFileContent(
-            data.staticContentDetails.page_url
-          ).then((Details) => {
-            document.getElementById("doc").innerHTML = Details;
-            console.log(Details);
-          });
-
+        getStaticContentDetails(Number(params.id)).then((data) => {
+          
           setStaticContentDetails(data.staticContentDetails);
+          setSrcURL(`${apiConstant.baseURL}/${apiConstant.getTextFromHTML}?file_url=${data.staticContentDetails.page_url}`)
+          
+          
         });
       } catch (error) {
         console.log(error);
@@ -58,22 +58,23 @@ const EditStaticContent = () => {
     }
   };
 
+  
+
   const updateContent = (url) => {
     try {
-      const Details = getFileContent(url).then((Details) => {
-        document.getElementById("doc").innerHTML = Details;
-        console.log(Details);
-      });
+      setSrcURL(`${apiConstant.baseURL}/${apiConstant.getTextFromHTML}?file_url=${url}`)
+          
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleSubmitUpdatedFile = async () => {
-    var data = new FormData();
-
-    data.append("content_id", params.id);
-    data.append("page_url", image_url);
+    
+    let data = {
+      content_id: params.id,
+      page_url:image_url,
+    }
     try {
       const res = await updateStaticContent(data);
       if (res.status == 200) {
@@ -155,19 +156,9 @@ const EditStaticContent = () => {
               </div>
               <div className="flex mt-10 ">
                 <div className="flex flex-col ml-40">
-                  <div
-                    id="doc"
-                    style={{
-                      marginLeft: "70px",
-                      fontSize: "15px",
-                      marginLeft: "10px",
-                      maxHeight: "200px",
-                      height: "300px",
-                      overflow: "auto",
-                      padding: "10px",
-                      border: "1px solid black",
-                    }}
-                  ></div>
+
+                    <StaticContentFrame srcURL={ srcURL}/>
+                    
                   <div style={{ display: "flex" }}>
                     <label for="upload" className="w-24 block ">
                       <div className="w-full px-2 py-1 ml-5 my-2 flex justify-around items-center bg-gray-400 rounded-lg text-white">
