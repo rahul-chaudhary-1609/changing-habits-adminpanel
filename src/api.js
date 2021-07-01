@@ -129,6 +129,7 @@ export const forgetpasswordApi = (email) => {
       }
     } catch (error) {
       apiError(error);
+      reject("An account with given info does not exist");
     }
   });
 };
@@ -209,7 +210,7 @@ export const signIn = (formValues) => {
       }
     } catch (error) {
       apiError(error);
-      reject("Something went wrong");
+      reject("Invalid Credentials entered");
     }
   });
 };
