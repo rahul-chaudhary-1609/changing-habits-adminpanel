@@ -23,6 +23,7 @@ import {
 } from "@coreui/react";
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
+import moment from "moment";
 
 import { GetRecipeList, ChangeUserStatus, DeleteRecipe } from "../../api";
 
@@ -55,7 +56,7 @@ const fields = [
     _style: { fontFamily: "Poppins" },
   },
   {
-    key: "name",
+    key: "PostedBy",
     label: "Posted By",
     _style: { fontFamily: "Poppins" },
   },
@@ -165,7 +166,7 @@ const Recipes = () => {
           item._classes = "catTableItem";
 
           if (item.created_at) {
-            item.created_at = item.created_at.slice(0, 10);
+            item.created_at = moment(item.created_at).format("LLL");
           }
           return item;
         });
@@ -256,7 +257,7 @@ const Recipes = () => {
         <CCard>
           <CCardHeader style={{ fontFamily: "Lato" }}>
             <h2>
-              <strong>Recipes Management</strong>
+              <strong>Recipe Management</strong>
             </h2>
             <CButton
               style={{ width: "5rem", marginLeft: "90%" }}
@@ -326,6 +327,9 @@ const Recipes = () => {
               }
               scopedSlots={{
                 email: (item) => <td>{item.email}</td>,
+                PostedBy: (item) => (
+                  <td>{item.role == 1 ? `App user:${item.name}` : "Admin"}</td>
+                ),
                 recipeType: (item) => (
                   <td>{item.recipe_type == 1 ? "Veg" : "Non Veg"}</td>
                 ),

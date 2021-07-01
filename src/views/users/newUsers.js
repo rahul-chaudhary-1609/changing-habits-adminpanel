@@ -24,6 +24,7 @@ import {
 } from "@coreui/react";
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
+import moment from "moment";
 
 import { GetUserList, ChangeUserStatus } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -160,7 +161,7 @@ const Users = () => {
           item._classes = "catTableItem";
 
           if (item.created_at) {
-            item.created_at = item.created_at.slice(0, 10);
+            item.created_at = moment(item.created_at).format("LLL");
           }
           if (item.dateOfBirth) {
             item.dateOfBirth = item.dateOfBirth.slice(0, 10);

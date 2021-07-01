@@ -12,7 +12,6 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
-  CModalHeader,
   CRow,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
@@ -30,6 +29,7 @@ export default function Forgetpassword() {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState();
+
   const onSubmit = async (values, actions) => {
     setLoading(true);
     try {
