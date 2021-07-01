@@ -95,12 +95,18 @@ export const UpdateEmailOrPhone = (userId, email) => {
 export const UpdateProfile = (bodyFormData) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await api({
-        method: "POST",
-        url: `${apiConstant.UpdateProfile}`,
-        data: bodyFormData,
-        headers: header(),
-      });
+      console.log(bodyFormData);
+
+      const response = await api.post(`${apiConstant.UpdateProfile}`,
+        JSON.stringify(bodyFormData),
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: store.getState().auth.isSignedIn,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.data.success) {
         resolve(response.data);
@@ -614,9 +620,13 @@ export const updateStaticContent = (body) => {
     try {
       const response = await api.put(
         `${apiConstant.updateStaticContent}`,
-        body,
+        JSON.stringify(body),
         {
-          headers: header(),
+          headers: {
+            Accept: "application/json",
+            Authorization: store.getState().auth.isSignedIn,
+            "Content-Type": "application/json",
+          },
         }
       );
 
