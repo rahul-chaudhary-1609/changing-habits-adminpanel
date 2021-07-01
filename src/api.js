@@ -97,12 +97,17 @@ export const UpdateEmailOrPhone = (userId, email) => {
 export const UpdateProfile = (bodyFormData) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await api({
-        method: "POST",
-        url: `${apiConstant.UpdateProfile}`,
-        data: bodyFormData,
-        headers: header(),
-      });
+      const response = await api.post(
+        `${apiConstant.UpdateProfile}`,
+        JSON.stringify(bodyFormData),
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: store.getState().auth.isSignedIn,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.data.success) {
         resolve(response.data);
@@ -129,7 +134,6 @@ export const forgetpasswordApi = (email) => {
       }
     } catch (error) {
       apiError(error);
-      reject("An account with given info does not exist");
     }
   });
 };
@@ -210,7 +214,7 @@ export const signIn = (formValues) => {
       }
     } catch (error) {
       apiError(error);
-      reject("Invalid Credentials entered");
+      reject("Something went wrong");
     }
   });
 };
@@ -617,9 +621,13 @@ export const updateStaticContent = (body) => {
     try {
       const response = await api.put(
         `${apiConstant.updateStaticContent}`,
-        body,
+        JSON.stringify(body),
         {
-          headers: header(),
+          headers: {
+            Accept: "application/json",
+            Authorization: store.getState().auth.isSignedIn,
+            "Content-Type": "application/json",
+          },
         }
       );
 

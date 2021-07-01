@@ -72,23 +72,18 @@ export default function EditAdmin() {
   };
 
   const onSubmit = async (values) => {
-    const bodyFormData = new FormData();
+    //const bodyFormData = new FormData();
+    let bodyFormData = {};
     formdata.append("image", image, image.name);
     formdata.append("folderName", "user");
     try {
       const res = await uploadImage(formdata);
       if (res.status == 200) {
-        bodyFormData.append("profile_picture_url", res.data.image_url);
+        bodyFormData.profile_picture_url=res.data.image_url
       }
-      bodyFormData.append("name", values.name);
-      bodyFormData.append(
-        "email",
-        values.newemail ? values.newemail : values.email
-      );
-      bodyFormData.append(
-        "phone",
-        values.newPhone ? values.newPhone : values.phone
-      );
+      
+      bodyFormData.name = values.name;
+      //bodyFormData.email = values.newemail ? values.newemail : values.email;
 
       try {
         setLoading(true);

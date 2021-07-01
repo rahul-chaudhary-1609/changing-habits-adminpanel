@@ -1,4 +1,5 @@
 const apiConstant = {
+  baseURL:"http://54.158.24.113/changinghabits",
   EditUserDetails: `api/v1/admin/editUserDetails`,
   GetUserList: `/api/v1/admin/listUsers?page=`,
   ChangeUserStatus: `/api/v1/admin/toggleUserStatus`,
@@ -25,6 +26,7 @@ const apiConstant = {
   GetFaqById: "/api/v1/admin/getFaq",
   EditFaqs: "/api/v1/admin/editFaq",
   addFaq: "/api/v1/admin/addFaq",
+  getTextFromHTML: "/api/v1/admin/htmlFileToText",
   ToggleFaqStatus: "/api/v1/admin/toggleFaqStatus",
 };
 
