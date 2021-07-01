@@ -12,7 +12,7 @@ import {
   CSidebarNavItem,
 } from "@coreui/react";
 import { setSideBar } from "../actions/index";
-import spoilerLogo from "../assets/icons/dish.jpeg";
+import changingHabitsLogo from "../assets/icons/dish.jpeg";
 import biglogo from "../assets/icons/dish.jpeg";
 import navigation from "./_nav";
 
@@ -31,7 +31,7 @@ const TheSidebar = () => {
         />
         <img
           className="c-sidebar-brand-minimized"
-          src={spoilerLogo}
+          src={changingHabitsLogo}
           alt="admin"
           height={35}
         />
