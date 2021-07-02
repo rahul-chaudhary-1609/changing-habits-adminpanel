@@ -38,12 +38,9 @@ const FAQS = () => {
 
   const [show, setShow] = useState(null);
   const [error, setError] = useState(null);
-  const [pageSize, setPageSize] = useState(10);
   const [active, setActive] = useState(null);
   const [activePage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
-  const [startId, setStartId] = useState(0);
-  let endId = qus && (startId < 0 ? 0 : startId + qus.length);
 
   const handleCollapse = (e, id) => {
     // let updatedStatus = { ...statusOpened };
@@ -70,7 +67,6 @@ const FAQS = () => {
 
   useEffect(() => {
     handleQuestions();
-    debugger;
   }, [refresh, activePage]);
 
   const handleQuestions = async () => {
@@ -83,8 +79,7 @@ const FAQS = () => {
       setStatusOpened(status);
       setQus(data.faqsData.rows);
       setTotalItems(data.faqsData.count);
-      let newStartId = pageSize * (activePage - 1);
-      setStartId(newStartId);
+      let newStartId = 10 * (activePage - 1);
     }
   };
 
@@ -307,9 +302,13 @@ const FAQS = () => {
                     );
                   })
                 )}
-                <br />
-                (showing {startId < 0 ? 0 : startId + 1} - {endId} of{" "}
-                {totalItems})
+                <br /> (showing{" "}
+                {qus.length < 1
+                  ? 0
+                  : qus.length < 10
+                  ? 1
+                  : 10 * (activePage - 1) + 1}{" "}
+                - {qus.length} of {totalItems})
                 <div style={{ textAlign: "right" }}>
                   <CPagination
                     activePage={activePage}

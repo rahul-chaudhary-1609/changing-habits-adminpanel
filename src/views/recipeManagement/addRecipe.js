@@ -93,7 +93,6 @@ export default function AddRecipe() {
         const result = await GetRecipeDetail(params.id);
         if (result) {
           setShow(result.recipeDetails);
-          debugger;
         }
       } catch (error) {
         console.log(error);
