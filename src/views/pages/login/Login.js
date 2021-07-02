@@ -33,15 +33,17 @@ const Login = () => {
   const location = useLocation();
 
   const initialValues = {
-    email: location.state && location.state.email ? location.state.email : null,
-    phone: location.state && location.state.phone ? location.state.phone : null,
+    email_phone:
+      location.state && location.state.email_phone
+        ? location.state.email_phone
+        : null,
     password: "",
     error: "",
   };
 
   const onSubmit = async (values, actions) => {
     try {
-      if (values.email || values.phone) {
+      if (values.email_phone) {
         setLoading(true);
         const res = await signIn(values);
 
@@ -57,7 +59,7 @@ const Login = () => {
       } else setMessage("Please enter Email or Phone Number");
     } catch (error) {
       setLoading(false);
-      actions.setFieldError("error", error);
+      // actions.setFieldError("error", error);
       console.log(error);
     }
   };
@@ -101,37 +103,20 @@ const Login = () => {
                       </CInputGroupPrepend>
                       <CInput
                         type="text"
-                        placeholder="Email address"
-                        autoComplete="email"
-                        id="email"
-                        name="email"
+                        placeholder="Email/Phone"
+                        autoComplete="email_phone"
+                        id="email_phone"
+                        name="email_phone"
                         onBlur={formik.handleBlur}
-                        value={formik.values.email}
+                        value={formik.values.email_phone}
                         onChange={formik.handleChange}
                       />
                     </CInputGroup>
-                    {formik.touched.email && formik.errors.email ? (
+                    {formik.touched.email_phone && formik.errors.email_phone ? (
                       <div className="email-validate">
-                        {formik.errors.email}
+                        {formik.errors.email_phone}
                       </div>
                     ) : null}
-                    <CInputGroup className="mb-3">
-                      <CInputGroupPrepend>
-                        <CInputGroupText>
-                          <CIcon name="cil-phone" />
-                        </CInputGroupText>
-                      </CInputGroupPrepend>
-                      <CInput
-                        type="text"
-                        placeholder="Phone"
-                        autoComplete="phone"
-                        id="phone"
-                        name="phone"
-                        onBlur={formik.handleBlur}
-                        value={formik.values.phone}
-                        onChange={formik.handleChange}
-                      />
-                    </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
                         <CInputGroupText>

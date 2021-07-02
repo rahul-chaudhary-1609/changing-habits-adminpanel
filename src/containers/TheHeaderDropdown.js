@@ -54,6 +54,7 @@ const TheHeaderDropdown = () => {
           {data ? (
             <CImg
               src={data}
+              style={{ height: "40px", width: "40px" }}
               className="c-avatar-img"
               alt="admin@bootstrapmaster.com"
             />

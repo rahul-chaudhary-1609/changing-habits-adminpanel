@@ -49,9 +49,8 @@ const FAQS = () => {
     setStatusOpened(updatedStatus);
   };
 
-  const toggleEnable = (id, status) => {
+  const toggleEnable = (id) => {
     setUserId(id);
-    setActive(status);
     setEnableModal(!enableModal);
   };
 
@@ -59,7 +58,7 @@ const FAQS = () => {
     try {
       setEnableModal(!enableModal);
       await ToggleFaqStatus(userId);
-      setRefresh(true);
+      setRefresh(!refresh);
     } catch (error) {
       console.log(error);
     }
@@ -70,13 +69,15 @@ const FAQS = () => {
   }, [refresh, activePage]);
 
   const handleQuestions = async () => {
+    if (refresh) setRefresh(!refresh);
+
     const data = await getFaqs(activePage ? activePage : 1);
     if (data.status == 200) {
       setError(null);
       let rows = data.faqsData.rows;
-      let status = {};
-      rows.forEach(({ id }) => (status[id] = false));
-      setStatusOpened(status);
+      let Status = {};
+      rows.forEach(({ id }) => (Status[id] = false));
+      setStatusOpened(Status);
       setQus(data.faqsData.rows);
       setTotalItems(data.faqsData.count);
       let newStartId = 10 * (activePage - 1);
@@ -286,9 +287,7 @@ const FAQS = () => {
                                   />
                                 </CTooltip>
                                 <CSwitch
-                                  onChange={() =>
-                                    toggleEnable(ques.id, ques.status)
-                                  }
+                                  onChange={() => toggleEnable(ques.id)}
                                   size="sm"
                                   variant={"3d"}
                                   color={"success"}
@@ -305,7 +304,7 @@ const FAQS = () => {
                 <br /> (showing{" "}
                 {qus.length < 1
                   ? 0
-                  : qus.length < 10
+                  : qus.length < 11
                   ? 1
                   : 10 * (activePage - 1) + 1}{" "}
                 - {qus.length} of {totalItems})

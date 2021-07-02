@@ -201,8 +201,7 @@ export const ChangePasswordApi = (oldPassword, newPassword, id) => {
 
 export const signIn = (formValues) => {
   let data = {};
-  if (formValues.email) data.email = formValues.email;
-  if (formValues.phone) data.phone = formValues.phone;
+  if (formValues.email_phone) data.email_phone = formValues.email_phone;
   data.password = formValues.password;
   return new Promise(async (resolve, reject) => {
     try {
@@ -654,7 +653,7 @@ export const ToggleFaqStatus = (faq_id) => {
         }
       );
 
-      if (response.data.success) {
+      if (response) {
         resolve(response.data);
       } else {
         reject(response.data);
