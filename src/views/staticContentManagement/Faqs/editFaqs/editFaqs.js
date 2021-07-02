@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import { getFaqById, editFaqs } from "../../../../api";
-import { useSelector } from "react-redux";
 import Loader from "../../../../globalComponent/loader";
 import { CButton } from "@coreui/react";
 
@@ -42,10 +41,9 @@ const EditFqs = () => {
 
   const handleSubmit = () => {
     if (!handleValidation()) {
-      const bodyData = new FormData();
-
-      bodyData.append("question", faqs.question);
-      bodyData.append("answer", faqs.answer);
+      let bodyData = {};
+      bodyData.question = faqs.question;
+      bodyData.answer = faqs.answer;
 
       const res = editFaqs(faqs.id, bodyData)
         .then((res) => {

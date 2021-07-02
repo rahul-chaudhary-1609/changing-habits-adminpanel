@@ -68,7 +68,6 @@ export default function EditUser(props) {
     try {
       const res = await uploadImage(data);
       if (res.status == 200) {
-        debugger;
         setImageUrl(res.image_url);
       }
     } catch (error) {

@@ -492,7 +492,7 @@ export const editFaqs = (faq_id, body) => {
     try {
       const response = await api.put(
         `${apiConstant.EditFaqs}/${faq_id}`,
-        body,
+        JSON.stringify(body),
         {
           headers: {
             Authorization: store.getState().auth.isSignedIn,
