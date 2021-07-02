@@ -654,7 +654,7 @@ export const ToggleFaqStatus = (faq_id) => {
         }
       );
 
-      if (response.data.success) {
+      if (response) {
         resolve(response.data);
       } else {
         reject(response.data);
