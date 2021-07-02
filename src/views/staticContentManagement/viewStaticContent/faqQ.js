@@ -304,7 +304,7 @@ const FAQS = () => {
                 <br /> (showing{" "}
                 {qus.length < 1
                   ? 0
-                  : qus.length < 10
+                  : qus.length < 11
                   ? 1
                   : 10 * (activePage - 1) + 1}{" "}
                 - {qus.length} of {totalItems})
