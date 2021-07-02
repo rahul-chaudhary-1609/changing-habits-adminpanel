@@ -79,9 +79,9 @@ export default function EditAdmin() {
     try {
       const res = await uploadImage(formdata);
       if (res.status == 200) {
-        bodyFormData.profile_picture_url=res.data.image_url
+        bodyFormData.profile_picture_url = res.data.image_url;
       }
-      
+
       bodyFormData.name = values.name;
       //bodyFormData.email = values.newemail ? values.newemail : values.email;
 
@@ -297,13 +297,13 @@ export default function EditAdmin() {
                     value={formik.values.email}
                     onChange={formik.handleChange}
                   />
-                  <CButton
+                  {/* <CButton
                     onClick={() => setEmailModal(!emailModal)}
                     style={{ color: "white", marginTop: "1rem", width: "8rem" }}
                     color="warning"
                   >
                     Update Email
-                  </CButton>
+                  </CButton> */}
                 </CCol>
               </CFormGroup>
               <CFormGroup row>
@@ -319,13 +319,13 @@ export default function EditAdmin() {
                     value={formik.values.phone}
                     onChange={formik.handleChange}
                   />
-                  <CButton
+                  {/* <CButton
                     onClick={() => setPhoneModal(!phoneModal)}
                     style={{ color: "white", marginTop: "1rem", width: "8rem" }}
                     color="warning"
                   >
                     Update Phone
-                  </CButton>
+                  </CButton> */}
                 </CCol>
               </CFormGroup>
               <CCardFooter
