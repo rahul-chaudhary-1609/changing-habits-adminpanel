@@ -214,7 +214,7 @@ export const signIn = (formValues) => {
       }
     } catch (error) {
       apiError(error);
-      reject("Invalid Credentials Entered!!");
+      reject("Invalid Credentials Entered");
     }
   });
 };

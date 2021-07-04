@@ -59,7 +59,7 @@ const Login = () => {
       } else setMessage("Please enter Email or Phone Number");
     } catch (error) {
       setLoading(false);
-      // actions.setFieldError("error", error);
+      actions.setFieldError("error", error);
       console.log(error);
     }
   };
@@ -138,6 +138,35 @@ const Login = () => {
                         {formik.errors.password}
                       </div>
                     ) : null}
+                    <CRow>
+                      <CCol xs="3">
+                        <CInputGroup
+                          style={{
+                            marginTop: "-8px",
+                            paddingBottom: "12px",
+                          }}
+                        >
+                          <CInput
+                            type="checkbox"
+                            placeholder="Remember Me"
+                            name="RememberMe"
+                            bsClass=""
+                            onBlur={formik.handleBlur}
+                            value={formik.values.RememberMe}
+                            onChange={formik.handleChange}
+                          />
+                          <p
+                            style={{
+                              paddingTop: "8px",
+                              paddingLeft: "5px",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Remember Me
+                          </p>
+                        </CInputGroup>
+                      </CCol>
+                    </CRow>
                     {formik.errors.error ? (
                       <div className="email-validate">
                         {formik.errors.error}
