@@ -20,6 +20,7 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
+  CSelect,
 } from "@coreui/react";
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
@@ -96,6 +97,22 @@ const Recipes = () => {
   const [enableModal, setEnableModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [recipeType, setRecipeType] = useState(null);
+
+  var recipe_type = [
+    {
+      label: "Select recipe type",
+      value: null,
+    },
+    {
+      label: "Veg",
+      value: 1,
+    },
+    {
+      label: "Non Veg",
+      value: 2,
+    },
+  ];
 
   const pageChange = (newPage) => {
     let newPage1 = newPage;
@@ -153,14 +170,21 @@ const Recipes = () => {
     if (newPage === 0) {
       newPage = 1;
     }
-    history.push(`/recipeManagement?search=&&page=${newPage}`);
+    history.push(`/recipeManagement?&page=${newPage}`);
   };
 
   useEffect(() => {
     const getData = async () => {
       try {
         setLoading(true);
-        const data = await GetRecipeList(currentPage, currentPageSearch);
+
+        const data = recipeType
+          ? await GetRecipeList(
+              currentPage,
+              currentPageSearch,
+              Number(recipeType)
+            )
+          : await GetRecipeList(currentPage, currentPageSearch);
         setLoading(false);
         data.rows.map((item) => {
           item._classes = "catTableItem";
@@ -182,7 +206,7 @@ const Recipes = () => {
     getData();
 
     currentPage !== page && setPage(currentPage);
-  }, [currentPage, currentPageSearch, refresh, page]);
+  }, [currentPage, currentPageSearch, refresh, page, recipeType]);
 
   return (
     <CRow>
@@ -281,7 +305,7 @@ const Recipes = () => {
               }
               clickableRows
               overTableSlot={
-                <CCol style={{ marginBottom: "1rem", display: "flex" }} md="5">
+                <CCol style={{ marginBottom: "1rem", display: "flex" }}>
                   <CInputGroup>
                     <CInputGroupPrepend>
                       <CInputGroupText
@@ -316,6 +340,23 @@ const Recipes = () => {
                       Reset
                     </CButton>
                   </CInputGroup>
+                  <CInputGroup>
+                    <CSelect
+                      onChange={(e) => {
+                        setRecipeType(e.target.value);
+                      }}
+                      custom
+                      value={recipeType}
+                      name="recipe_type"
+                      id="recipe_type"
+                    >
+                      {recipe_type.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </CSelect>
+                  </CInputGroup>
                 </CCol>
               }
               underTableSlot={
@@ -328,7 +369,11 @@ const Recipes = () => {
               scopedSlots={{
                 email: (item) => <td>{item.email}</td>,
                 PostedBy: (item) => (
-                  <td>{item.role == 1 ? `App user:${item.name}` : "Admin"}</td>
+                  <td>
+                    {item.role == 1
+                      ? `App user : ${item.name}`
+                      : `Admin : ${item.name}`}
+                  </td>
                 ),
                 recipeType: (item) => (
                   <td>{item.recipe_type == 1 ? "Veg" : "Non Veg"}</td>

@@ -19,6 +19,7 @@ import {
 import CIcon from "@coreui/icons-react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
+import { store } from "../../../store";
 
 import { loginValidation } from "../../../reusable/validations/loginValidations";
 
@@ -52,6 +53,9 @@ const Login = () => {
             type: "SIGN_IN",
             payload: res,
           });
+          if (values.RememberMe) {
+            sessionStorage.setItem("jwt", store.getState().auth.isSignedIn);
+          }
           setLoading(false);
           setMessage(null);
           history.push("/users");
@@ -162,7 +166,7 @@ const Login = () => {
                               fontWeight: "bold",
                             }}
                           >
-                            Remember Me
+                            Remember me
                           </p>
                         </CInputGroup>
                       </CCol>

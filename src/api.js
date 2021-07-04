@@ -9,6 +9,10 @@ export const api = axios.create({
 
 export const api2 = "http://54.158.24.113/changinghabits";
 
+const token = sessionStorage.getItem("jwt")
+  ? sessionStorage.getItem("jwt")
+  : store.getState().auth.isSignedIn;
+
 export const SavePost = (body) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -51,8 +55,6 @@ export const EditPost = (recipe_id, body) => {
 
 export const GetUserProfile = () => {
   return new Promise(async (resolve, reject) => {
-    // console.log(id, token);
-
     try {
       const response = await api.get(`${apiConstant.GetUserProfile}`, {
         headers: header(),
@@ -226,7 +228,6 @@ export const addUserList = (data) => {
     country_code: data.country_code,
     phone_no: data.phone_no,
   };
-  const token = store.getState().auth.isSignedIn;
 
   return new Promise(async (resolve, reject) => {
     try {
@@ -373,17 +374,24 @@ export const uploadImage = (data) => {
   });
 };
 
-export const GetRecipeList = (page, search) => {
+export const GetRecipeList = (page, search, recipeType) => {
   let searchKey;
   if (search) {
-    searchKey = `searchKey=${search}`;
+    searchKey = `&searchKey=${search}`;
   } else {
     searchKey = "";
   }
+  let type;
+  if (recipeType) {
+    type = `&type=${recipeType}`;
+  } else type = "";
+
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
-        apiConstant.GetRecipesList.concat(`${page}&page_size=10&${searchKey}`),
+        apiConstant.GetRecipesList.concat(
+          `${page}&page_size=10${searchKey}${type}`
+        ),
         {
           headers: header(),
         }
@@ -552,7 +560,6 @@ export const getFaqs = (page) => {
 };
 
 export const getFileContent = (url) => {
-  const token = store.getState().auth.isSignedIn;
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
