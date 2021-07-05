@@ -9,9 +9,7 @@ export const api = axios.create({
 
 export const api2 = "http://54.158.24.113/changinghabits";
 
-const token = sessionStorage.getItem("jwt")
-  ? sessionStorage.getItem("jwt")
-  : store.getState().auth.isSignedIn;
+const token = store.getState().auth.isSignedIn;
 
 export const SavePost = (body) => {
   return new Promise(async (resolve, reject) => {

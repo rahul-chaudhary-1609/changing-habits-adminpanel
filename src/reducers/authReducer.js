@@ -16,7 +16,6 @@ export default function authReducer(state = INITIAL_STATE, action) {
       };
 
     case SIGN_OUT:
-      sessionStorage.removeItem("jwt");
       return { ...state, isSignedIn: false, userId: null };
 
     default:

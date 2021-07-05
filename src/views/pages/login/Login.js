@@ -38,11 +38,12 @@ const Login = () => {
   const location = useLocation();
 
   const initialValues = {
-    email_phone:
-      location.state && location.state.email_phone
-        ? location.state.email_phone
-        : null,
-    password: "",
+    email_phone: localStorage.getItem("email_phone")
+      ? localStorage.getItem("email_phone")
+      : location.state && location.state.email_phone
+      ? location.state.email_phone
+      : null,
+    password: localStorage.getItem("pass") ? localStorage.getItem("pass") : "",
     error: "",
   };
 
@@ -57,12 +58,15 @@ const Login = () => {
             type: "SIGN_IN",
             payload: res,
           });
-          if (values.RememberMe) {
-            sessionStorage.setItem("jwt", store.getState().auth.isSignedIn);
-          }
           setLoading(false);
           setMessage(null);
           history.push("/users");
+          if (values.RememberMe) {
+            localStorage.setItem("email_phone", values.email_phone);
+            localStorage.setItem("pass", values.password);
+          } else {
+            localStorage.clear();
+          }
         }
       } else setMessage("Please enter Email or Phone Number");
     } catch (error) {
@@ -176,14 +180,13 @@ const Login = () => {
                             type="checkbox"
                             placeholder="Remember Me"
                             name="RememberMe"
-                            bsClass=""
+                            style={{ fontSize: "4px", marginLeft: "-9px" }}
                             onBlur={formik.handleBlur}
                             value={formik.values.RememberMe}
                             onChange={formik.handleChange}
                           />
                           <p
                             style={{
-                              paddingTop: "8px",
                               paddingLeft: "5px",
                               fontWeight: "bold",
                             }}

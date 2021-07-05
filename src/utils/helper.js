@@ -12,9 +12,7 @@ export const apiError = (error) => {
 };
 
 export const header = (roleId = 1, contentType, accept) => {
-  const token = sessionStorage.getItem("jwt")
-    ? sessionStorage.getItem("jwt")
-    : store.getState().auth.isSignedIn;
+  const token = store.getState().auth.isSignedIn;
 
   return {
     Authorization: `Bearer ${token}`,
