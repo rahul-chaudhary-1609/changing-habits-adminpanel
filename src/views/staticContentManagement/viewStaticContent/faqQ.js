@@ -243,7 +243,7 @@ const FAQS = () => {
                               <p style={{ fontSize: "17px" }}>{ques.answer}</p>
                               <div style={{ textAlign: "right" }}>
                                 <CTooltip
-                                  content={"edit Faq"}
+                                  content={"Edit Faq"}
                                   placement={"top-start"}
                                 >
                                   <CIcon
@@ -263,7 +263,7 @@ const FAQS = () => {
                                 </CTooltip>
 
                                 <CTooltip
-                                  content={`Delete ${ques.id} Faq
+                                  content={`Delete Faq
                           `}
                                   placement={"top-start"}
                                   interactive={true}

@@ -291,9 +291,9 @@ export default function EditUser(props) {
                 <CFormGroup row>
                   <CCol>
                     <DefaultUser
-                      style={{ marginBottom: "2rem", marginLeft: "250px" }}
+                      style={{ marginBottom: "2rem", marginLeft: "168px" }}
                     />
-                    <div style={{ marginLeft: "230px" }}>
+                    <div style={{ marginLeft: "150px" }}>
                       <CInputFile
                         name="profile_picture_url"
                         type="file"

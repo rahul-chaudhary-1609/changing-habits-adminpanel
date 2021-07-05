@@ -152,7 +152,7 @@ const EditFqs = () => {
                   placeholder="Enter the answer "
                   style={{
                     width: "70%",
-                    height: "100px",
+                    height: "170px",
                     marginLeft: "140px",
                     padding: "10px",
                   }}

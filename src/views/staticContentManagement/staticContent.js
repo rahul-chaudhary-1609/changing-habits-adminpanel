@@ -11,6 +11,7 @@ import {
 } from "@coreui/react";
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
+import moment from "moment";
 
 import { getStaticContents } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -51,7 +52,7 @@ const StaticContentList = () => {
           item._classes = "catTableItem";
 
           if (item.updatedAt) {
-            item.updatedAt = item.updatedAt.slice(0, 10);
+            item.updatedAt = moment(item.updatedAt).format("LLL");
           }
           return item;
         });
@@ -100,7 +101,7 @@ const StaticContentList = () => {
                       >
                         {item.id != 5 ? (
                           <CTooltip
-                            content={"edit User"}
+                            content={"Edit Content"}
                             placement={"top-start"}
                           >
                             <CIcon

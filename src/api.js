@@ -324,6 +324,7 @@ export const GetUserList = (page, search, accountType) => {
       }
     } catch (error) {
       apiError(error);
+      reject(error);
     }
   });
 };
@@ -415,9 +416,7 @@ export const GetRecipeList = (page, search, recipeType) => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
-        apiConstant.GetRecipesList.concat(
-          `${page}&page_size=10${searchKey}${type}`
-        ),
+        apiConstant.GetRecipesList.concat(`${page}${searchKey}${type}`),
         {
           headers: header(),
         }
@@ -430,6 +429,7 @@ export const GetRecipeList = (page, search, recipeType) => {
       }
     } catch (error) {
       apiError(error);
+      reject(error);
     }
   });
 };

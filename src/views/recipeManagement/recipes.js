@@ -121,7 +121,7 @@ const Recipes = () => {
       newPage1 = 1;
     }
     currentPage !== newPage &&
-      history.push(`/users?search=${onsearchCHange}&&page=${newPage1}`);
+      history.push(`/users?search=${onsearchCHange}&page=${newPage1}`);
   };
 
   const toggleDelete = (id) => {
@@ -162,7 +162,7 @@ const Recipes = () => {
 
   const handleSearch = async () => {
     currentPageSearch !== onsearchCHange &&
-      history.push(`/recipeManagement?search=${onsearchCHange}&&page=${page}`);
+      history.push(`/recipeManagement?search=${onsearchCHange}&page=${page}`);
   };
 
   const handleReset = () => {
@@ -178,7 +178,7 @@ const Recipes = () => {
     const getData = async () => {
       try {
         setLoading(true);
-
+        setData([]);
         const data = recipeType
           ? await GetRecipeList(
               currentPage,
@@ -321,7 +321,7 @@ const Recipes = () => {
                       onChange={handleSearchChange}
                       id="input1-group1"
                       name="input1-group1"
-                      placeholder="Search"
+                      placeholder="Search by Recipe Title"
                     />
 
                     <CButton
@@ -415,7 +415,10 @@ const Recipes = () => {
                           alignItems: "center",
                         }}
                       >
-                        <CTooltip content={"edit User"} placement={"top-start"}>
+                        <CTooltip
+                          content={"Edit Recipe"}
+                          placement={"top-start"}
+                        >
                           <CIcon
                             onClick={() =>
                               history.push({
@@ -429,7 +432,7 @@ const Recipes = () => {
                           />
                         </CTooltip>
                         <CTooltip
-                          content={`Delete ${item.recipe_title} Recipe
+                          content={`Delete Recipe
                           `}
                           placement={"top-start"}
                           interactive={true}

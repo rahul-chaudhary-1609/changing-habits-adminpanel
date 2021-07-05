@@ -165,7 +165,7 @@ const Login = () => {
                       </div>
                     ) : null}
                     <CRow>
-                      <CCol xs="3">
+                      <CCol xs="4">
                         <CInputGroup
                           style={{
                             marginTop: "-8px",

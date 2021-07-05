@@ -116,7 +116,7 @@ const Users = () => {
       newPage1 = 1;
     }
     currentPage !== newPage &&
-      history.push(`/users?search=${onsearchCHange}&&page=${newPage1}`);
+      history.push(`/users?search=${onsearchCHange}&page=${newPage1}`);
   };
 
   const toggleEnable = (id, status) => {
@@ -157,7 +157,7 @@ const Users = () => {
 
   const handleSearch = async () => {
     currentPageSearch !== onsearchCHange &&
-      history.push(`/users?search=${onsearchCHange}&&page=${page}`);
+      history.push(`/users?search=${onsearchCHange}&page=${page}`);
   };
 
   const handleReset = () => {
@@ -166,13 +166,14 @@ const Users = () => {
     if (newPage === 0) {
       newPage = 1;
     }
-    history.push(`/users?search=&&page=${newPage}`);
+    history.push(`/users?search=&page=${newPage}`);
   };
 
   useEffect(() => {
     const getData = async () => {
       try {
         setLoading(true);
+        setData([]);
         const data = accountType
           ? await GetUserList(
               currentPage,
@@ -187,18 +188,14 @@ const Users = () => {
           if (item.created_at) {
             item.created_at = moment(item.created_at).format("LLL");
           }
-          if (item.dateOfBirth) {
-            item.dateOfBirth = item.dateOfBirth.slice(0, 10);
-          }
 
           return item;
         });
-
         setData(data.rows);
         setCount(data.count);
       } catch (error) {
-        console.log(error);
         setLoading(false);
+        console.log(error);
       }
     };
 
@@ -299,7 +296,7 @@ const Users = () => {
                       onChange={handleSearchChange}
                       id="input1-group1"
                       name="input1-group1"
-                      placeholder="Search"
+                      placeholder="Search by Name or Email"
                     />
 
                     <CButton
@@ -349,9 +346,6 @@ const Users = () => {
                   currentId++;
                   return <td>{currentId}</td>;
                 },
-                dateOfBirth: (item) => (
-                  <td>{item.dateOfBirth ? item.dateOfBirth : ""}</td>
-                ),
                 email: (item) => <td>{item.email}</td>,
                 status: (item) => (
                   <td>
@@ -385,7 +379,7 @@ const Users = () => {
                           alignItems: "center",
                         }}
                       >
-                        <CTooltip content={"edit User"} placement={"top-start"}>
+                        <CTooltip content={"Edit User"} placement={"top-start"}>
                           <CIcon
                             onClick={() =>
                               history.push({
