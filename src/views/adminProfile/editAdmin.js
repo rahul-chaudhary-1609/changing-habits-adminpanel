@@ -67,12 +67,9 @@ export default function EditAdmin() {
 
   const handleProfileChange = async (image) => {
     setImage(image);
-    // formdata.append("image", image, image.name);
-    // formdata.append("folderName", "user");
   };
 
   const onSubmit = async (values) => {
-    //const bodyFormData = new FormData();
     let bodyFormData = {};
     formdata.append("image", image, image.name);
     formdata.append("folderName", "user");
@@ -83,7 +80,6 @@ export default function EditAdmin() {
       }
 
       bodyFormData.name = values.name;
-      //bodyFormData.email = values.newemail ? values.newemail : values.email;
 
       try {
         setLoading(true);

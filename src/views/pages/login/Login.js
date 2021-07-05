@@ -15,7 +15,10 @@ import {
   CRow,
   CModal,
   CModalHeader,
+  CInputGroupAppend,
 } from "@coreui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import CIcon from "@coreui/icons-react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
@@ -29,6 +32,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+  const [showpass, setShowPass] = useState("password");
 
   const history = useHistory();
   const location = useLocation();
@@ -128,7 +132,7 @@ const Login = () => {
                         </CInputGroupText>
                       </CInputGroupPrepend>
                       <CInput
-                        type="password"
+                        type={showpass}
                         placeholder="Password"
                         autoComplete="current-password"
                         name="password"
@@ -136,6 +140,24 @@ const Login = () => {
                         value={formik.values.password}
                         onChange={formik.handleChange}
                       />
+                      <CInputGroupAppend>
+                        <CInputGroupText
+                          onClick={() => {
+                            if (showpass === "password") {
+                              setShowPass("text");
+                            } else {
+                              setShowPass("password");
+                            }
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            color="blue"
+                            size="sm"
+                            icon={showpass !== "password" ? faEye : faEyeSlash}
+                          />{" "}
+                          {/* <i className={showpass !== 'password' ? "fa fa-eye" : "fa fa-eye-slash"} /> */}
+                        </CInputGroupText>
+                      </CInputGroupAppend>
                     </CInputGroup>
                     {formik.touched.password && formik.errors.password ? (
                       <div className="email-validate">

@@ -40,7 +40,7 @@ const getBadge = (status) => {
 };
 
 const fields = [
-  { key: "id", label: "Id", _style: { fontFamily: "Poppins" } },
+  { key: "currentId", label: "Id", _style: { fontFamily: "Poppins" } },
   {
     key: "recipe_title",
     label: "Recipe Title ",
@@ -98,6 +98,7 @@ const Recipes = () => {
   const [refresh, setRefresh] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [recipeType, setRecipeType] = useState(null);
+  let currentId = page && page * 10 - 10;
 
   var recipe_type = [
     {
@@ -367,6 +368,10 @@ const Recipes = () => {
                 </div>
               }
               scopedSlots={{
+                currentId: (item) => {
+                  currentId++;
+                  return <td>{currentId}</td>;
+                },
                 email: (item) => <td>{item.email}</td>,
                 PostedBy: (item) => (
                   <td>

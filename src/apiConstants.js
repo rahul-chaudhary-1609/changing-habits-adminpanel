@@ -1,11 +1,12 @@
 const apiConstant = {
-  baseURL:"http://54.158.24.113/changinghabits",
+  baseURL: "http://54.158.24.113/changinghabits",
   EditUserDetails: `api/v1/admin/editUserDetails`,
   GetUserList: `/api/v1/admin/listUsers?page=`,
   ChangeUserStatus: `/api/v1/admin/toggleUserStatus`,
   AddUser: `/api/v1/admin/addUser`,
   ViewUserDetails: `api/v1/admin/viewUserDetails`,
   GetUserProfile: `/api/v1/admin/getAdminProfile`,
+  GetUserManagementDetails: `/api/v1/admin/viewUserDetails`,
   UpdateProfile: `/api/v1/admin/editProfile`,
   ForgotPassword: `/api/v1/admin/forgotPassword`,
   VerifyOtp: `/api/v1.0/VerifyOtp`,

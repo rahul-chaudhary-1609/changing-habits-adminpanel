@@ -71,6 +71,27 @@ export const GetUserProfile = () => {
   });
 };
 
+export const GetUserManagementDetails = (user_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await api.get(
+        `${apiConstant.GetUserManagementDetails}/${user_id}`,
+        {
+          headers: header(),
+        }
+      );
+
+      if (response.data.success) {
+        resolve(response.data);
+      } else {
+        reject(response.data);
+      }
+    } catch (error) {
+      apiError(error);
+    }
+  });
+};
+
 export const UpdateEmailOrPhone = (userId, email) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -181,15 +202,20 @@ export const resetPassword = (email, password, confirmPassword, otp) => {
   });
 };
 
-export const ChangePasswordApi = (oldPassword, newPassword, id) => {
+export const ChangePasswordApi = (formData) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await api.post(`${apiConstant.ChangePassword}`, {
-        userId: id,
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-      });
-
+      const response = await api.post(
+        `${apiConstant.ChangePassword}`,
+        JSON.stringify(formData),
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: store.getState().auth.isSignedIn,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.data.success) {
         resolve(response.data);
       } else {
@@ -197,6 +223,7 @@ export const ChangePasswordApi = (oldPassword, newPassword, id) => {
       }
     } catch (error) {
       apiError(error);
+      reject("Invalid Old Password");
     }
   });
 };
@@ -221,19 +248,12 @@ export const signIn = (formValues) => {
   });
 };
 
-export const addUserList = (data) => {
-  let formData = {
-    name: data.name,
-    email: data.email,
-    country_code: data.country_code,
-    phone_no: data.phone_no,
-  };
-
+export const addUserList = (bodyFormData) => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.post(
         `${apiConstant.AddUser}`,
-        JSON.stringify(formData),
+        JSON.stringify(bodyFormData),
         {
           headers: {
             Accept: "application/json",
