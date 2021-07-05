@@ -15,10 +15,14 @@ import {
   CRow,
   CModal,
   CModalHeader,
+  CInputGroupAppend,
 } from "@coreui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import CIcon from "@coreui/icons-react";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
+import { store } from "../../../store";
 
 import { loginValidation } from "../../../reusable/validations/loginValidations";
 
@@ -28,6 +32,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+  const [showpass, setShowPass] = useState("password");
 
   const history = useHistory();
   const location = useLocation();
@@ -52,6 +57,9 @@ const Login = () => {
             type: "SIGN_IN",
             payload: res,
           });
+          if (values.RememberMe) {
+            sessionStorage.setItem("jwt", store.getState().auth.isSignedIn);
+          }
           setLoading(false);
           setMessage(null);
           history.push("/users");
@@ -59,7 +67,7 @@ const Login = () => {
       } else setMessage("Please enter Email or Phone Number");
     } catch (error) {
       setLoading(false);
-      // actions.setFieldError("error", error);
+      actions.setFieldError("error", error);
       console.log(error);
     }
   };
@@ -124,7 +132,7 @@ const Login = () => {
                         </CInputGroupText>
                       </CInputGroupPrepend>
                       <CInput
-                        type="password"
+                        type={showpass}
                         placeholder="Password"
                         autoComplete="current-password"
                         name="password"
@@ -132,12 +140,59 @@ const Login = () => {
                         value={formik.values.password}
                         onChange={formik.handleChange}
                       />
+                      <CInputGroupAppend>
+                        <CInputGroupText
+                          onClick={() => {
+                            if (showpass === "password") {
+                              setShowPass("text");
+                            } else {
+                              setShowPass("password");
+                            }
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            color="blue"
+                            size="sm"
+                            icon={showpass !== "password" ? faEye : faEyeSlash}
+                          />{" "}
+                          {/* <i className={showpass !== 'password' ? "fa fa-eye" : "fa fa-eye-slash"} /> */}
+                        </CInputGroupText>
+                      </CInputGroupAppend>
                     </CInputGroup>
                     {formik.touched.password && formik.errors.password ? (
                       <div className="email-validate">
                         {formik.errors.password}
                       </div>
                     ) : null}
+                    <CRow>
+                      <CCol xs="3">
+                        <CInputGroup
+                          style={{
+                            marginTop: "-8px",
+                            paddingBottom: "12px",
+                          }}
+                        >
+                          <CInput
+                            type="checkbox"
+                            placeholder="Remember Me"
+                            name="RememberMe"
+                            bsClass=""
+                            onBlur={formik.handleBlur}
+                            value={formik.values.RememberMe}
+                            onChange={formik.handleChange}
+                          />
+                          <p
+                            style={{
+                              paddingTop: "8px",
+                              paddingLeft: "5px",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Remember me
+                          </p>
+                        </CInputGroup>
+                      </CCol>
+                    </CRow>
                     {formik.errors.error ? (
                       <div className="email-validate">
                         {formik.errors.error}

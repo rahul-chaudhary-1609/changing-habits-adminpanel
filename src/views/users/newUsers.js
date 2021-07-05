@@ -42,16 +42,16 @@ const getBadge = (status) => {
 };
 
 const fields = [
-  { key: "id", label: "Id", _style: { fontFamily: "Poppins" } },
+  { key: "currentId", label: "Id", _style: { fontFamily: "Poppins" } },
   { key: "name", label: "Username", _style: { fontFamily: "Poppins" } },
   {
     key: "email",
-    label: "Email/Phone",
+    label: "Email",
     _style: { fontFamily: "Poppins" },
   },
   {
     key: "created_at",
-    label: "Registration Date",
+    label: "Signup Date",
     _style: { fontFamily: "Poppins" },
   },
   { key: "status", _style: { fontFamily: "Poppins" } },
@@ -91,6 +91,7 @@ const Users = () => {
   const [enableModal, setEnableModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  let currentId = page && page * 10 - 10;
 
   const pageChange = (newPage) => {
     let newPage1 = newPage;
@@ -304,6 +305,10 @@ const Users = () => {
                 </div>
               }
               scopedSlots={{
+                currentId: (item) => {
+                  currentId++;
+                  return <td>{currentId}</td>;
+                },
                 dateOfBirth: (item) => (
                   <td>{item.dateOfBirth ? item.dateOfBirth : ""}</td>
                 ),

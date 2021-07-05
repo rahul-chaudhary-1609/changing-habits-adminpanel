@@ -2,7 +2,7 @@ import * as yup from "yup";
 
 export const loginValidation = () => {
   return yup.object({
-    email: yup.string().email("Invalid Email address format").trim(),
+    email_phone: yup.string().required("Email or Phone is required").trim(),
     password: yup.string().required("Password is required").trim(),
   });
 };
@@ -43,9 +43,23 @@ export const forgetpasswordValidation = () => {
 
 export const ChangePasswordValidation = () => {
   return yup.object({
+    oldpassword: yup
+      .string()
+      .required("Old Password is required")
+      .test(
+        "regex",
+        "Password must be min 8 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
+        (val) => {
+          let regExp = new RegExp(
+            "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+          );
+
+          return regExp.test(val);
+        }
+      ),
     newpassword: yup
       .string()
-      .required("Please Enter your password")
+      .required("New Password is required")
       .test(
         "regex",
         "Password must be min 8 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
@@ -122,6 +136,6 @@ export const UserValidation = () => {
       .matches(phoneRegExp, "Phone number is not valid")
       .required("Please enter Phone Number")
       .max(10, "Phone Number cannot exceed 10 characters"),
-    country_code: yup.string().required("Please enter Country Code"),
+    country_code: yup.string().required("Please enter Country Code e.g. +91"),
   });
 };

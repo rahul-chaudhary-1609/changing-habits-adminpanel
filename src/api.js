@@ -9,6 +9,10 @@ export const api = axios.create({
 
 export const api2 = "http://54.158.24.113/changinghabits";
 
+const token = sessionStorage.getItem("jwt")
+  ? sessionStorage.getItem("jwt")
+  : store.getState().auth.isSignedIn;
+
 export const SavePost = (body) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -51,12 +55,31 @@ export const EditPost = (recipe_id, body) => {
 
 export const GetUserProfile = () => {
   return new Promise(async (resolve, reject) => {
-    // console.log(id, token);
-
     try {
       const response = await api.get(`${apiConstant.GetUserProfile}`, {
         headers: header(),
       });
+
+      if (response.data.success) {
+        resolve(response.data);
+      } else {
+        reject(response.data);
+      }
+    } catch (error) {
+      apiError(error);
+    }
+  });
+};
+
+export const GetUserManagementDetails = (user_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await api.get(
+        `${apiConstant.GetUserManagementDetails}/${user_id}`,
+        {
+          headers: header(),
+        }
+      );
 
       if (response.data.success) {
         resolve(response.data);
@@ -179,15 +202,20 @@ export const resetPassword = (email, password, confirmPassword, otp) => {
   });
 };
 
-export const ChangePasswordApi = (oldPassword, newPassword, id) => {
+export const ChangePasswordApi = (formData) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await api.post(`${apiConstant.ChangePassword}`, {
-        userId: id,
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-      });
-
+      const response = await api.post(
+        `${apiConstant.ChangePassword}`,
+        JSON.stringify(formData),
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: store.getState().auth.isSignedIn,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.data.success) {
         resolve(response.data);
       } else {
@@ -195,6 +223,7 @@ export const ChangePasswordApi = (oldPassword, newPassword, id) => {
       }
     } catch (error) {
       apiError(error);
+      reject("Invalid Old Password");
     }
   });
 };
@@ -214,25 +243,17 @@ export const signIn = (formValues) => {
       }
     } catch (error) {
       apiError(error);
-      reject("Invalid Credentials Entered!!");
+      reject("Invalid Credentials Entered");
     }
   });
 };
 
-export const addUserList = (data) => {
-  let formData = {
-    name: data.name,
-    email: data.email,
-    country_code: data.country_code,
-    phone_no: data.phone_no,
-  };
-  const token = store.getState().auth.isSignedIn;
-
+export const addUserList = (bodyFormData) => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.post(
         `${apiConstant.AddUser}`,
-        JSON.stringify(formData),
+        JSON.stringify(bodyFormData),
         {
           headers: {
             Accept: "application/json",
@@ -373,17 +394,24 @@ export const uploadImage = (data) => {
   });
 };
 
-export const GetRecipeList = (page, search) => {
+export const GetRecipeList = (page, search, recipeType) => {
   let searchKey;
   if (search) {
-    searchKey = `searchKey=${search}`;
+    searchKey = `&searchKey=${search}`;
   } else {
     searchKey = "";
   }
+  let type;
+  if (recipeType) {
+    type = `&type=${recipeType}`;
+  } else type = "";
+
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
-        apiConstant.GetRecipesList.concat(`${page}&page_size=10&${searchKey}`),
+        apiConstant.GetRecipesList.concat(
+          `${page}&page_size=10${searchKey}${type}`
+        ),
         {
           headers: header(),
         }
@@ -552,7 +580,6 @@ export const getFaqs = (page) => {
 };
 
 export const getFileContent = (url) => {
-  const token = store.getState().auth.isSignedIn;
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(

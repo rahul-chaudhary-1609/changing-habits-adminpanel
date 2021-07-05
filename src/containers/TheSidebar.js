@@ -12,8 +12,8 @@ import {
   CSidebarNavItem,
 } from "@coreui/react";
 import { setSideBar } from "../actions/index";
-import changingHabitsLogo from "../assets/icons/dish.jpeg";
-import biglogo from "../assets/icons/dish.jpeg";
+import changingHabitsLogo from "../assets/icons/dish.jpeg.png";
+import biglogo from "../assets/icons/dish.jpeg.png";
 import navigation from "./_nav";
 
 const TheSidebar = () => {

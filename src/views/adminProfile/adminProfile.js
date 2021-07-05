@@ -103,7 +103,7 @@ export default function AdminProfile() {
                   <td style={{ marginLeft: "8rem" }}>
                     <strong>Name</strong>
                   </td>
-                  <td style={{ marginLeft: "8rem" }}>
+                  <td style={{ marginLeft: "9.8rem" }}>
                     <>{userData["name"] ? String(userData["name"]) : ""}</>
                   </td>
                 </tr>
