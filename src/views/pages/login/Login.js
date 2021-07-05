@@ -38,12 +38,14 @@ const Login = () => {
   const location = useLocation();
 
   const initialValues = {
-    email_phone: localStorage.getItem("email_phone")
-      ? localStorage.getItem("email_phone")
+    email_phone: sessionStorage.getItem("email_phone")
+      ? sessionStorage.getItem("email_phone")
       : location.state && location.state.email_phone
       ? location.state.email_phone
       : null,
-    password: localStorage.getItem("pass") ? localStorage.getItem("pass") : "",
+    password: sessionStorage.getItem("pass")
+      ? sessionStorage.getItem("pass")
+      : "",
     error: "",
   };
 
@@ -62,10 +64,10 @@ const Login = () => {
           setMessage(null);
           history.push("/users");
           if (values.RememberMe) {
-            localStorage.setItem("email_phone", values.email_phone);
-            localStorage.setItem("pass", values.password);
+            sessionStorage.setItem("email_phone", values.email_phone);
+            sessionStorage.setItem("pass", values.password);
           } else {
-            localStorage.clear();
+            sessionStorage.clear();
           }
         }
       } else setMessage("Please enter Email or Phone Number");

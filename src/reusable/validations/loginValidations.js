@@ -2,8 +2,12 @@ import * as yup from "yup";
 
 export const loginValidation = () => {
   return yup.object({
-    email_phone: yup.string().required("Email or Phone is required").trim(),
-    password: yup.string().required("Password is required").trim(),
+    email_phone: yup
+      .string()
+      .required("Email or Phone is required")
+      .trim()
+      .nullable(),
+    password: yup.string().required("Password is required").trim().nullable(),
   });
 };
 
