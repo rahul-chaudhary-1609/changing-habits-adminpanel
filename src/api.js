@@ -295,17 +295,23 @@ export const ViewUserDetails = (user_id) => {
   });
 };
 
-export const GetUserList = (page, search) => {
+export const GetUserList = (page, search, accountType) => {
   let searchKey;
   if (search) {
-    searchKey = `searchKey=${search}`;
+    searchKey = `&searchKey=${search}`;
   } else {
     searchKey = "";
+  }
+  let status;
+  if (accountType == 0 || accountType == 1) {
+    status = `&status=${accountType}`;
+  } else {
+    status = "";
   }
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
-        apiConstant.GetUserList.concat(`${page}&page_size=10&${searchKey}`),
+        apiConstant.GetUserList.concat(`${page}${searchKey}${status}`),
         {
           headers: header(),
         }

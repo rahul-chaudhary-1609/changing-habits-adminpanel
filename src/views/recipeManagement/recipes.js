@@ -341,7 +341,7 @@ const Recipes = () => {
                       Reset
                     </CButton>
                   </CInputGroup>
-                  <CInputGroup>
+                  <CInputGroup style={{ width: "30%" }}>
                     <CSelect
                       onChange={(e) => {
                         setRecipeType(e.target.value);

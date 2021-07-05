@@ -21,6 +21,7 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
+  CSelect,
 } from "@coreui/react";
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
@@ -40,6 +41,21 @@ const getBadge = (status) => {
       return "primary";
   }
 };
+
+var account_type = [
+  {
+    label: "Select account type",
+    value: null,
+  },
+  {
+    label: "Active",
+    value: 1,
+  },
+  {
+    label: "Blocked",
+    value: 0,
+  },
+];
 
 const fields = [
   { key: "currentId", label: "Id", _style: { fontFamily: "Poppins" } },
@@ -65,6 +81,7 @@ const fields = [
 ];
 const Users = () => {
   const [loading, setLoading] = useState(false);
+  const [accountType, setAccountType] = useState(null);
 
   const history = useHistory();
 
@@ -77,7 +94,7 @@ const Users = () => {
   const currentPageSearch =
     queryPageSEarch && queryPageSEarch[1] ? queryPageSEarch[1] : "";
 
-  const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
+  const currentPage = 1;
 
   const [page, setPage] = useState(currentPage);
 
@@ -156,7 +173,13 @@ const Users = () => {
     const getData = async () => {
       try {
         setLoading(true);
-        const data = await GetUserList(currentPage, currentPageSearch);
+        const data = accountType
+          ? await GetUserList(
+              currentPage,
+              currentPageSearch,
+              Number(accountType)
+            )
+          : await GetUserList(currentPage, currentPageSearch);
         setLoading(false);
         data.rows.map((item) => {
           item._classes = "catTableItem";
@@ -182,7 +205,7 @@ const Users = () => {
     getData();
 
     currentPage !== page && setPage(currentPage);
-  }, [currentPage, currentPageSearch, refresh, page]);
+  }, [currentPage, currentPageSearch, refresh, page, accountType]);
 
   return (
     <CRow>
@@ -261,7 +284,7 @@ const Users = () => {
               }
               clickableRows
               overTableSlot={
-                <CCol style={{ marginBottom: "1rem", display: "flex" }} md="5">
+                <CCol style={{ marginBottom: "1rem", display: "flex" }}>
                   <CInputGroup>
                     <CInputGroupPrepend>
                       <CInputGroupText
@@ -295,6 +318,23 @@ const Users = () => {
                     >
                       Reset
                     </CButton>
+                  </CInputGroup>
+                  <CInputGroup style={{ width: "30%" }}>
+                    <CSelect
+                      onChange={(e) => {
+                        setAccountType(e.target.value);
+                      }}
+                      custom
+                      value={accountType}
+                      name="status"
+                      id="status"
+                    >
+                      {account_type.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </CSelect>
                   </CInputGroup>
                 </CCol>
               }
