@@ -94,7 +94,7 @@ const Users = () => {
   const currentPageSearch =
     queryPageSEarch && queryPageSEarch[1] ? queryPageSEarch[1] : "";
 
-  const currentPage = 1;
+  const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
 
   const [page, setPage] = useState(currentPage);
 
@@ -166,7 +166,7 @@ const Users = () => {
     if (newPage === 0) {
       newPage = 1;
     }
-    history.push(`/users?search=&page=${newPage}`);
+    history.push(`/users?page=${newPage}`);
   };
 
   useEffect(() => {
