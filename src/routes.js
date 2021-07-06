@@ -44,6 +44,22 @@ const EditFqs = React.lazy(() =>
   import("./views/staticContentManagement/Faqs/editFaqs/editFaqs")
 );
 
+const ListLearning= React.lazy(() =>
+  import("./views/learningManagement/ListLearning")
+);
+
+const AddLearning= React.lazy(() =>
+  import("./views/learningManagement/AddLearning")
+);
+
+const AddEditLearningContent= React.lazy(() =>
+  import("./views/learningManagement/AddEditContent")
+);
+
+const AddEditLearningQuiz= React.lazy(() =>
+  import("./views/learningManagement/AddEditQuiz")
+);
+
 const routes = [
   { path: "/", exact: true, name: "Users", component: User },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
@@ -140,6 +156,33 @@ const routes = [
     exact: true,
     name: "Edit Faqs",
     component: EditFqs,
+  },
+  {
+    path: `/listLearning/:type`,
+    exact: true,
+    name: "List Learning",
+    component: ListLearning,
+  },
+
+  {
+    path: `/addLearning`,
+    exact: true,
+    name: "Add Learning",
+    component: AddLearning,
+  },
+  
+  {
+    path: `/editLearningContent/:id`,
+    exact: true,
+    name: "Edit Learning Content",
+    component: AddEditLearningContent,
+  },
+ 
+  {
+    path: `/editLearningQuiz/:id`,
+    exact: true,
+    name: "Edit Learning Quiz",
+    component: AddEditLearningQuiz,
   },
 
   { component: Page404 },

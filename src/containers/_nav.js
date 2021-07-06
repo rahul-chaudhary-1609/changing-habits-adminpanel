@@ -1,5 +1,6 @@
 import React from "react";
 import CIcon from "@coreui/icons-react";
+import { freeSet } from "@coreui/icons";
 
 const _nav = [
   {
@@ -19,6 +20,12 @@ const _nav = [
     name: "Content Management",
     to: "/static",
     icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Today's Learning Management",
+    to: "/listLearning/content",
+    icon: <CIcon name="cil-list" customClasses="c-sidebar-nav-icon" />,
   },
 ];
 

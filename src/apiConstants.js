@@ -28,6 +28,12 @@ const apiConstant = {
   addFaq: "/api/v1/admin/addFaq",
   getTextFromHTML: "/api/v1/admin/htmlFileToText",
   ToggleFaqStatus: "/api/v1/admin/toggleFaqStatus",
+
+  //learnning content management API's
+  listLearningContent: "/api/v1/admin/listLearningContent",
+  toggleLearningContentStatus: "/api/v1/admin/toggleLearningContentStatus",
+  listLearningQuiz: "/api/v1/admin/listQuiz",
+  toggleLearningQuizStatus:"/api/v1/admin/toggleQuizStatus"
 };
 
 export default apiConstant;
