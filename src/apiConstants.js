@@ -11,7 +11,7 @@ const apiConstant = {
   ForgotPassword: `/api/v1/admin/forgotPassword`,
   VerifyOtp: `/api/v1.0/VerifyOtp`,
   uploadImage: `/api/v1/admin/uploadImage`,
-  ResetPassword: `/api/v1/admin/ResetPassword`,
+  ResetPassword: `/api/v1/admin/resetPassword`,
   ChangePassword: `/api/v1/admin/changePassword`,
   Login: `/api/v1/admin/login`,
   GetRecipesList: `/api/v1/admin/listRecipes?page=`,

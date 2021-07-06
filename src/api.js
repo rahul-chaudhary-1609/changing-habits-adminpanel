@@ -179,15 +179,20 @@ export const verifyOTP = (email, otp) => {
   });
 };
 
-export const resetPassword = (email, password, confirmPassword, otp) => {
+export const resetPassword = (data, token) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await api.post(`${apiConstant.ResetPassword}`, {
-        password: password,
-        confirmPassword: confirmPassword,
-        emailOrPhoneNumber: email,
-        otp: otp,
-      });
+      const response = await api.post(
+        `${apiConstant.ResetPassword}`,
+        JSON.stringify(data),
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.data.success) {
         resolve(response.data);
@@ -196,6 +201,7 @@ export const resetPassword = (email, password, confirmPassword, otp) => {
       }
     } catch (error) {
       apiError(error);
+      reject(error);
     }
   });
 };
