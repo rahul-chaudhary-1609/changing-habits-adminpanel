@@ -137,8 +137,8 @@ export const UserValidation = () => {
       .trim(),
     phone_no: yup
       .string()
-      .matches(phoneRegExp, "Phone number is not valid")
-      .required("Please enter Phone Number")
+      .matches(phoneRegExp, "Phone Number is not valid")
+      .required("Phone Number is required")
       .max(10, "Phone Number cannot exceed 10 characters"),
     country_code: yup.string().required("Please enter Country Code e.g. +91"),
   });

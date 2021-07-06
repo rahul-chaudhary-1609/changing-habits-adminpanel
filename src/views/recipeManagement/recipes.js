@@ -52,6 +52,11 @@ const fields = [
     _style: { fontFamily: "Poppins" },
   },
   {
+    key: "status",
+    label: "Status",
+    _style: { fontFamily: "Poppins" },
+  },
+  {
     key: "created_at",
     label: "Posted Date",
     _style: { fontFamily: "Poppins" },
@@ -121,7 +126,9 @@ const Recipes = () => {
       newPage1 = 1;
     }
     currentPage !== newPage &&
-      history.push(`/users?search=${onsearchCHange}&page=${newPage1}`);
+      history.push(
+        `/recipeManagement?search=${onsearchCHange}&page=${newPage1}`
+      );
   };
 
   const toggleDelete = (id) => {
@@ -385,13 +392,21 @@ const Recipes = () => {
                 ),
                 status: (item) => (
                   <td>
-                    {item.status == 1 ? (
+                    {item.status == 0 ? (
+                      <CBadge
+                        style={{ width: "4rem", height: "1.1rem" }}
+                        shape="pill"
+                        color={getBadge("")}
+                      >
+                        Pending
+                      </CBadge>
+                    ) : item.status == 1 ? (
                       <CBadge
                         style={{ width: "4rem", height: "1.1rem" }}
                         shape="pill"
                         color={getBadge("Active")}
                       >
-                        Active
+                        Approved
                       </CBadge>
                     ) : (
                       <CBadge
@@ -399,7 +414,7 @@ const Recipes = () => {
                         shape="pill"
                         color={getBadge("Banned")}
                       >
-                        Blocked
+                        Rejected
                       </CBadge>
                     )}
                   </td>

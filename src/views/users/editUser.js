@@ -33,7 +33,9 @@ export default function EditUser(props) {
 
   const [userDetails, setUserDetails] = useState({});
   const [showError, setShowError] = useState(null);
+  const [msgError, setMsgError] = useState(null);
   const [image, setImage] = useState({});
+  const [subscriptionStatus, setSubscriptionStatus] = useState(0);
 
   const initialValues = {
     name: userDetails.name ? userDetails.name : "",
@@ -42,6 +44,9 @@ export default function EditUser(props) {
     phone_no: userDetails.phone_no ? userDetails.phone_no : "",
     profile_picture_url: userDetails.profile_picture_url
       ? userDetails.profile_picture_url
+      : "",
+    subscription_status: userDetails.subscription_status
+      ? userDetails.subscription_status
       : "",
   };
 
@@ -66,35 +71,47 @@ export default function EditUser(props) {
     setImage(image);
   };
 
-  const onSubmit = async (values) => {
-    let bodyFormData = {};
-    if (image.type) {
-      formdata.append("image", image, image.name);
-      formdata.append("folderName", "user");
-      const res = await uploadImage(formdata);
-      if (res.status == 200) {
-        bodyFormData.profile_picture_url = res.data.image_url;
+  const handleSubscriptionStatus = (type) => {
+    setSubscriptionStatus(type);
+  };
+
+  const onSubmit = async (values, actions) => {
+    try {
+      let bodyFormData = {};
+      if (image.type) {
+        formdata.append("image", image, image.name);
+        formdata.append("folderName", "user");
+        const res = await uploadImage(formdata);
+        if (res.status == 200) {
+          bodyFormData.profile_picture_url = res.data.image_url;
+        }
       }
-    }
-    bodyFormData.name = values.name;
-    if (params.id) {
-      setLoading(true);
-      const response = await EditUserDetails(bodyFormData, Number(params.id));
+      bodyFormData.name = values.name;
+      bodyFormData.subscription_status = subscriptionStatus;
+
+      if (params.id) {
+        setLoading(true);
+        const response = await EditUserDetails(bodyFormData, Number(params.id));
+        setLoading(false);
+        if (response) {
+          setShowError(null);
+          history.push("/users");
+        }
+      } else {
+        bodyFormData.email = values.email;
+        bodyFormData.country_code = values.country_code;
+        bodyFormData.phone_no = values.phone_no;
+        setLoading(true);
+        const response = await addUserList(bodyFormData);
+        setLoading(false);
+        if (response) {
+          history.push("/users");
+        }
+      }
+    } catch (error) {
       setLoading(false);
-      if (response) {
-        setShowError(null);
-        history.push("/users");
-      }
-    } else {
-      bodyFormData.email = values.email;
-      bodyFormData.country_code = values.country_code;
-      bodyFormData.phone_no = values.phone_no;
-      setLoading(true);
-      const response = await addUserList(bodyFormData);
-      setLoading(false);
-      if (response) {
-        history.push("/users");
-      }
+      actions.setFieldError("error", error.message);
+      setMsgError(error.message);
     }
   };
 
@@ -319,7 +336,7 @@ export default function EditUser(props) {
                 <CFormGroup row>
                   <CCol md="3">
                     <CLabel htmlFor="hf-categorytype">
-                      <h6>Enter User Name</h6>
+                      <h6>User Name</h6>
                     </CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
@@ -339,7 +356,7 @@ export default function EditUser(props) {
                 <CFormGroup row>
                   <CCol md="3">
                     <CLabel htmlFor="hf-categorytype">
-                      <h6>Enter Email</h6>
+                      <h6>Email</h6>
                     </CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
@@ -361,7 +378,7 @@ export default function EditUser(props) {
                 <CFormGroup row>
                   <CCol md="3">
                     <CLabel htmlFor="hf-categorytype">
-                      <h6>Enter Mobile Number</h6>
+                      <h6>Mobile Number</h6>
                     </CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
@@ -396,6 +413,82 @@ export default function EditUser(props) {
                     ) : null}
                   </CCol>
                 </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="recipe_type">
+                      <h6>Subscription Status?</h6>
+                    </CLabel>
+                  </CCol>
+                  <CCol row md="4">
+                    <label for={0}>
+                      <CInput
+                        type="radio"
+                        id={0}
+                        formControlName="recipe_type"
+                        checked={subscriptionStatus == 0 ? "checked" : ""}
+                        style={{
+                          width: "20%",
+                          marginTop: "-7px",
+                          outline: "none !important",
+                          cursor: "pointer",
+                        }}
+                        onChange={() => {
+                          handleSubscriptionStatus(0);
+                        }}
+                      />
+                      Free Trial
+                    </label>
+                  </CCol>
+                  <CCol row md="4">
+                    <label for={1}>
+                      <CInput
+                        type="radio"
+                        id={1}
+                        formControlName="recipe_type"
+                        checked={subscriptionStatus == 1 ? "checked" : ""}
+                        style={{
+                          width: "10%",
+                          marginTop: "-7px",
+                          cursor: "pointer",
+                        }}
+                        onChange={() => {
+                          handleSubscriptionStatus(1);
+                        }}
+                      />
+                      Paid Subscription
+                    </label>
+                  </CCol>
+                </CFormGroup>
+                {subscriptionStatus == 1 ? (
+                  <CFormGroup row>
+                    <CCol md="3">
+                      <CLabel htmlFor="hf-categorytype">
+                        <h6>Subscription Token Id</h6>
+                      </CLabel>
+                    </CCol>
+                    <CCol xs="12" md="9">
+                      <CInput
+                        type="text"
+                        id="subscription_token_id"
+                        name="subscription_token_id"
+                        onBlur={formik.handleBlur}
+                        value={formik.values.subscription_token_id}
+                        onChange={formik.handleChange}
+                      />
+                      {formik.touched.subscription_token_id &&
+                      formik.errors.subscription_token_id ? (
+                        <div className="email-validate">
+                          {formik.errors.subscription_token_id}
+                        </div>
+                      ) : null}
+                    </CCol>
+                  </CFormGroup>
+                ) : (
+                  ""
+                )}
+                {msgError ? (
+                  <div className="email-validate">{msgError}</div>
+                ) : null}
                 <CCardFooter
                   style={{
                     display: "flex",

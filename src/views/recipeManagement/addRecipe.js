@@ -241,6 +241,7 @@ export default function AddRecipe() {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+    setLoading(true);
     var body = {};
     console.log("image", image);
     if (image && image.type) {
@@ -272,7 +273,6 @@ export default function AddRecipe() {
       body.recipe_methods = show.recipe_methods;
       body.recipe_type = recipeType ? recipeType : show.recipe_type;
       try {
-        setLoading(true);
         const response = await EditPost(params.id, body);
         setLoading(false);
         if (response) {
@@ -290,7 +290,6 @@ export default function AddRecipe() {
       body.recipe_type = recipeType ? recipeType : show.recipe_type;
 
       try {
-        setLoading(true);
         const response = await SavePost(body);
         setLoading(false);
         if (response) {
@@ -486,6 +485,7 @@ export default function AddRecipe() {
                             id={1}
                             formControlName="recipe_type"
                             checked={recipeType == 1 ? "checked" : ""}
+                            value={show.recipe_type}
                             style={{
                               width: "60%",
                               marginTop: "-7px",

@@ -273,7 +273,8 @@ export const addUserList = (bodyFormData) => {
         reject(response.data);
       }
     } catch (error) {
-      apiError(error);
+      apiError(error.response.data);
+      reject(error.response.data);
     }
   });
 };
