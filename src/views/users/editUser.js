@@ -68,35 +68,33 @@ export default function EditUser(props) {
 
   const onSubmit = async (values) => {
     let bodyFormData = {};
-    formdata.append("image", image, image.name);
-    formdata.append("folderName", "user");
-    try {
+    if (image.type) {
+      formdata.append("image", image, image.name);
+      formdata.append("folderName", "user");
       const res = await uploadImage(formdata);
       if (res.status == 200) {
         bodyFormData.profile_picture_url = res.data.image_url;
       }
-      bodyFormData.name = values.name;
-      if (params.id) {
-        setLoading(true);
-        const response = await EditUserDetails(bodyFormData, Number(params.id));
-        setLoading(false);
-        if (response) {
-          setShowError(null);
-          history.push("/users");
-        }
-      } else {
-        bodyFormData.email = values.email;
-        bodyFormData.country_code = values.country_code;
-        bodyFormData.phone_no = values.phone_no;
-        setLoading(true);
-        const response = await addUserList(bodyFormData);
-        setLoading(false);
-        if (response) {
-          history.push("/users");
-        }
-      }
-    } catch (error) {
+    }
+    bodyFormData.name = values.name;
+    if (params.id) {
+      setLoading(true);
+      const response = await EditUserDetails(bodyFormData, Number(params.id));
       setLoading(false);
+      if (response) {
+        setShowError(null);
+        history.push("/users");
+      }
+    } else {
+      bodyFormData.email = values.email;
+      bodyFormData.country_code = values.country_code;
+      bodyFormData.phone_no = values.phone_no;
+      setLoading(true);
+      const response = await addUserList(bodyFormData);
+      setLoading(false);
+      if (response) {
+        history.push("/users");
+      }
     }
   };
 
