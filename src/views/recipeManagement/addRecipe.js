@@ -320,7 +320,7 @@ export default function AddRecipe() {
             <CCard>
               <CCardHeader style={{ fontFamily: "Lato" }}>
                 <h3>
-                  {location.state ? (
+                  {params.id ? (
                     <strong>Edit Recipe</strong>
                   ) : (
                     <strong>Add Recipe</strong>

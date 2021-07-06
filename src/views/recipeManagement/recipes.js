@@ -27,6 +27,8 @@ import CIcon from "@coreui/icons-react";
 import moment from "moment";
 
 import { GetRecipeList, ChangeUserStatus, DeleteRecipe } from "../../api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 const getBadge = (status) => {
   switch (status) {
@@ -444,6 +446,23 @@ const Recipes = () => {
                             style={{ color: "red", cursor: "pointer" }}
                             size="lg"
                             content={freeSet.cilPencil}
+                          />
+                        </CTooltip>
+                        <CTooltip
+                          content={`View Recipe`}
+                          placement={"top-start"}
+                        >
+                          <FontAwesomeIcon
+                            color="green"
+                            size="lg"
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              history.push({
+                                pathname: `/viewRecipe/${item.id}`,
+                                state: { item },
+                              })
+                            }
+                            icon={faEye}
                           />
                         </CTooltip>
                         <CTooltip

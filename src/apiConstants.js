@@ -3,6 +3,7 @@ const apiConstant = {
   EditUserDetails: `api/v1/admin/editUserDetails`,
   GetUserList: `/api/v1/admin/listUsers?page=`,
   ChangeUserStatus: `/api/v1/admin/toggleUserStatus`,
+  ToggleRecipeStatus: `/api/v1/admin/toggleRecipeStatus`,
   AddUser: `/api/v1/admin/addUser`,
   ViewUserDetails: `api/v1/admin/viewUserDetails`,
   GetUserProfile: `/api/v1/admin/getAdminProfile`,

@@ -701,3 +701,27 @@ export const ToggleFaqStatus = (faq_id) => {
     }
   });
 };
+
+export const ToggleRecipeStatus = (recipe_id, status) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await api.put(
+        `${apiConstant.ToggleRecipeStatus}/${recipe_id}`,
+        {
+          status: status,
+        },
+        {
+          headers: header(),
+        }
+      );
+
+      if (response.data.success) {
+        resolve(response.data);
+      } else {
+        reject(response.data);
+      }
+    } catch (error) {
+      apiError(error);
+    }
+  });
+};
