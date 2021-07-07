@@ -43,8 +43,8 @@ const FAQS = () => {
   const [totalItems, setTotalItems] = useState(null);
 
   const handleCollapse = (e, id) => {
-    // let updatedStatus = { ...statusOpened };
-    let updatedStatus = { statusOpened };
+    let updatedStatus = { ...statusOpened };
+    // let updatedStatus = { statusOpened };
     updatedStatus[id] = !updatedStatus[id];
     setStatusOpened(updatedStatus);
   };
