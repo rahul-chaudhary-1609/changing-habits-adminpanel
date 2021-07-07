@@ -105,7 +105,27 @@ const Recipes = () => {
   const [refresh, setRefresh] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [recipeType, setRecipeType] = useState(null);
+  const [recipeStatus, setRecipeStatus] = useState(null);
   let currentId = page && page * 10 - 10;
+
+  var recipe_status = [
+    {
+      label: "Select recipe status",
+      value: null,
+    },
+    {
+      label: "Pending",
+      value: 0,
+    },
+    {
+      label: "Approved",
+      value: 1,
+    },
+    {
+      label: "Rejected",
+      value: 2,
+    },
+  ];
 
   var recipe_type = [
     {
@@ -188,13 +208,13 @@ const Recipes = () => {
       try {
         setLoading(true);
         setData([]);
-        const data = recipeType
-          ? await GetRecipeList(
-              currentPage,
-              currentPageSearch,
-              Number(recipeType)
-            )
-          : await GetRecipeList(currentPage, currentPageSearch);
+        let dropdown = {};
+        dropdown.recipeType = recipeType ? Number(recipeType) : null;
+        dropdown.recipeStatus = recipeStatus ? Number(recipeStatus) : null;
+        const data =
+          recipeType || recipeStatus
+            ? await GetRecipeList(currentPage, currentPageSearch, dropdown)
+            : await GetRecipeList(currentPage, currentPageSearch);
         setLoading(false);
         data.rows.map((item) => {
           item._classes = "catTableItem";
@@ -216,7 +236,7 @@ const Recipes = () => {
     getData();
 
     currentPage !== page && setPage(currentPage);
-  }, [currentPage, currentPageSearch, refresh, page, recipeType]);
+  }, [currentPage, currentPageSearch, refresh, page, recipeStatus, recipeType]);
 
   return (
     <CRow>
@@ -350,6 +370,23 @@ const Recipes = () => {
                       Reset
                     </CButton>
                   </CInputGroup>
+                  <CInputGroup style={{ width: "30%", marginRight: "10px" }}>
+                    <CSelect
+                      onChange={(e) => {
+                        setRecipeStatus(e.target.value);
+                      }}
+                      custom
+                      value={recipeStatus}
+                      name="status"
+                      id="status"
+                    >
+                      {recipe_status.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </CSelect>
+                  </CInputGroup>
                   <CInputGroup style={{ width: "30%" }}>
                     <CSelect
                       onChange={(e) => {
@@ -384,9 +421,14 @@ const Recipes = () => {
                 email: (item) => <td>{item.email}</td>,
                 PostedBy: (item) => (
                   <td>
-                    {item.role == 1
-                      ? `App user : ${item.name}`
-                      : `Admin : ${item.name}`}
+                    {item.role == 1 ? (
+                      <>
+                        <b>App user : </b>
+                        {item.name}
+                      </>
+                    ) : (
+                      `Admin : ${item.name}`
+                    )}
                   </td>
                 ),
                 recipeType: (item) => (

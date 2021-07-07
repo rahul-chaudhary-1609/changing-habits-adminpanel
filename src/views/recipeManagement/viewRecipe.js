@@ -273,39 +273,45 @@ export default function ViewRecipe() {
                       </div>
                     ) : (
                       <>
-                        <CButton
-                          name="approve"
-                          disabled={show.status == 1 ? true : false}
-                          title={
-                            show.status == 1
-                              ? "Recipe already approved"
-                              : "Click to approve recipe"
-                          }
-                          color="primary"
-                          style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            toggleStatus(show.status);
-                          }}
-                        >
-                          Approve
-                        </CButton>
-                        <CButton
-                          name="reject"
-                          disabled={show.status == 2 ? true : false}
-                          title={
-                            show.status == 2
-                              ? "Recipe already rejected"
-                              : "Click to reject recipe"
-                          }
-                          style={{ cursor: "pointer" }}
-                          color="danger"
-                          style={{ marginLeft: "2rem", width: "77px" }}
-                          onClick={() => {
-                            toggleStatus(show.status);
-                          }}
-                        >
-                          Reject
-                        </CButton>
+                        {show.role == 1 ? (
+                          <>
+                            <CButton
+                              name="approve"
+                              disabled={show.status == 1 ? true : false}
+                              title={
+                                show.status == 1
+                                  ? "Recipe already approved"
+                                  : "Click to approve recipe"
+                              }
+                              color="primary"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => {
+                                toggleStatus(show.status);
+                              }}
+                            >
+                              Approve
+                            </CButton>
+                            <CButton
+                              name="reject"
+                              disabled={show.status == 2 ? true : false}
+                              title={
+                                show.status == 2
+                                  ? "Recipe already rejected"
+                                  : "Click to reject recipe"
+                              }
+                              style={{ cursor: "pointer" }}
+                              color="danger"
+                              style={{ marginLeft: "2rem", width: "77px" }}
+                              onClick={() => {
+                                toggleStatus(show.status);
+                              }}
+                            >
+                              Reject
+                            </CButton>
+                          </>
+                        ) : (
+                          ""
+                        )}
                         <CButton
                           name="edit"
                           color="success"

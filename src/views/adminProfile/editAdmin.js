@@ -71,31 +71,29 @@ export default function EditAdmin() {
 
   const onSubmit = async (values) => {
     let bodyFormData = {};
-    formdata.append("image", image, image.name);
-    formdata.append("folderName", "user");
-    try {
+
+    if (image.type) {
+      formdata.append("image", image, image.name);
+      formdata.append("folderName", "user");
       const res = await uploadImage(formdata);
       if (res.status == 200) {
         bodyFormData.profile_picture_url = res.data.image_url;
       }
+    }
 
-      bodyFormData.name = values.name;
+    bodyFormData.name = values.name;
+    try {
+      setLoading(true);
+      const response = await UpdateProfile(bodyFormData);
 
-      try {
-        setLoading(true);
-        const response = await UpdateProfile(bodyFormData);
+      update();
 
-        update();
+      setLoading(false);
 
-        setLoading(false);
-
-        history.push({
-          pathname: `/profile`,
-          state: { data: response.message, type: "edit" },
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      history.push({
+        pathname: `/profile`,
+        state: { data: response.message, type: "edit" },
+      });
     } catch (error) {
       console.log(error);
     }
@@ -105,7 +103,7 @@ export default function EditAdmin() {
     enableReinitialize: true,
     initialValues,
     onSubmit,
-    validationSchema: updateEmail,
+    // validationSchema: updateEmail,
   });
 
   const handleUpadteEmail = async (type) => {

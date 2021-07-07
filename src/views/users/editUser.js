@@ -48,6 +48,9 @@ export default function EditUser(props) {
     subscription_status: userDetails.subscription_status
       ? userDetails.subscription_status
       : "",
+    subscription_token_id: userDetails.subscription_token_id
+      ? userDetails.subscription_token_id
+      : "",
   };
 
   const formdata = new FormData();
@@ -78,6 +81,7 @@ export default function EditUser(props) {
   const onSubmit = async (values, actions) => {
     try {
       let bodyFormData = {};
+      setMsgError(null);
       if (image.type) {
         formdata.append("image", image, image.name);
         formdata.append("folderName", "user");
@@ -87,7 +91,6 @@ export default function EditUser(props) {
         }
       }
       bodyFormData.name = values.name;
-      bodyFormData.subscription_status = subscriptionStatus;
 
       if (params.id) {
         setLoading(true);
@@ -101,6 +104,10 @@ export default function EditUser(props) {
         bodyFormData.email = values.email;
         bodyFormData.country_code = values.country_code;
         bodyFormData.phone_no = values.phone_no;
+        bodyFormData.subscription_status = subscriptionStatus;
+        if (values.subscription_token_id) {
+          bodyFormData.subscription_token_id = values.subscription_token_id;
+        }
         setLoading(true);
         const response = await addUserList(bodyFormData);
         setLoading(false);
@@ -119,7 +126,7 @@ export default function EditUser(props) {
     enableReinitialize: true,
     initialValues,
     onSubmit,
-    validationSchema: UserValidation,
+    validationSchema: UserValidation(subscriptionStatus),
   });
 
   return (

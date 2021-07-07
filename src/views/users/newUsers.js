@@ -66,6 +66,11 @@ const fields = [
     _style: { fontFamily: "Poppins" },
   },
   {
+    key: "phone_no",
+    label: "Mobile",
+    _style: { fontFamily: "Poppins" },
+  },
+  {
     key: "created_at",
     label: "Signup Date",
     _style: { fontFamily: "Poppins" },

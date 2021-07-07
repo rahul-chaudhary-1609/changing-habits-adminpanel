@@ -117,7 +117,7 @@ export const updateEmail = () => {
   });
 };
 
-export const UserValidation = () => {
+export const UserValidation = (subscriptionStatus) => {
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   return yup.object({
     name: yup
@@ -141,5 +141,8 @@ export const UserValidation = () => {
       .required("Phone Number is required")
       .max(10, "Phone Number cannot exceed 10 characters"),
     country_code: yup.string().required("Please enter Country Code e.g. +91"),
+    subscription_token_id: subscriptionStatus
+      ? yup.string().required("Token Id is required")
+      : "",
   });
 };

@@ -406,7 +406,7 @@ export const uploadImage = (data) => {
   });
 };
 
-export const GetRecipeList = (page, search, recipeType) => {
+export const GetRecipeList = (page, search, data) => {
   let searchKey;
   if (search) {
     searchKey = `&searchKey=${search}`;
@@ -414,14 +414,21 @@ export const GetRecipeList = (page, search, recipeType) => {
     searchKey = "";
   }
   let type;
-  if (recipeType) {
-    type = `&type=${recipeType}`;
+  if (data && data.recipeType) {
+    type = `&type=${data.recipeType}`;
   } else type = "";
+
+  let status;
+  if (data && (data.recipeStatus || data.recipeStatus == 0)) {
+    status = `&status=${data.recipeStatus}`;
+  } else status = "";
 
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
-        apiConstant.GetRecipesList.concat(`${page}${searchKey}${type}`),
+        apiConstant.GetRecipesList.concat(
+          `${page}${searchKey}${type}${status}`
+        ),
         {
           headers: header(),
         }
