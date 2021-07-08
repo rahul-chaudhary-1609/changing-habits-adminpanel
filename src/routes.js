@@ -57,6 +57,14 @@ const AddEditLearningQuiz= React.lazy(() =>
   import("./views/learningManagement/AddEditQuiz")
 );
 
+const ListFoodLogCategory= React.lazy(() =>
+  import("./views/foodLogCategory/ListFoodLogCategory")
+);
+
+const AddEditFoodLogCategory= React.lazy(() =>
+  import("./views/foodLogCategory/AddEditFoodLogCategory")
+);
+
 const routes = [
   { path: "/", exact: true, name: "Users", component: User },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
@@ -185,6 +193,27 @@ const routes = [
     exact: true,
     name: "Edit Learning Quiz",
     component: AddEditLearningQuiz,
+  },
+
+  {
+    path: `/listFoodLogCategory`,
+    exact: true,
+    name: "List Food Log Category",
+    component: ListFoodLogCategory,
+  },
+
+  {
+    path: `/addFoodLogCategory`,
+    exact: true,
+    name: "Add Food Log Category",
+    component: AddEditFoodLogCategory,
+  },
+
+   {
+    path: `/editFoodLogCategory/:id`,
+    exact: true,
+    name: "Edit Food Log Category",
+    component: AddEditFoodLogCategory,
   },
 
   { component: Page404 },
