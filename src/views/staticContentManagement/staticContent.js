@@ -111,7 +111,7 @@ const StaticContentList = () => {
                                   state: { item },
                                 })
                               }
-                              style={{ color: "red", cursor: "pointer" }}
+                              style={{ color: "black", cursor: "pointer" }}
                               size="lg"
                               content={freeSet.cilPencil}
                             />

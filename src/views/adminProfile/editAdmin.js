@@ -331,7 +331,7 @@ export default function EditAdmin() {
               >
                 <CButton
                   onClick={() => history.push("/profile")}
-                  style={{ width: "5rem" }}
+                  style={{ width: "5rem", marginRight: "-170px" }}
                   type="reset"
                   color="danger"
                 >
@@ -344,21 +344,30 @@ export default function EditAdmin() {
                 ) : (
                   <CButton
                     type="submit"
-                    color="success"
-                    style={{ width: "5rem" }}
+                    style={{
+                      width: "5rem",
+                      backgroundColor: "teal",
+                      color: "white",
+                    }}
                   >
                     <strong>Update</strong>
                   </CButton>
                 )}
               </CCardFooter>
               <CCardFooter>
-                <CCol style={{ textAlign: "center", margin: "10px" }}>
-                  <CButton
-                    color="primary"
-                    onClick={() => history.push("/changePassword")}
-                  >
-                    <strong>Change Password</strong>
-                  </CButton>
+                <CCol
+                  style={{
+                    textAlign: "center",
+                    margin: "10px",
+                    cursor: "pointer",
+                    color: "blue",
+                  }}
+                >
+                  <a onClick={() => history.push("/changePassword")}>
+                    <u>
+                      <strong>Change Password?</strong>
+                    </u>
+                  </a>
                 </CCol>
               </CCardFooter>
             </CForm>

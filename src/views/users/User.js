@@ -11,6 +11,8 @@ import {
 import { useHistory, useParams } from "react-router-dom";
 import { GetUserManagementDetails } from "../../api";
 import DefaultUser from "../../assets/svgs/defaultUser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const User = () => {
   const params = useParams();
@@ -47,11 +49,17 @@ const User = () => {
               <strong>User Details</strong>
             </h2>
             <CButton
-              style={{ width: "8rem" }}
-              color="primary"
+              style={{ backgroundColor: "gray" }}
               onClick={() => history.goBack()}
             >
-              <strong>Back</strong>
+              <strong>
+                <FontAwesomeIcon
+                  color="white"
+                  size="lg"
+                  style={{ cursor: "pointer", color: "black" }}
+                  icon={faArrowLeft}
+                />
+              </strong>
             </CButton>
           </CCardHeader>
           <CCardBody>

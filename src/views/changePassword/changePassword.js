@@ -216,11 +216,13 @@ export default function ChangePassword() {
                       </div>
                     ) : null}
                     <CRow>
-                      <CCol xs="10" style={{ marginRight: "5px" }}>
+                      <CCol
+                        style={{ marginRight: "-70px", marginLeft: "137px" }}
+                      >
                         {!loading ? (
                           <CButton
                             color="danger"
-                            className="px-6"
+                            style={{ width: "5.5rem" }}
                             onClick={() => history.goBack()}
                           >
                             Cancel
@@ -237,8 +239,8 @@ export default function ChangePassword() {
                       <CCol>
                         {!loading ? (
                           <CButton
-                            color="primary"
                             className="px-4"
+                            style={{ backgroundColor: "teal", color: "white" }}
                             type="submit"
                           >
                             Update

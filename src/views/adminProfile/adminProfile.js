@@ -61,8 +61,7 @@ export default function AdminProfile() {
               <strong>Admin Profile</strong>
             </h2>
             <CButton
-              style={{ width: "8rem" }}
-              color="success"
+              style={{ width: "8rem", backgroundColor: "teal", color: "white" }}
               onClick={() =>
                 history.push({
                   pathname: "./editAdmin",

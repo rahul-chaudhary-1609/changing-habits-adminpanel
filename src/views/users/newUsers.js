@@ -265,8 +265,12 @@ const Users = () => {
               <strong>User Management</strong>
             </h2>
             <CButton
-              style={{ width: "5rem", marginLeft: "90%" }}
-              color="success"
+              style={{
+                width: "5rem",
+                marginLeft: "90%",
+                backgroundColor: "teal",
+                color: "white",
+              }}
               onClick={() => history.push("/addUser")}
             >
               <strong>Add</strong>
@@ -290,7 +294,7 @@ const Users = () => {
                   <CInputGroup>
                     <CInputGroupPrepend>
                       <CInputGroupText
-                        style={{ backgroundColor: "#0D86FF", color: "white" }}
+                        style={{ backgroundColor: "teal", color: "white" }}
                       >
                         <CIcon content={freeSet.cilSearch} />
                       </CInputGroupText>
@@ -306,8 +310,11 @@ const Users = () => {
 
                     <CButton
                       onClick={handleSearch}
-                      style={{ marginLeft: "1rem" }}
-                      color="info"
+                      style={{
+                        marginLeft: "1rem",
+                        backgroundColor: "teal",
+                        color: "white",
+                      }}
                     >
                       Search
                     </CButton>
@@ -315,8 +322,11 @@ const Users = () => {
                       onClick={() => {
                         handleReset();
                       }}
-                      style={{ marginLeft: "1rem" }}
-                      color="info"
+                      style={{
+                        marginLeft: "1rem",
+                        backgroundColor: "teal",
+                        color: "white",
+                      }}
                     >
                       Reset
                     </CButton>
@@ -328,6 +338,7 @@ const Users = () => {
                       }}
                       custom
                       value={accountType}
+                      placeholder="Select account type"
                       name="status"
                       id="status"
                     >
@@ -392,7 +403,7 @@ const Users = () => {
                                 state: { item },
                               })
                             }
-                            style={{ color: "red", cursor: "pointer" }}
+                            style={{ color: "black", cursor: "pointer" }}
                             size="lg"
                             content={freeSet.cilPencil}
                           />

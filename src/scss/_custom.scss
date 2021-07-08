@@ -1,34 +1,82 @@
 .email-validate {
-  color: red;
-  margin-bottom: 1rem;
+    color: red;
+    margin-bottom: 1rem;
 } // Here you can add other styles
 
 .mail-sent {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: green;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: green;
 }
 
 .catTableItem {
-  //font-size: 2rem;
-  font-family: "Poppins", sans-serif;
+    // font-size: 2rem;
+    font-family: "Poppins", sans-serif;
 
-  font: bolder;
+    font: bolder;
 }
 
 .cellclass {
-  font-family: "Poppins";
+    font-family: "Poppins";
 }
 
 .table-class {
-  text-align: center;
+    text-align: center;
 }
 
 .flex-apptable {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.c-sidebar {
+    color: #fff;
+    font-weight: 700;
+    font-family: 'Poppins';
+    background: teal;
+}
+
+.c-sidebar .c-sidebar-brand {
+    color: white;
+    background: white;
+}
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: teal;
+    border-color: teal;
+}
+.page-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    line-height: 1.25;
+    border: 1px solid;
+    color: teal;
+    background-color: #fff;
+    border-color: teal;
+}
+.page-item.disabled .page-link {
+    pointer-events: none;
+    cursor: auto;
+    color: teal;
+    background-color: #fff;
+    border-color: teal;
+}
+
+.c-sidebar .c-sidebar-nav-link:hover,
+.c-sidebar .c-sidebar-nav-dropdown-toggle:hover {
+    color: white;
+    background-color: black;
+}
+
+.c-wrapper:not(.c-wrapper-fluid) .c-header-fixed {
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: teal;
+    top: 0;
 }

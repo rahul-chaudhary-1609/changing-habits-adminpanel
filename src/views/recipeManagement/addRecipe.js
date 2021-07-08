@@ -51,7 +51,7 @@ export default function AddRecipe() {
     },
   ];
 
-  const [recipeType, setRecipeType] = useState(null);
+  const [recipeType, setRecipeType] = useState(1);
   const [disable, setDisable] = useState(false);
   const [image, setImage] = useState({});
 
@@ -100,9 +100,10 @@ export default function AddRecipe() {
         console.log(error);
       }
     };
-
-    GetRecipe();
-  }, [params.id]);
+    if (params.id) {
+      GetRecipe();
+    }
+  }, []);
 
   const validateForm = () => {
     let valid = true;
@@ -264,7 +265,9 @@ export default function AddRecipe() {
           recipe_image_url: { ...error.recipe_image_url, error: error },
         });
       }
-    } else body.recipe_image_url = show.recipe_image_url;
+    } else if (params.id) {
+      body.recipe_image_url = show.recipe_image_url;
+    }
 
     if (params.id) {
       body.phase_id = Number(show.phase_id);
@@ -414,6 +417,11 @@ export default function AddRecipe() {
                             {error.recipe_image_url.error}
                           </div>
                         )}
+                        <span style={{ color: "red", fontSize: "13px" }}>
+                          {image.type || show.recipe_image_url
+                            ? ""
+                            : "*Recipe Image is required*"}
+                        </span>
                       </div>
                     </CFormGroup>
                     <CFormGroup row>
@@ -559,11 +567,14 @@ export default function AddRecipe() {
                       </div>
                     ) : (
                       <CButton
-                        // disabled={disable}
                         type="submit"
                         name="submit"
-                        color="success"
-                        style={{ width: "75px" }}
+                        style={{
+                          width: "75px",
+                          backgroundColor: "teal",
+                          color: "white",
+                          fontWeight: "bold",
+                        }}
                       >
                         Save
                       </CButton>

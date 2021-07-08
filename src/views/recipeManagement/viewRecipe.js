@@ -17,6 +17,8 @@ import {
 
 import { GetRecipeDetail, ToggleRecipeStatus } from "../../api";
 import { useHistory, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function ViewRecipe() {
   const history = useHistory();
@@ -142,6 +144,23 @@ export default function ViewRecipe() {
               >
                 <div className="form-horizontal">
                   <div style={{ margin: "auto" }}>
+                    <div style={{ textAlign: "right" }}>
+                      <CButton
+                        style={{ cursor: "pointer", backgroundColor: "gray" }}
+                        title="Click to go back"
+                      >
+                        <strong>
+                          {" "}
+                          <FontAwesomeIcon
+                            color="white"
+                            size="lg"
+                            style={{ cursor: "pointer", color: "black" }}
+                            icon={faArrowLeft}
+                            onClick={() => history.goBack()}
+                          />
+                        </strong>
+                      </CButton>
+                    </div>
                     <CFormGroup row>
                       <CCol md="3">
                         <CLabel>
@@ -273,24 +292,8 @@ export default function ViewRecipe() {
                       </div>
                     ) : (
                       <>
-                        {show.role == 1 ? (
+                        {show.status == 0 || show.status == 2 ? (
                           <>
-                            <CButton
-                              name="approve"
-                              disabled={show.status == 1 ? true : false}
-                              title={
-                                show.status == 1
-                                  ? "Recipe already approved"
-                                  : "Click to approve recipe"
-                              }
-                              color="primary"
-                              style={{ cursor: "pointer" }}
-                              onClick={() => {
-                                toggleStatus(show.status);
-                              }}
-                            >
-                              Approve
-                            </CButton>
                             <CButton
                               name="reject"
                               disabled={show.status == 2 ? true : false}
@@ -301,44 +304,39 @@ export default function ViewRecipe() {
                               }
                               style={{ cursor: "pointer" }}
                               color="danger"
-                              style={{ marginLeft: "2rem", width: "77px" }}
+                              style={{ width: "77px" }}
                               onClick={() => {
                                 toggleStatus(show.status);
                               }}
                             >
                               Reject
                             </CButton>
+                            <CButton
+                              name="approve"
+                              disabled={show.status == 1 ? true : false}
+                              title={
+                                show.status == 1
+                                  ? "Recipe already approved"
+                                  : "Click to approve recipe"
+                              }
+                              style={{
+                                cursor: "pointer",
+                                marginLeft: "2rem",
+                                backgroundColor: "teal",
+                                color: "white",
+                              }}
+                              onClick={() => {
+                                toggleStatus(show.status);
+                              }}
+                            >
+                              Approve
+                            </CButton>
                           </>
                         ) : (
                           ""
                         )}
-                        <CButton
-                          name="edit"
-                          color="success"
-                          style={{
-                            marginLeft: "2rem",
-                            width: "77px",
-                            cursor: "pointer",
-                          }}
-                          title="Click to edit recipe"
-                          onClick={() =>
-                            history.push({
-                              pathname: `/addRecipe/${params.id}`,
-                            })
-                          }
-                        >
-                          Edit
-                        </CButton>
                       </>
                     )}
-                    <CButton
-                      style={{ marginLeft: "2rem", cursor: "pointer" }}
-                      color="danger"
-                      title="Click to go back"
-                      onClick={() => history.goBack()}
-                    >
-                      <strong>Cancel</strong>
-                    </CButton>
                   </div>
                 </div>
               </CCardBody>

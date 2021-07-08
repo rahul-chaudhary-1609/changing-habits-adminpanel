@@ -4,7 +4,7 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import { DeleteFaq, getFaqs, ToggleFaqStatus } from "../../../api";
 import { useHistory, useParams } from "react-router";
-import { freeSet, cibWindows } from "@coreui/icons";
+import { freeSet } from "@coreui/icons";
 import _ from "lodash";
 import {
   CPagination,
@@ -18,6 +18,8 @@ import {
   CTooltip,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const FAQS = () => {
   const history = useHistory();
@@ -25,7 +27,6 @@ const FAQS = () => {
   // const { id } = useParams();
   const path = useParams();
   const id = path.id;
-  const topicid = path.topicid;
 
   const [statusOpened, setStatusOpened] = useState({});
   const [qus, setQus] = useState([]);
@@ -157,22 +158,39 @@ const FAQS = () => {
         <div id="recipients" className="p-4 md:p-8 mt-6 lg:mt-0 rounded  ">
           <h1 className="text-3xl">FAQs</h1>
           <br />
-          <div style={{ marginLeft: "76%", marginTop: "-88px" }}>
+          <div style={{ textAlign: "right", marginTop: "-88px" }}>
             <CButton
-              style={{ height: "3rem" }}
-              onClick={() => history.goBack()}
-              className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-              color="primary"
+              style={{
+                cursor: "pointer",
+                backgroundColor: "gray",
+              }}
+              title="Click to go back"
             >
-              Back
+              <strong>
+                {" "}
+                <FontAwesomeIcon
+                  color="white"
+                  size="lg"
+                  style={{
+                    cursor: "pointer",
+                    color: "black",
+                  }}
+                  icon={faArrowLeft}
+                  onClick={() => history.goBack()}
+                />
+              </strong>
             </CButton>
             <CButton
-              style={{ height: "3rem" }}
+              style={{
+                width: "5rem",
+                backgroundColor: "teal",
+                color: "white",
+                marginLeft: "10px",
+              }}
+              title="Click to add"
               onClick={() => history.push(`/viewStaticContent/${id}/addFaqs`)}
-              className="shadow bg-blue-500 ml-3 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-              color="primary"
             >
-              Add New
+              <strong>Add</strong>
             </CButton>
           </div>
         </div>
@@ -253,7 +271,7 @@ const FAQS = () => {
                                       )
                                     }
                                     style={{
-                                      color: "red",
+                                      color: "black",
                                       cursor: "pointer",
                                       marginBottom: "10px",
                                     }}
@@ -281,7 +299,8 @@ const FAQS = () => {
                                       cursor: "pointer",
                                       outline: "none",
                                       boxShadow: "none",
-                                      marginBottom: "10px",
+                                      marginBottom: "13px",
+                                      marginLeft: "5px",
                                     }}
                                     content={freeSet.cilTrash}
                                   />
@@ -289,6 +308,7 @@ const FAQS = () => {
                                 <CSwitch
                                   onChange={() => toggleEnable(ques.id)}
                                   size="sm"
+                                  style={{ marginLeft: "10px" }}
                                   variant={"3d"}
                                   color={"success"}
                                   checked={ques.status}

@@ -314,8 +314,12 @@ const Recipes = () => {
               <strong>Recipe Management</strong>
             </h2>
             <CButton
-              style={{ width: "5rem", marginLeft: "90%" }}
-              color="success"
+              style={{
+                width: "5rem",
+                marginLeft: "90%",
+                backgroundColor: "teal",
+                color: "white",
+              }}
               onClick={() => history.push("/addRecipe")}
             >
               <strong>Add</strong>
@@ -339,7 +343,7 @@ const Recipes = () => {
                   <CInputGroup>
                     <CInputGroupPrepend>
                       <CInputGroupText
-                        style={{ backgroundColor: "#0D86FF", color: "white" }}
+                        style={{ backgroundColor: "teal", color: "white" }}
                       >
                         <CIcon content={freeSet.cilSearch} />
                       </CInputGroupText>
@@ -355,8 +359,11 @@ const Recipes = () => {
 
                     <CButton
                       onClick={handleSearch}
-                      style={{ marginLeft: "1rem" }}
-                      color="info"
+                      style={{
+                        marginLeft: "1rem",
+                        backgroundColor: "teal",
+                        color: "white",
+                      }}
                     >
                       Search
                     </CButton>
@@ -364,8 +371,11 @@ const Recipes = () => {
                       onClick={() => {
                         handleReset();
                       }}
-                      style={{ marginLeft: "1rem" }}
-                      color="info"
+                      style={{
+                        marginLeft: "1rem",
+                        backgroundColor: "teal",
+                        color: "white",
+                      }}
                     >
                       Reset
                     </CButton>
@@ -485,7 +495,7 @@ const Recipes = () => {
                                 state: { item },
                               })
                             }
-                            style={{ color: "red", cursor: "pointer" }}
+                            style={{ color: "black", cursor: "pointer" }}
                             size="lg"
                             content={freeSet.cilPencil}
                           />

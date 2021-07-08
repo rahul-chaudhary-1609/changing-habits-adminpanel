@@ -10,6 +10,8 @@ import Loader from "../../../globalComponent/loader";
 import { CButton } from "@coreui/react";
 import StaticContentFrame from "../getFrame";
 import apiConstant from "src/apiConstants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const EditStaticContent = () => {
   const history = useHistory();
@@ -27,11 +29,10 @@ const EditStaticContent = () => {
     const getContent = async () => {
       try {
         getStaticContentDetails(Number(params.id)).then((data) => {
-          
           setStaticContentDetails(data.staticContentDetails);
-          setSrcURL(`${apiConstant.baseURL}/${apiConstant.getTextFromHTML}?file_url=${data.staticContentDetails.page_url}`)
-          
-          
+          setSrcURL(
+            `${apiConstant.baseURL}/${apiConstant.getTextFromHTML}?file_url=${data.staticContentDetails.page_url}`
+          );
         });
       } catch (error) {
         console.log(error);
@@ -58,23 +59,21 @@ const EditStaticContent = () => {
     }
   };
 
-  
-
   const updateContent = (url) => {
     try {
-      setSrcURL(`${apiConstant.baseURL}/${apiConstant.getTextFromHTML}?file_url=${url}`)
-          
+      setSrcURL(
+        `${apiConstant.baseURL}/${apiConstant.getTextFromHTML}?file_url=${url}`
+      );
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleSubmitUpdatedFile = async () => {
-    
     let data = {
       content_id: params.id,
-      page_url:image_url,
-    }
+      page_url: image_url,
+    };
     try {
       const res = await updateStaticContent(data);
       if (res.status == 200) {
@@ -96,25 +95,26 @@ const EditStaticContent = () => {
         ) : (
           <div
             id="recipients"
-            className="p-4 md:p-8 mt-6 lg:mt-0 rounded shadow bg-white"
+            className="p-3 md:p-8 mt-6 lg:mt-0 rounded shadow bg-white"
           >
             <br />
-            <CButton
-              style={{ height: "3rem" }}
-              onClick={() => history.goBack()}
-              className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-              color="primary"
-            >
-              Back
-            </CButton>
-            <CButton
-              style={{ height: "3rem" }}
-              onClick={handleSubmitUpdatedFile}
-              className="shadow bg-blue-500 ml-3 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-              color="primary"
-            >
-              Save
-            </CButton>
+            <div style={{ textAlign: "right" }}>
+              <CButton
+                style={{ cursor: "pointer", backgroundColor: "gray" }}
+                title="Click to go back"
+              >
+                <strong>
+                  {" "}
+                  <FontAwesomeIcon
+                    color="white"
+                    size="lg"
+                    style={{ cursor: "pointer", color: "black" }}
+                    icon={faArrowLeft}
+                    onClick={() => history.goBack()}
+                  />
+                </strong>
+              </CButton>
+            </div>
             <br />
             {error && (
               <p
@@ -148,7 +148,7 @@ const EditStaticContent = () => {
                 marginTop: "20px",
                 backgroundColor: "lightgrey",
                 padding: "20px",
-                height: "610px",
+                height: "550px",
               }}
             >
               <div className="flex ">
@@ -156,12 +156,11 @@ const EditStaticContent = () => {
               </div>
               <div className="flex mt-10 ">
                 <div className="flex flex-col ml-40">
+                  <StaticContentFrame srcURL={srcURL} />
 
-                    <StaticContentFrame srcURL={ srcURL}/>
-                    
                   <div style={{ display: "flex" }}>
                     <label for="upload" className="w-24 block ">
-                      <div className="w-full px-2 py-1 ml-5 my-2 flex justify-around items-center bg-gray-400 rounded-lg text-white">
+                      <div className="w-full px-2 py-1 ml-5 my-2 flex justify-around items-center bg-gray-800 rounded-lg text-white">
                         Upload File
                         <input
                           type="file"
@@ -192,6 +191,20 @@ const EditStaticContent = () => {
                         {filename}
                       </p>
                     )}
+                  </div>
+                  <div style={{ textAlign: "center" }}>
+                    <CButton
+                      type="submit"
+                      onClick={handleSubmitUpdatedFile}
+                      style={{
+                        width: "75px",
+                        backgroundColor: "teal",
+                        color: "white",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Save
+                    </CButton>
                   </div>
                 </div>
               </div>

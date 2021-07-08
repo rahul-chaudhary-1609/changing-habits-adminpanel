@@ -279,8 +279,8 @@ export default function EditUser(props) {
                   ) : (
                     <CButton
                       type="submit"
-                      style={{ width: "5rem" }}
-                      color="success"
+                      className="teal"
+                      style={{ width: "5rem", marginRight: "-105px" }}
                     >
                       {params.id ? (
                         <strong>Update</strong>
@@ -510,8 +510,12 @@ export default function EditUser(props) {
                   ) : (
                     <CButton
                       type="submit"
-                      style={{ width: "5rem" }}
-                      color="success"
+                      style={{
+                        width: "5rem",
+                        backgroundColor: "teal",
+                        color: "white",
+                        marginLeft: "50px",
+                      }}
                     >
                       {userDetails.name ? (
                         <strong>Update</strong>
@@ -522,7 +526,7 @@ export default function EditUser(props) {
                   )}
 
                   <CButton
-                    style={{ width: "5rem" }}
+                    style={{ width: "5rem", marginRight: "55px" }}
                     color="danger"
                     onClick={() => history.goBack()}
                   >
