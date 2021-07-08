@@ -16,16 +16,15 @@ import ListLearningQuiz from "./ListQuiz";
 
 function Learning(props) {
     let history = useHistory();
-    let quizRadioButton = false;
-    let contentRadioButton=true
+    let quizButton = false;
+    let contentButton=true
 
-    console.log(props.match.params.type);
     if (props.match.params.type == "quiz") {
-        quizRadioButton = true
-        contentRadioButton=false
+        quizButton = true
+        contentButton=false
     } else {
-        contentRadioButton = true
-        quizRadioButton = false
+        contentButton = true
+        quizButton = false
     }
     
     return (
@@ -39,7 +38,7 @@ function Learning(props) {
                                 <CButton
                                     color="success"
                                     style={{ width: "5rem",}}
-                                    onClick={()=>history.push('/addLearning')}
+                                    onClick={()=>quizButton? history.push('/addLearningQuiz'):history.push('/addLearningContent')}
                                 >
                                     <strong>Add</strong>
                                 </CButton>
@@ -47,35 +46,27 @@ function Learning(props) {
                                             
                         </CCardHeader>
                         <CCardBody>
-                                <div style={{ display: "flex", justifyContent:"center", marginLeft:"1rem",marginBottom:"1rem" }}>
-                                <CInputGroupText style={{ marginLeft: "1rem", cursor:"pointer" }}
+                                <div style={{ display: "flex", justifyContent:"center", marginLeft:"1rem",marginBottom:"2rem" }}>
+                                
+                                <CButton
+                                    color={quizButton ? "secondary" : "info"}
+                                    style={{width:"12rem", marginLeft:"2rem"}}
                                     onClick={() => {
                                         history.push('/listLearning/content')
                                     }}
-                                >
-                                    <CIcon style={{ marginRight: "1rem" }} name="cilList"/>
-                                    Learning Content
-                                    <input style={{ marginLeft: "1rem" }}
-                                        type="radio"
-                                        checked={contentRadioButton}
-                                    />
-                                </CInputGroupText>  
-                                <CInputGroupText style={{ marginLeft: "1rem", cursor:"pointer" }}
+                                > <strong>Learning Content</strong>
+                                </CButton>
+                                <CButton
+                                    color={quizButton ? "info" : "secondary"}
+                                    style={{width:"12rem", marginLeft:"2rem"}}
                                     onClick={() => {
                                         history.push("/listLearning/quiz")
-                                        
                                     }}
-                                >
-                                    <CIcon style={{ marginRight: "1rem" }} name="cilPuzzle"/>
-                                    Learning Quiz
-                                    <input style={{ marginLeft: "1rem" }}
-                                        type="radio"
-                                        checked={quizRadioButton}
-                                    />
-                                </CInputGroupText>                                   
+                                ><strong>Learning Quiz</strong>
+                                </CButton>
                             </div>
                             
-                            {quizRadioButton?<ListLearningQuiz/>:<ListLearningContent/>}
+                            {quizButton?<ListLearningQuiz/>:<ListLearningContent/>}
 
                         </CCardBody>
                     </CCard>

@@ -48,9 +48,6 @@ const ListLearning= React.lazy(() =>
   import("./views/learningManagement/ListLearning")
 );
 
-const AddLearning= React.lazy(() =>
-  import("./views/learningManagement/AddLearning")
-);
 
 const AddEditLearningContent= React.lazy(() =>
   import("./views/learningManagement/AddEditContent")
@@ -163,12 +160,11 @@ const routes = [
     name: "List Learning",
     component: ListLearning,
   },
-
   {
-    path: `/addLearning`,
+    path: `/addLearningContent`,
     exact: true,
-    name: "Add Learning",
-    component: AddLearning,
+    name: "Add Learning Content",
+    component: AddEditLearningContent,
   },
   
   {
@@ -177,7 +173,13 @@ const routes = [
     name: "Edit Learning Content",
     component: AddEditLearningContent,
   },
- 
+
+ {
+    path: `/addLearningQuiz`,
+    exact: true,
+    name: "Add Learning Quiz",
+    component: AddEditLearningQuiz,
+  },
   {
     path: `/editLearningQuiz/:id`,
     exact: true,

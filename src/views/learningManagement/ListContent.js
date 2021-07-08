@@ -93,7 +93,6 @@ function ListLearningContent() {
     useEffect(() => {
         const getData = async () => {
             try {
-                console.log("Data")
                 let req = {
                     queryParams: {
                         searchKey: searchKey,
@@ -103,7 +102,6 @@ function ListLearningContent() {
                 }
                 setLoading(true)
                 let response = await listLearningContent(req);
-                console.log("response", response)
                 let updatedData = formatData(response.rows);
                 setData([...updatedData])
                 setDataCount(response.count)
@@ -114,7 +112,6 @@ function ListLearningContent() {
             } catch (error) {
                 setData([])
                 setDataCount(0)
-                console.log(error)
                 if (error.message) {
                     setLoading(false)
                     setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
@@ -247,7 +244,7 @@ function ListLearningContent() {
                                             case 5:
                                                 return (<td>Phase 4</td>)
                                             case 6:
-                                                return (<td>Phase 5</td>)
+                                                return (<td>Phase 4 EVA</td>)
                                             default:
                                                 return (<td>Phase 4 EVA</td>)
                                       }  
