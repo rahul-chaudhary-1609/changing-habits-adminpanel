@@ -1,6 +1,6 @@
 import React from "react";
 import CIcon from "@coreui/icons-react";
-import { FaBook,FaList } from 'react-icons/fa';
+import { freeSet } from "@coreui/icons";
 
 const _nav = [
   {
@@ -25,13 +25,13 @@ const _nav = [
     _tag: "CSidebarNavItem",
     name: "Today's Learning Management",
     to: "/listLearning/content",
-    icon: <CIcon name="cil-list" customClasses="c-sidebar-nav-icon" />,
+    icon: <CIcon content={freeSet.cilBook} customClasses="c-sidebar-nav-icon" />,
   },
   {
     _tag: "CSidebarNavItem",
     name: "Food Log Category",
     to: "/listFoodLogCategory",
-    icon: <CIcon name="cil-list" customClasses="c-sidebar-nav-icon" />,
+    icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
   },
 ];
 
