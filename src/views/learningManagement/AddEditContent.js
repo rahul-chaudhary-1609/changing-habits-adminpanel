@@ -252,8 +252,8 @@ let [title,setTitle ] = useState("");
                 <div style={{display:"flex", justifyContent:"space-between"}}>
                     <h2>{history.location.pathname=="/addLearningContent"?"Add Learning Content":"Edit Learning Content"}</h2>
                     <CButton
-                        color="success"
-                        style={{ width: "5rem" }}
+                        
+                        style={{ width: "5rem",backgroundColor:"#008080",color:"#fff" }}
                         onClick={()=>history.goBack()}
                     >
                         <strong>Back</strong>
@@ -325,7 +325,8 @@ let [title,setTitle ] = useState("");
                       onChange={(e)=>setPhase(e.target.value)}
                       value={phase}
                       id="phase"
-                      name="phase"
+                        name="phase"
+                        custom
                       required
                     > <option value="" defaultValue disabled>Select Phase</option>
                       {phases.map((phase) => {
@@ -341,7 +342,8 @@ let [title,setTitle ] = useState("");
                       onChange={(e) => setPhaseDay(e.target.value)}
                       value={phaseDay}
                       id="phase_day"
-                      name="phase_day"
+                        name="phase_day"
+                        custom
                       required
                     > <option value="" defaultValue disabled>Select Day</option>
                       {phaseDaysList.map((day) => {
@@ -390,7 +392,7 @@ let [title,setTitle ] = useState("");
                   </CFormGroup>
                   
                   <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"space-around"}}>
-                    <CButton style={{width:"10rem"}} color="success" type="submit" >Save</CButton>
+                    <CButton style={{width:"10rem",backgroundColor:"#008080",color:"#fff"}} type="submit" >Save</CButton>
                     <CButton style={{width:"10rem"}} type="reset" color="secondary" onClick={handleReset} >Reset</CButton>
                   </CFormGroup>
                   

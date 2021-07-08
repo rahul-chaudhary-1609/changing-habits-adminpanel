@@ -126,25 +126,6 @@ function ListLearningQuiz() {
 
 
     return (
-        // <CContainer fluid>
-           
-        //     <CRow>
-        //         <CCol>
-        //             <CCard>
-        //                 <CCardHeader>
-        //                     <div style={{display:"flex", justifyContent:"space-between"}}>
-        //                         <h2>Today's Learning Management</h2>
-        //                         <CButton
-        //                             color="success"
-        //                             style={{ width: "5rem",}}
-        //                             onClick={()=>history.push('/selectLearningContentType')}
-        //                         >
-        //                             <strong>Add</strong>
-        //                         </CButton>
-        //                     </div>
-                                            
-        //                 </CCardHeader>
-        //                 <CCardBody>
                 <>
             <StatusModal
                 toggleModal={toggleModal}
@@ -153,6 +134,7 @@ function ListLearningQuiz() {
                 toggleStatus={toggleStatus}
                 setStatus={setStatus}
                 status={status}
+                info={"learning quiz"}
             />
                            
                            
@@ -168,7 +150,7 @@ function ListLearningQuiz() {
                                     <CCol style={{ marginBottom: "1rem", display: "flex" }}>
                                         <CInputGroup>
                                             <CInputGroupPrepend>
-                                                <CInputGroupText className={'bg-info text-white'}>
+                                                <CInputGroupText style={{backgroundColor:"#008080",color:"#fff"}}>
                                                     <CIcon name={'cilSearch'} />
                                                 </CInputGroupText>
                                             </CInputGroupPrepend>
@@ -176,12 +158,12 @@ function ListLearningQuiz() {
                                                 value={searchValue}
                                                 onChange={(e) => { setSearchValue(e.target.value) }}
                                             />
-                                            <CButton color="info" style={{ marginLeft: "1rem" }}
+                                            <CButton style={{ marginLeft: "1rem",backgroundColor:"#008080",color:"#fff" }}
                                                 onClick={() => { setSearchKey(searchValue != "" ? searchValue : null) }}
                                             >
                                                 Search
                                             </CButton>
-                                            <CButton color="info" style={{ marginLeft: "1rem" }}
+                                            <CButton style={{ marginLeft: "1rem",backgroundColor:"#008080",color:"#fff" }}
                                                 onClick={() => {
                                                     setSearchValue("")
                                                     setSearchKey(null)
@@ -209,7 +191,8 @@ function ListLearningQuiz() {
                                             <td>
                                                 <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
                                                     <CTooltip content={"Edit Content"} placement={"top-start"}>
-                                                        <CIcon style={{ color: "red", cursor: "pointer" }}
+                                                        <CIcon style={{ color: "black", cursor: "pointer" }}
+                                                            size="lg"
                                                             name={"cilPencil"}
                                                             onClick={()=>history.push(`/editLearningQuiz/${item.id}`)}
                                                         />
@@ -261,11 +244,7 @@ function ListLearningQuiz() {
                                     setPage({ ...page, number: i })
                                 }}
                             />
-                        {/* </CCardBody>
-                    </CCard>
-                </CCol>
-            </CRow>
-        </CContainer> */}
+                        
             </>
   )
     

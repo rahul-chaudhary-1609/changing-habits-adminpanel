@@ -20,7 +20,7 @@ import {
     CSelect
 } from "@coreui/react"
 import CIcon from "@coreui/icons-react";
-import { FaFilter,FaSearch } from 'react-icons/fa';
+import { FaFilter} from 'react-icons/fa';
 
 import { listFoodLogCategory,listPhases,toggleFoodLogCategoryStatus } from "../../data/foodLogCategory"
 import StatusModal from "../../utils/components/modal";
@@ -146,6 +146,7 @@ function ListFoodLogCategory() {
                 toggleStatus={toggleStatus}
                 setStatus={setStatus}
                 status={status}
+                info={"food log category"}
             />
             <CRow>
                 <CCol sm="12">
@@ -176,15 +177,15 @@ function ListFoodLogCategory() {
                         <CCol style={{ marginBottom: "1rem", display: "flex", justifyContent:"start" }}>
                             <CInputGroup>
                                 <CInputGroupPrepend>
-                                    <CInputGroupText className={'bg-info text-white'}>
-                                        <FaSearch/>
+                                    <CInputGroupText style={{backgroundColor:"#008080",color:"#fff"}}>
+                                        <CIcon name={'cilSearch'} />
                                     </CInputGroupText>
                                 </CInputGroupPrepend>
                                 <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search"
                                     value={searchValue}
                                     onChange={(e) => { setSearchValue(e.target.value) }}
                                 />
-                                <CButton color="info" style={{ marginLeft: "1rem" }}
+                                <CButton style={{ marginLeft: "1rem",backgroundColor:"#008080",color:"#fff" }}
                                     onClick={() => { setSearchKey(searchValue != "" ? searchValue : null) }}
                                 >
                                     Search
@@ -193,7 +194,7 @@ function ListFoodLogCategory() {
                             
                             
                                 <CInputGroupPrepend style={{marginLeft:"3rem",}}>
-                                    <CInputGroupText style={{ borderRadius:"2px"}} className={'bg-info text-white'}>
+                                    <CInputGroupText style={{ borderRadius:"2px",backgroundColor:"#008080",color:"#fff"}} >
                                         <FaFilter/>
                                     </CInputGroupText>
                                 </CInputGroupPrepend>
@@ -203,13 +204,14 @@ function ListFoodLogCategory() {
                                     value={phase}
                                     id="phase"
                                     name="phase"
+                                    custom
                                     required
                                     > <option value="0" defaultValue>All Phase</option>
                                     {phases.map((phase) => {
                                         return <option key={phase.id} value={phase.id}> {phase.phase_name}</option>
                                     })}
                                 </CSelect> 
-                                <CButton color="info" style={{ marginLeft: "4rem" }}
+                                <CButton style={{ marginLeft: "4rem",backgroundColor:"#008080",color:"#fff" }}
                                     onClick={() => {
                                         setSearchValue("")
                                         setSearchKey(null)
@@ -239,7 +241,8 @@ function ListFoodLogCategory() {
                                 <td>
                                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
                                         <CTooltip content={"Edit Content"} placement={"top-start"}>
-                                            <CIcon style={{ color: "red", cursor: "pointer" }}
+                                            <CIcon style={{ color: "black", cursor: "pointer" }}
+                                                size="lg"
                                                 name={"cilPencil"}
                                                 onClick={()=>history.push(`/editFoodLogCategory/${item.id}`)}
                                             />

@@ -36,8 +36,7 @@ function Learning(props) {
                             <div style={{display:"flex", justifyContent:"space-between"}}>
                                 <h2>Today's Learning Management</h2>
                                 <CButton
-                                    color="success"
-                                    style={{ width: "5rem",}}
+                                    style={{ width: "5rem", backgroundColor:"#008080",color:"#fff"}}
                                     onClick={()=>quizButton? history.push('/addLearningQuiz'):history.push('/addLearningContent')}
                                 >
                                     <strong>Add</strong>
@@ -49,16 +48,14 @@ function Learning(props) {
                                 <div style={{ display: "flex", justifyContent:"center", marginLeft:"1rem",marginBottom:"2rem" }}>
                                 
                                 <CButton
-                                    color={quizButton ? "secondary" : "info"}
-                                    style={{width:"12rem", marginLeft:"2rem"}}
+                                    style={{width:"12rem", marginLeft:"2rem", backgroundColor:quizButton ? "gray":"#008080", color:"#fff"}}
                                     onClick={() => {
                                         history.push('/listLearning/content')
                                     }}
                                 > <strong>Learning Content</strong>
                                 </CButton>
                                 <CButton
-                                    color={quizButton ? "info" : "secondary"}
-                                    style={{width:"12rem", marginLeft:"2rem"}}
+                                    style={{width:"12rem", marginLeft:"2rem",backgroundColor:quizButton ? "#008080" : "gray",color:"#fff"}}
                                     onClick={() => {
                                         history.push("/listLearning/quiz")
                                     }}

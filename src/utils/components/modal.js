@@ -13,17 +13,19 @@ export default function StatusModal(props) {
                 closeOnBackdrop={false}
                 backdrop
                 centered
-                color={props.status == 1 ? "danger" : "success" }
+                //color={props.status == 1 ? "danger" : "success" }
+                
             >
                 <CModalHeader
+                    style={{backgroundColor:"#008080",color:"#fff"}}
                     closeButton
                 ><strong>{props.status==1?"Block Learning Content":"Unblock Learning Content"}</strong></CModalHeader>
                 <CModalBody>
-                    Are you sure you want to {props.status==1?"block":"unblock"} this learning content?
+                    Are you sure you want to {props.status == 1 ? "block" : "unblock"} this { props.info}?
           </CModalBody>
                 <CModalFooter>
                     <CButton
-                        color="info"
+                        style={{backgroundColor:"#008080",color:"#fff"}}
                         onClick={()=>props.toggleStatus(props.toggleData)}
                     >Yes</CButton>
                     <CButton

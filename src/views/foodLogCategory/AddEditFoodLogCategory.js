@@ -147,7 +147,8 @@ let [categoryName,setCategoryName ] = useState("");
                                     onChange={(e)=>setPhase(e.target.value)}
                                     value={phase}
                                     id="phase"
-                                    name="phase"
+                      name="phase"
+                      custom
                                     required
                                     > <option value="" defaultValue disabled>Select Phase</option>
                                     {phases.map((phase) => {
