@@ -21,6 +21,7 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
+  CSelect,
 } from "@coreui/react";
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
@@ -41,17 +42,37 @@ const getBadge = (status) => {
   }
 };
 
+var account_type = [
+  {
+    label: "Select account type",
+    value: null,
+  },
+  {
+    label: "Active",
+    value: 1,
+  },
+  {
+    label: "Blocked",
+    value: 0,
+  },
+];
+
 const fields = [
-  { key: "id", label: "Id", _style: { fontFamily: "Poppins" } },
+  { key: "currentId", label: "Id", _style: { fontFamily: "Poppins" } },
   { key: "name", label: "Username", _style: { fontFamily: "Poppins" } },
   {
     key: "email",
-    label: "Email/Phone",
+    label: "Email",
+    _style: { fontFamily: "Poppins" },
+  },
+  {
+    key: "phone_no",
+    label: "Mobile",
     _style: { fontFamily: "Poppins" },
   },
   {
     key: "created_at",
-    label: "Registration Date",
+    label: "Signup Date",
     _style: { fontFamily: "Poppins" },
   },
   { key: "status", _style: { fontFamily: "Poppins" } },
@@ -65,6 +86,7 @@ const fields = [
 ];
 const Users = () => {
   const [loading, setLoading] = useState(false);
+  const [accountType, setAccountType] = useState(null);
 
   const history = useHistory();
 
@@ -91,6 +113,7 @@ const Users = () => {
   const [enableModal, setEnableModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  let currentId = page && page * 10 - 10;
 
   const pageChange = (newPage) => {
     let newPage1 = newPage;
@@ -98,7 +121,7 @@ const Users = () => {
       newPage1 = 1;
     }
     currentPage !== newPage &&
-      history.push(`/users?search=${onsearchCHange}&&page=${newPage1}`);
+      history.push(`/users?search=${onsearchCHange}&page=${newPage1}`);
   };
 
   const toggleEnable = (id, status) => {
@@ -139,7 +162,7 @@ const Users = () => {
 
   const handleSearch = async () => {
     currentPageSearch !== onsearchCHange &&
-      history.push(`/users?search=${onsearchCHange}&&page=${page}`);
+      history.push(`/users?search=${onsearchCHange}&page=${page}`);
   };
 
   const handleReset = () => {
@@ -148,14 +171,21 @@ const Users = () => {
     if (newPage === 0) {
       newPage = 1;
     }
-    history.push(`/users?search=&&page=${newPage}`);
+    history.push(`/users?page=${newPage}`);
   };
 
   useEffect(() => {
     const getData = async () => {
       try {
         setLoading(true);
-        const data = await GetUserList(currentPage, currentPageSearch);
+        setData([]);
+        const data = accountType
+          ? await GetUserList(
+              currentPage,
+              currentPageSearch,
+              Number(accountType)
+            )
+          : await GetUserList(currentPage, currentPageSearch);
         setLoading(false);
         data.rows.map((item) => {
           item._classes = "catTableItem";
@@ -163,25 +193,21 @@ const Users = () => {
           if (item.created_at) {
             item.created_at = moment(item.created_at).format("LLL");
           }
-          if (item.dateOfBirth) {
-            item.dateOfBirth = item.dateOfBirth.slice(0, 10);
-          }
 
           return item;
         });
-
         setData(data.rows);
         setCount(data.count);
       } catch (error) {
-        console.log(error);
         setLoading(false);
+        console.log(error);
       }
     };
 
     getData();
 
     currentPage !== page && setPage(currentPage);
-  }, [currentPage, currentPageSearch, refresh, page]);
+  }, [currentPage, currentPageSearch, refresh, page, accountType]);
 
   return (
     <CRow>
@@ -239,8 +265,12 @@ const Users = () => {
               <strong>User Management</strong>
             </h2>
             <CButton
-              style={{ width: "5rem", marginLeft: "90%" }}
-              color="success"
+              style={{
+                width: "5rem",
+                marginLeft: "90%",
+                backgroundColor: "teal",
+                color: "white",
+              }}
               onClick={() => history.push("/addUser")}
             >
               <strong>Add</strong>
@@ -260,11 +290,11 @@ const Users = () => {
               }
               clickableRows
               overTableSlot={
-                <CCol style={{ marginBottom: "1rem", display: "flex" }} md="5">
+                <CCol style={{ marginBottom: "1rem", display: "flex" }}>
                   <CInputGroup>
                     <CInputGroupPrepend>
                       <CInputGroupText
-                        style={{ backgroundColor: "#0D86FF", color: "white" }}
+                        style={{ backgroundColor: "teal", color: "white" }}
                       >
                         <CIcon content={freeSet.cilSearch} />
                       </CInputGroupText>
@@ -275,13 +305,16 @@ const Users = () => {
                       onChange={handleSearchChange}
                       id="input1-group1"
                       name="input1-group1"
-                      placeholder="Search"
+                      placeholder="Search by Name or Email"
                     />
 
                     <CButton
                       onClick={handleSearch}
-                      style={{ marginLeft: "1rem" }}
-                      color="info"
+                      style={{
+                        marginLeft: "1rem",
+                        backgroundColor: "teal",
+                        color: "white",
+                      }}
                     >
                       Search
                     </CButton>
@@ -289,11 +322,32 @@ const Users = () => {
                       onClick={() => {
                         handleReset();
                       }}
-                      style={{ marginLeft: "1rem" }}
-                      color="info"
+                      style={{
+                        marginLeft: "1rem",
+                        backgroundColor: "teal",
+                        color: "white",
+                      }}
                     >
                       Reset
                     </CButton>
+                  </CInputGroup>
+                  <CInputGroup style={{ width: "30%" }}>
+                    <CSelect
+                      onChange={(e) => {
+                        setAccountType(e.target.value);
+                      }}
+                      custom
+                      value={accountType}
+                      placeholder="Select account type"
+                      name="status"
+                      id="status"
+                    >
+                      {account_type.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </CSelect>
                   </CInputGroup>
                 </CCol>
               }
@@ -304,9 +358,10 @@ const Users = () => {
                 </div>
               }
               scopedSlots={{
-                dateOfBirth: (item) => (
-                  <td>{item.dateOfBirth ? item.dateOfBirth : ""}</td>
-                ),
+                currentId: (item) => {
+                  currentId++;
+                  return <td>{currentId}</td>;
+                },
                 email: (item) => <td>{item.email}</td>,
                 status: (item) => (
                   <td>
@@ -340,7 +395,7 @@ const Users = () => {
                           alignItems: "center",
                         }}
                       >
-                        <CTooltip content={"edit User"} placement={"top-start"}>
+                        <CTooltip content={"Edit User"} placement={"top-start"}>
                           <CIcon
                             onClick={() =>
                               history.push({
@@ -348,7 +403,7 @@ const Users = () => {
                                 state: { item },
                               })
                             }
-                            style={{ color: "red", cursor: "pointer" }}
+                            style={{ color: "black", cursor: "pointer" }}
                             size="lg"
                             content={freeSet.cilPencil}
                           />

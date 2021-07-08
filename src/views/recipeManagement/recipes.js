@@ -20,12 +20,15 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
+  CSelect,
 } from "@coreui/react";
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import moment from "moment";
 
 import { GetRecipeList, ChangeUserStatus, DeleteRecipe } from "../../api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 const getBadge = (status) => {
   switch (status) {
@@ -39,7 +42,7 @@ const getBadge = (status) => {
 };
 
 const fields = [
-  { key: "id", label: "Id", _style: { fontFamily: "Poppins" } },
+  { key: "currentId", label: "Id", _style: { fontFamily: "Poppins" } },
   {
     key: "recipe_title",
     label: "Recipe Title ",
@@ -48,6 +51,11 @@ const fields = [
   {
     key: "recipeType",
     label: "Recipe Type",
+    _style: { fontFamily: "Poppins" },
+  },
+  {
+    key: "status",
+    label: "Status",
     _style: { fontFamily: "Poppins" },
   },
   {
@@ -96,6 +104,43 @@ const Recipes = () => {
   const [enableModal, setEnableModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [recipeType, setRecipeType] = useState(null);
+  const [recipeStatus, setRecipeStatus] = useState(null);
+  let currentId = page && page * 10 - 10;
+
+  var recipe_status = [
+    {
+      label: "Select recipe status",
+      value: null,
+    },
+    {
+      label: "Pending",
+      value: 0,
+    },
+    {
+      label: "Approved",
+      value: 1,
+    },
+    {
+      label: "Rejected",
+      value: 2,
+    },
+  ];
+
+  var recipe_type = [
+    {
+      label: "Select recipe type",
+      value: null,
+    },
+    {
+      label: "Veg",
+      value: 1,
+    },
+    {
+      label: "Non Veg",
+      value: 2,
+    },
+  ];
 
   const pageChange = (newPage) => {
     let newPage1 = newPage;
@@ -103,7 +148,9 @@ const Recipes = () => {
       newPage1 = 1;
     }
     currentPage !== newPage &&
-      history.push(`/users?search=${onsearchCHange}&&page=${newPage1}`);
+      history.push(
+        `/recipeManagement?search=${onsearchCHange}&page=${newPage1}`
+      );
   };
 
   const toggleDelete = (id) => {
@@ -144,7 +191,7 @@ const Recipes = () => {
 
   const handleSearch = async () => {
     currentPageSearch !== onsearchCHange &&
-      history.push(`/recipeManagement?search=${onsearchCHange}&&page=${page}`);
+      history.push(`/recipeManagement?search=${onsearchCHange}&page=${page}`);
   };
 
   const handleReset = () => {
@@ -153,14 +200,21 @@ const Recipes = () => {
     if (newPage === 0) {
       newPage = 1;
     }
-    history.push(`/recipeManagement?search=&&page=${newPage}`);
+    history.push(`/recipeManagement?&page=${newPage}`);
   };
 
   useEffect(() => {
     const getData = async () => {
       try {
         setLoading(true);
-        const data = await GetRecipeList(currentPage, currentPageSearch);
+        setData([]);
+        let dropdown = {};
+        dropdown.recipeType = recipeType ? Number(recipeType) : null;
+        dropdown.recipeStatus = recipeStatus ? Number(recipeStatus) : null;
+        const data =
+          recipeType || recipeStatus
+            ? await GetRecipeList(currentPage, currentPageSearch, dropdown)
+            : await GetRecipeList(currentPage, currentPageSearch);
         setLoading(false);
         data.rows.map((item) => {
           item._classes = "catTableItem";
@@ -182,7 +236,7 @@ const Recipes = () => {
     getData();
 
     currentPage !== page && setPage(currentPage);
-  }, [currentPage, currentPageSearch, refresh, page]);
+  }, [currentPage, currentPageSearch, refresh, page, recipeStatus, recipeType]);
 
   return (
     <CRow>
@@ -260,8 +314,12 @@ const Recipes = () => {
               <strong>Recipe Management</strong>
             </h2>
             <CButton
-              style={{ width: "5rem", marginLeft: "90%" }}
-              color="success"
+              style={{
+                width: "5rem",
+                marginLeft: "90%",
+                backgroundColor: "teal",
+                color: "white",
+              }}
               onClick={() => history.push("/addRecipe")}
             >
               <strong>Add</strong>
@@ -281,11 +339,11 @@ const Recipes = () => {
               }
               clickableRows
               overTableSlot={
-                <CCol style={{ marginBottom: "1rem", display: "flex" }} md="5">
+                <CCol style={{ marginBottom: "1rem", display: "flex" }}>
                   <CInputGroup>
                     <CInputGroupPrepend>
                       <CInputGroupText
-                        style={{ backgroundColor: "#0D86FF", color: "white" }}
+                        style={{ backgroundColor: "teal", color: "white" }}
                       >
                         <CIcon content={freeSet.cilSearch} />
                       </CInputGroupText>
@@ -296,13 +354,16 @@ const Recipes = () => {
                       onChange={handleSearchChange}
                       id="input1-group1"
                       name="input1-group1"
-                      placeholder="Search"
+                      placeholder="Search by Recipe Title"
                     />
 
                     <CButton
                       onClick={handleSearch}
-                      style={{ marginLeft: "1rem" }}
-                      color="info"
+                      style={{
+                        marginLeft: "1rem",
+                        backgroundColor: "teal",
+                        color: "white",
+                      }}
                     >
                       Search
                     </CButton>
@@ -310,11 +371,48 @@ const Recipes = () => {
                       onClick={() => {
                         handleReset();
                       }}
-                      style={{ marginLeft: "1rem" }}
-                      color="info"
+                      style={{
+                        marginLeft: "1rem",
+                        backgroundColor: "teal",
+                        color: "white",
+                      }}
                     >
                       Reset
                     </CButton>
+                  </CInputGroup>
+                  <CInputGroup style={{ width: "30%", marginRight: "10px" }}>
+                    <CSelect
+                      onChange={(e) => {
+                        setRecipeStatus(e.target.value);
+                      }}
+                      custom
+                      value={recipeStatus}
+                      name="status"
+                      id="status"
+                    >
+                      {recipe_status.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </CSelect>
+                  </CInputGroup>
+                  <CInputGroup style={{ width: "30%" }}>
+                    <CSelect
+                      onChange={(e) => {
+                        setRecipeType(e.target.value);
+                      }}
+                      custom
+                      value={recipeType}
+                      name="recipe_type"
+                      id="recipe_type"
+                    >
+                      {recipe_type.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </CSelect>
                   </CInputGroup>
                 </CCol>
               }
@@ -326,22 +424,43 @@ const Recipes = () => {
                 </div>
               }
               scopedSlots={{
+                currentId: (item) => {
+                  currentId++;
+                  return <td>{currentId}</td>;
+                },
                 email: (item) => <td>{item.email}</td>,
                 PostedBy: (item) => (
-                  <td>{item.role == 1 ? `App user:${item.name}` : "Admin"}</td>
+                  <td>
+                    {item.role == 1 ? (
+                      <>
+                        <b>App user : </b>
+                        {item.name}
+                      </>
+                    ) : (
+                      `Admin : ${item.name}`
+                    )}
+                  </td>
                 ),
                 recipeType: (item) => (
                   <td>{item.recipe_type == 1 ? "Veg" : "Non Veg"}</td>
                 ),
                 status: (item) => (
                   <td>
-                    {item.status == 1 ? (
+                    {item.status == 0 ? (
+                      <CBadge
+                        style={{ width: "4rem", height: "1.1rem" }}
+                        shape="pill"
+                        color={getBadge("")}
+                      >
+                        Pending
+                      </CBadge>
+                    ) : item.status == 1 ? (
                       <CBadge
                         style={{ width: "4rem", height: "1.1rem" }}
                         shape="pill"
                         color={getBadge("Active")}
                       >
-                        Active
+                        Approved
                       </CBadge>
                     ) : (
                       <CBadge
@@ -349,7 +468,7 @@ const Recipes = () => {
                         shape="pill"
                         color={getBadge("Banned")}
                       >
-                        Blocked
+                        Rejected
                       </CBadge>
                     )}
                   </td>
@@ -365,7 +484,10 @@ const Recipes = () => {
                           alignItems: "center",
                         }}
                       >
-                        <CTooltip content={"edit User"} placement={"top-start"}>
+                        <CTooltip
+                          content={"Edit Recipe"}
+                          placement={"top-start"}
+                        >
                           <CIcon
                             onClick={() =>
                               history.push({
@@ -373,13 +495,30 @@ const Recipes = () => {
                                 state: { item },
                               })
                             }
-                            style={{ color: "red", cursor: "pointer" }}
+                            style={{ color: "black", cursor: "pointer" }}
                             size="lg"
                             content={freeSet.cilPencil}
                           />
                         </CTooltip>
                         <CTooltip
-                          content={`Delete ${item.recipe_title} Recipe
+                          content={`View Recipe`}
+                          placement={"top-start"}
+                        >
+                          <FontAwesomeIcon
+                            color="green"
+                            size="lg"
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              history.push({
+                                pathname: `/viewRecipe/${item.id}`,
+                                state: { item },
+                              })
+                            }
+                            icon={faEye}
+                          />
+                        </CTooltip>
+                        <CTooltip
+                          content={`Delete Recipe
                           `}
                           placement={"top-start"}
                           interactive={true}

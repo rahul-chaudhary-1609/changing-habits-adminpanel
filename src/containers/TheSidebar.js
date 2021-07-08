@@ -12,8 +12,8 @@ import {
   CSidebarNavItem,
 } from "@coreui/react";
 import { setSideBar } from "../actions/index";
-import changingHabitsLogo from "../assets/icons/dish.jpeg";
-import biglogo from "../assets/icons/dish.jpeg";
+import changingHabitsLogo from "../assets/icons/logo tflp – 1.png";
+import biglogo from "../assets/icons/logo tflp – 1.png";
 import navigation from "./_nav";
 
 const TheSidebar = () => {
@@ -26,7 +26,7 @@ const TheSidebar = () => {
         <img
           alt="admin"
           className="c-sidebar-brand-full"
-          style={{ width: "85%", marginTop: "20px" }}
+          style={{ width: "75%", marginTop: "20px" }}
           src={biglogo}
         />
         <img

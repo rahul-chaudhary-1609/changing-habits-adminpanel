@@ -3,6 +3,8 @@ import { useHistory, useParams } from "react-router";
 import { getFaqById, editFaqs } from "../../../../api";
 import Loader from "../../../../globalComponent/loader";
 import { CButton } from "@coreui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const EditFqs = () => {
   const history = useHistory();
@@ -69,22 +71,39 @@ const EditFqs = () => {
         >
           <h1 className="text-2xl">Edit FAQ</h1>
           <br />
-          <div style={{ marginLeft: "80%", marginTop: "-70px" }}>
+          <div style={{ textAlign: "right", marginTop: "-88px" }}>
             <CButton
-              style={{ height: "3rem" }}
-              onClick={() => history.goBack()}
-              className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-              color="primary"
+              style={{
+                cursor: "pointer",
+                backgroundColor: "gray",
+              }}
+              title="Click to go back"
             >
-              Back
+              <strong>
+                {" "}
+                <FontAwesomeIcon
+                  color="white"
+                  size="lg"
+                  style={{
+                    cursor: "pointer",
+                    color: "black",
+                  }}
+                  icon={faArrowLeft}
+                  onClick={() => history.goBack()}
+                />
+              </strong>
             </CButton>
             <CButton
-              style={{ height: "3rem" }}
+              style={{
+                width: "5rem",
+                backgroundColor: "teal",
+                color: "white",
+                marginLeft: "10px",
+              }}
+              title="Click to add"
               onClick={handleSubmit}
-              className="shadow bg-blue-500 ml-3 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-              color="primary"
             >
-              Save
+              <strong>Save</strong>
             </CButton>
           </div>
           <br />
@@ -122,7 +141,7 @@ const EditFqs = () => {
             <div
               style={{
                 marginTop: "20px",
-                backgroundColor: "lightgrey",
+                backgroundColor: "#929191",
                 padding: "20px",
                 height: "400px",
               }}
@@ -152,7 +171,7 @@ const EditFqs = () => {
                   placeholder="Enter the answer "
                   style={{
                     width: "70%",
-                    height: "100px",
+                    height: "170px",
                     marginLeft: "140px",
                     padding: "10px",
                   }}

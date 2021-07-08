@@ -67,39 +67,33 @@ export default function EditAdmin() {
 
   const handleProfileChange = async (image) => {
     setImage(image);
-    // formdata.append("image", image, image.name);
-    // formdata.append("folderName", "user");
   };
 
   const onSubmit = async (values) => {
-    //const bodyFormData = new FormData();
     let bodyFormData = {};
-    formdata.append("image", image, image.name);
-    formdata.append("folderName", "user");
-    try {
+
+    if (image.type) {
+      formdata.append("image", image, image.name);
+      formdata.append("folderName", "user");
       const res = await uploadImage(formdata);
       if (res.status == 200) {
         bodyFormData.profile_picture_url = res.data.image_url;
       }
+    }
 
-      bodyFormData.name = values.name;
-      //bodyFormData.email = values.newemail ? values.newemail : values.email;
+    bodyFormData.name = values.name;
+    try {
+      setLoading(true);
+      const response = await UpdateProfile(bodyFormData);
 
-      try {
-        setLoading(true);
-        const response = await UpdateProfile(bodyFormData);
+      update();
 
-        update();
+      setLoading(false);
 
-        setLoading(false);
-
-        history.push({
-          pathname: `/profile`,
-          state: { data: response.message, type: "edit" },
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      history.push({
+        pathname: `/profile`,
+        state: { data: response.message, type: "edit" },
+      });
     } catch (error) {
       console.log(error);
     }
@@ -109,7 +103,7 @@ export default function EditAdmin() {
     enableReinitialize: true,
     initialValues,
     onSubmit,
-    validationSchema: updateEmail,
+    // validationSchema: updateEmail,
   });
 
   const handleUpadteEmail = async (type) => {
@@ -337,7 +331,7 @@ export default function EditAdmin() {
               >
                 <CButton
                   onClick={() => history.push("/profile")}
-                  style={{ width: "5rem" }}
+                  style={{ width: "5rem", marginRight: "-170px" }}
                   type="reset"
                   color="danger"
                 >
@@ -350,21 +344,30 @@ export default function EditAdmin() {
                 ) : (
                   <CButton
                     type="submit"
-                    color="success"
-                    style={{ width: "5rem" }}
+                    style={{
+                      width: "5rem",
+                      backgroundColor: "teal",
+                      color: "white",
+                    }}
                   >
                     <strong>Update</strong>
                   </CButton>
                 )}
               </CCardFooter>
               <CCardFooter>
-                <CCol style={{ textAlign: "center", margin: "10px" }}>
-                  <CButton
-                    color="primary"
-                    onClick={() => history.push("/changePassword")}
-                  >
-                    <strong>Change Password</strong>
-                  </CButton>
+                <CCol
+                  style={{
+                    textAlign: "center",
+                    margin: "10px",
+                    cursor: "pointer",
+                    color: "blue",
+                  }}
+                >
+                  <a onClick={() => history.push("/changePassword")}>
+                    <u>
+                      <strong>Change Password?</strong>
+                    </u>
+                  </a>
                 </CCol>
               </CCardFooter>
             </CForm>

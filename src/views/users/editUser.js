@@ -32,7 +32,10 @@ export default function EditUser(props) {
   const [loading, setLoading] = useState(false);
 
   const [userDetails, setUserDetails] = useState({});
-  const [imageUrl, setImageUrl] = useState(null);
+  const [showError, setShowError] = useState(null);
+  const [msgError, setMsgError] = useState(null);
+  const [image, setImage] = useState({});
+  const [subscriptionStatus, setSubscriptionStatus] = useState(0);
 
   const initialValues = {
     name: userDetails.name ? userDetails.name : "",
@@ -42,10 +45,18 @@ export default function EditUser(props) {
     profile_picture_url: userDetails.profile_picture_url
       ? userDetails.profile_picture_url
       : "",
+    subscription_status: userDetails.subscription_status
+      ? userDetails.subscription_status
+      : "",
+    subscription_token_id: userDetails.subscription_token_id
+      ? userDetails.subscription_token_id
+      : "",
   };
 
+  const formdata = new FormData();
+
   useEffect(() => {
-    getUserDetails();
+    if (params.id) getUserDetails();
   }, []);
 
   const getUserDetails = async () => {
@@ -59,40 +70,46 @@ export default function EditUser(props) {
     }
   };
 
-  const handleProfileChange = async (e) => {
-    var image = e.currentTarget.files[0];
-    var data = new FormData();
-    data.append("image", image, image.name);
-    data.append("folderName", "user");
-
-    try {
-      const res = await uploadImage(data);
-      if (res.status == 200) {
-        setImageUrl(res.image_url);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const handleProfileChange = async (image) => {
+    setImage(image);
   };
 
-  const onSubmit = async (values) => {
+  const handleSubscriptionStatus = (type) => {
+    setSubscriptionStatus(type);
+  };
+
+  const onSubmit = async (values, actions) => {
     try {
-      if (userDetails.name) {
-        let formData = {};
-        if (values.name != userDetails.name) formData.name = values.name;
-        if (values.email != userDetails.email) formData.email = values.email;
-        if (values.phone_no != userDetails.phone_no)
-          formData.phone_no = values.phone_no;
-        if (imageUrl) formData.profile_picture_url = imageUrl;
+      let bodyFormData = {};
+      setMsgError(null);
+      if (image.type) {
+        formdata.append("image", image, image.name);
+        formdata.append("folderName", "user");
+        const res = await uploadImage(formdata);
+        if (res.status == 200) {
+          bodyFormData.profile_picture_url = res.data.image_url;
+        }
+      }
+      bodyFormData.name = values.name;
+
+      if (params.id) {
         setLoading(true);
-        const response = await EditUserDetails(formData, Number(params.id));
+        const response = await EditUserDetails(bodyFormData, Number(params.id));
         setLoading(false);
         if (response) {
+          setShowError(null);
           history.push("/users");
         }
       } else {
+        bodyFormData.email = values.email;
+        bodyFormData.country_code = values.country_code;
+        bodyFormData.phone_no = values.phone_no;
+        bodyFormData.subscription_status = subscriptionStatus;
+        if (values.subscription_token_id) {
+          bodyFormData.subscription_token_id = values.subscription_token_id;
+        }
         setLoading(true);
-        const response = await addUserList(values);
+        const response = await addUserList(bodyFormData);
         setLoading(false);
         if (response) {
           history.push("/users");
@@ -100,6 +117,8 @@ export default function EditUser(props) {
       }
     } catch (error) {
       setLoading(false);
+      actions.setFieldError("error", error.message);
+      setMsgError(error.message);
     }
   };
 
@@ -107,7 +126,7 @@ export default function EditUser(props) {
     enableReinitialize: true,
     initialValues,
     onSubmit,
-    validationSchema: UserValidation,
+    validationSchema: UserValidation(subscriptionStatus),
   });
 
   return (
@@ -155,37 +174,28 @@ export default function EditUser(props) {
                     ) : (
                       <DefaultUser style={{ marginBottom: "2rem" }} />
                     )}
-                    <div style={{ textAlign: "center" }}>
-                      <label for="upload">
-                        <div
-                          class="w-full px-2 py-1 my-2 flex justify-around items-center bg-gray-400 rounded-lg text-white"
-                          title="Upload a photo..."
-                        >
-                          <svg
-                            style={{ width: "20px" }}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                            ></path>
-                          </svg>{" "}
-                          Upload
-                          <CInput
-                            type="file"
-                            name="upload"
-                            id="upload"
-                            onChange={handleProfileChange}
-                            style={{ display: "none" }}
-                            accept="image/png,image/jpeg"
-                          />
-                        </div>
-                      </label>
+                    <div style={{ marginLeft: "140px" }}>
+                      <CInputFile
+                        name="profile_picture_url"
+                        type="file"
+                        className="hidden"
+                        onChange={(e) => {
+                          formik.setFieldValue("profile_picture_url", "");
+
+                          if (
+                            e.target.files[0].type !== "image/png" &&
+                            e.target.files[0].type !== "image/jpeg"
+                          ) {
+                            setShowError("Only jpeg, png images are allowed");
+                            return;
+                          }
+                          setShowError(null);
+                          handleProfileChange(e.target.files[0]);
+                        }}
+                      />
+                      {showError ? (
+                        <div className="email-validate">{showError}</div>
+                      ) : null}
                     </div>
                   </CCol>
                 </CFormGroup>
@@ -219,6 +229,7 @@ export default function EditUser(props) {
                     <CInput
                       type="text"
                       id="email"
+                      disabled="true"
                       name="email"
                       onBlur={formik.handleBlur}
                       value={formik.values.email}
@@ -242,6 +253,7 @@ export default function EditUser(props) {
                       type="text"
                       id="phone_no"
                       name="phone_no"
+                      disabled="true"
                       onBlur={formik.handleBlur}
                       value={formik.values.phone_no}
                       onChange={formik.handleChange}
@@ -267,8 +279,8 @@ export default function EditUser(props) {
                   ) : (
                     <CButton
                       type="submit"
-                      style={{ width: "5rem" }}
-                      color="success"
+                      className="teal"
+                      style={{ width: "5rem", marginRight: "-105px" }}
                     >
                       {params.id ? (
                         <strong>Update</strong>
@@ -299,26 +311,39 @@ export default function EditUser(props) {
             <CCardBody style={{ fontFamily: "Roboto" }}>
               <CForm onSubmit={formik.handleSubmit} className="form-horizontal">
                 <CFormGroup row>
-                  <CCol xs="12" md="9">
-                    <DefaultUser style={{ marginBottom: "2rem" }} />
-                    <CInputFile
-                      id="profile_picture_url"
-                      name="profile_picture_url"
-                      type="file"
-                      accept="image/x-png,image/gif,image/jpeg"
-                      onChange={formik.handleChange}
+                  <CCol>
+                    <DefaultUser
+                      style={{ marginBottom: "2rem", marginLeft: "168px" }}
                     />
-                    {formik.errors.profile_picture_url ? (
-                      <div className="email-validate">
-                        {formik.errors.profile_picture_url}
-                      </div>
-                    ) : null}
+                    <div style={{ marginLeft: "150px" }}>
+                      <CInputFile
+                        name="profile_picture_url"
+                        type="file"
+                        className="hidden"
+                        onChange={(e) => {
+                          formik.setFieldValue("profile_picture_url", "");
+
+                          if (
+                            e.target.files[0].type !== "image/png" &&
+                            e.target.files[0].type !== "image/jpeg"
+                          ) {
+                            setShowError("Only jpeg, png images are allowed");
+                            return;
+                          }
+                          setShowError(null);
+                          handleProfileChange(e.target.files[0]);
+                        }}
+                      />
+                      {showError ? (
+                        <div className="email-validate">{showError}</div>
+                      ) : null}
+                    </div>
                   </CCol>
                 </CFormGroup>
                 <CFormGroup row>
                   <CCol md="3">
                     <CLabel htmlFor="hf-categorytype">
-                      <h6>Enter User Name</h6>
+                      <h6>User Name</h6>
                     </CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
@@ -330,18 +355,15 @@ export default function EditUser(props) {
                       value={formik.values.name}
                       onChange={formik.handleChange}
                     />
-                    {formik.touched.categoryType &&
-                    formik.errors.categoryType ? (
-                      <div className="email-validate">
-                        {formik.errors.categoryType}
-                      </div>
+                    {formik.touched.name && formik.errors.name ? (
+                      <div className="email-validate">{formik.errors.name}</div>
                     ) : null}
                   </CCol>
                 </CFormGroup>
                 <CFormGroup row>
                   <CCol md="3">
                     <CLabel htmlFor="hf-categorytype">
-                      <h6>Enter Email</h6>
+                      <h6>Email</h6>
                     </CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
@@ -363,7 +385,7 @@ export default function EditUser(props) {
                 <CFormGroup row>
                   <CCol md="3">
                     <CLabel htmlFor="hf-categorytype">
-                      <h6>Enter Mobile Number</h6>
+                      <h6>Mobile Number</h6>
                     </CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
@@ -371,9 +393,11 @@ export default function EditUser(props) {
                       type="text"
                       id="country_code"
                       name="country_code"
+                      placeholder="code"
                       onBlur={formik.handleBlur}
                       value={formik.values.country_code}
                       onChange={formik.handleChange}
+                      style={{ marginBottom: "5px", width: "30%" }}
                     />
                     {formik.touched.country_code &&
                     formik.errors.country_code ? (
@@ -396,47 +420,82 @@ export default function EditUser(props) {
                     ) : null}
                   </CCol>
                 </CFormGroup>
-                {/* <CFormGroup row>
+                <CFormGroup row>
                   <CCol md="3">
-                    <CLabel htmlFor="hf-categorytype">
-                      <h6>User in Free Trail?</h6>
+                    <CLabel htmlFor="recipe_type">
+                      <h6>Subscription Status?</h6>
                     </CLabel>
                   </CCol>
-                  <CCol row md="3">
-                    <CInput
-                      type="radio"
-                      id="trail"
-                      name="yesno"
-                      style={{
-                        width: "15%",
-                        marginTop: "-7px",
-                        outline: "none !important",
-                      }}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.trail}
-                      onChange={formik.handleChange}
-                    />
-                    <label for="trail1">Yes</label>
+                  <CCol row md="4">
+                    <label for={0}>
+                      <CInput
+                        type="radio"
+                        id={0}
+                        formControlName="recipe_type"
+                        checked={subscriptionStatus == 0 ? "checked" : ""}
+                        style={{
+                          width: "20%",
+                          marginTop: "-7px",
+                          outline: "none !important",
+                          cursor: "pointer",
+                        }}
+                        onChange={() => {
+                          handleSubscriptionStatus(0);
+                        }}
+                      />
+                      Free Trial
+                    </label>
                   </CCol>
-                  <CCol row md="3">
-                    <CInput
-                      type="radio"
-                      id="trail"
-                      name="yesno"
-                      style={{ width: "15%", marginTop: "-7px" }}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.trail}
-                      onChange={formik.handleChange}
-                    />
-                    <label for="trail2">No</label>
-                    {formik.touched.categoryType &&
-                    formik.errors.categoryType ? (
-                      <div className="email-validate">
-                        {formik.errors.categoryType}
-                      </div>
-                    ) : null}
+                  <CCol row md="4">
+                    <label for={1}>
+                      <CInput
+                        type="radio"
+                        id={1}
+                        formControlName="recipe_type"
+                        checked={subscriptionStatus == 1 ? "checked" : ""}
+                        style={{
+                          width: "10%",
+                          marginTop: "-7px",
+                          cursor: "pointer",
+                        }}
+                        onChange={() => {
+                          handleSubscriptionStatus(1);
+                        }}
+                      />
+                      Paid Subscription
+                    </label>
                   </CCol>
-                </CFormGroup> */}
+                </CFormGroup>
+                {subscriptionStatus == 1 ? (
+                  <CFormGroup row>
+                    <CCol md="3">
+                      <CLabel htmlFor="hf-categorytype">
+                        <h6>Subscription Token Id</h6>
+                      </CLabel>
+                    </CCol>
+                    <CCol xs="12" md="9">
+                      <CInput
+                        type="text"
+                        id="subscription_token_id"
+                        name="subscription_token_id"
+                        onBlur={formik.handleBlur}
+                        value={formik.values.subscription_token_id}
+                        onChange={formik.handleChange}
+                      />
+                      {formik.touched.subscription_token_id &&
+                      formik.errors.subscription_token_id ? (
+                        <div className="email-validate">
+                          {formik.errors.subscription_token_id}
+                        </div>
+                      ) : null}
+                    </CCol>
+                  </CFormGroup>
+                ) : (
+                  ""
+                )}
+                {msgError ? (
+                  <div className="email-validate">{msgError}</div>
+                ) : null}
                 <CCardFooter
                   style={{
                     display: "flex",
@@ -451,8 +510,12 @@ export default function EditUser(props) {
                   ) : (
                     <CButton
                       type="submit"
-                      style={{ width: "5rem" }}
-                      color="success"
+                      style={{
+                        width: "5rem",
+                        backgroundColor: "teal",
+                        color: "white",
+                        marginLeft: "50px",
+                      }}
                     >
                       {userDetails.name ? (
                         <strong>Update</strong>
@@ -463,7 +526,7 @@ export default function EditUser(props) {
                   )}
 
                   <CButton
-                    style={{ width: "5rem" }}
+                    style={{ width: "5rem", marginRight: "55px" }}
                     color="danger"
                     onClick={() => history.goBack()}
                   >

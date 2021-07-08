@@ -13,13 +13,17 @@ const _nav = [
     _tag: "CSidebarNavItem",
     name: "Recipe Management",
     to: "/recipeManagement",
-    icon: <CIcon name="cil-star" customClasses="c-sidebar-nav-icon" />,
+    icon: (
+      <CIcon content={freeSet.cilDinner} customClasses="c-sidebar-nav-icon" />
+    ),
   },
   {
     _tag: "CSidebarNavItem",
     name: "Content Management",
     to: "/static",
-    icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon" />,
+    icon: (
+      <CIcon content={freeSet.cilFile} customClasses="c-sidebar-nav-icon" />
+    ),
   },
   {
     _tag: "CSidebarNavItem",

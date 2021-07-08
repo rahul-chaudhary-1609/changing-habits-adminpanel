@@ -9,6 +9,8 @@ export const api = axios.create({
 
 export const api2 = "http://54.158.24.113/changinghabits";
 
+const token = store.getState().auth.isSignedIn;
+
 export const SavePost = (body) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -51,12 +53,31 @@ export const EditPost = (recipe_id, body) => {
 
 export const GetUserProfile = () => {
   return new Promise(async (resolve, reject) => {
-    // console.log(id, token);
-
     try {
       const response = await api.get(`${apiConstant.GetUserProfile}`, {
         headers: header(),
       });
+
+      if (response.data.success) {
+        resolve(response.data);
+      } else {
+        reject(response.data);
+      }
+    } catch (error) {
+      apiError(error);
+    }
+  });
+};
+
+export const GetUserManagementDetails = (user_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await api.get(
+        `${apiConstant.GetUserManagementDetails}/${user_id}`,
+        {
+          headers: header(),
+        }
+      );
 
       if (response.data.success) {
         resolve(response.data);
@@ -158,15 +179,20 @@ export const verifyOTP = (email, otp) => {
   });
 };
 
-export const resetPassword = (email, password, confirmPassword, otp) => {
+export const resetPassword = (data, token) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await api.post(`${apiConstant.ResetPassword}`, {
-        password: password,
-        confirmPassword: confirmPassword,
-        emailOrPhoneNumber: email,
-        otp: otp,
-      });
+      const response = await api.post(
+        `${apiConstant.ResetPassword}`,
+        JSON.stringify(data),
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.data.success) {
         resolve(response.data);
@@ -175,19 +201,25 @@ export const resetPassword = (email, password, confirmPassword, otp) => {
       }
     } catch (error) {
       apiError(error);
+      reject(error);
     }
   });
 };
 
-export const ChangePasswordApi = (oldPassword, newPassword, id) => {
+export const ChangePasswordApi = (formData) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await api.post(`${apiConstant.ChangePassword}`, {
-        userId: id,
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-      });
-
+      const response = await api.post(
+        `${apiConstant.ChangePassword}`,
+        JSON.stringify(formData),
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: store.getState().auth.isSignedIn,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.data.success) {
         resolve(response.data);
       } else {
@@ -195,6 +227,7 @@ export const ChangePasswordApi = (oldPassword, newPassword, id) => {
       }
     } catch (error) {
       apiError(error);
+      reject("Invalid Old Password");
     }
   });
 };
@@ -214,25 +247,17 @@ export const signIn = (formValues) => {
       }
     } catch (error) {
       apiError(error);
-      reject("Invalid Credentials Entered!!");
+      reject("Invalid Credentials Entered");
     }
   });
 };
 
-export const addUserList = (data) => {
-  let formData = {
-    name: data.name,
-    email: data.email,
-    country_code: data.country_code,
-    phone_no: data.phone_no,
-  };
-  const token = store.getState().auth.isSignedIn;
-
+export const addUserList = (bodyFormData) => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.post(
         `${apiConstant.AddUser}`,
-        JSON.stringify(formData),
+        JSON.stringify(bodyFormData),
         {
           headers: {
             Accept: "application/json",
@@ -248,7 +273,8 @@ export const addUserList = (data) => {
         reject(response.data);
       }
     } catch (error) {
-      apiError(error);
+      apiError(error.response.data);
+      reject(error.response.data);
     }
   });
 };
@@ -274,17 +300,23 @@ export const ViewUserDetails = (user_id) => {
   });
 };
 
-export const GetUserList = (page, search) => {
+export const GetUserList = (page, search, accountType) => {
   let searchKey;
   if (search) {
-    searchKey = `searchKey=${search}`;
+    searchKey = `&searchKey=${search}`;
   } else {
     searchKey = "";
+  }
+  let status;
+  if (accountType == 0 || accountType == 1) {
+    status = `&status=${accountType}`;
+  } else {
+    status = "";
   }
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
-        apiConstant.GetUserList.concat(`${page}&page_size=10&${searchKey}`),
+        apiConstant.GetUserList.concat(`${page}${searchKey}${status}`),
         {
           headers: header(),
         }
@@ -297,6 +329,7 @@ export const GetUserList = (page, search) => {
       }
     } catch (error) {
       apiError(error);
+      reject(error);
     }
   });
 };
@@ -373,17 +406,29 @@ export const uploadImage = (data) => {
   });
 };
 
-export const GetRecipeList = (page, search) => {
+export const GetRecipeList = (page, search, data) => {
   let searchKey;
   if (search) {
-    searchKey = `searchKey=${search}`;
+    searchKey = `&searchKey=${search}`;
   } else {
     searchKey = "";
   }
+  let type;
+  if (data && data.recipeType) {
+    type = `&type=${data.recipeType}`;
+  } else type = "";
+
+  let status;
+  if (data && (data.recipeStatus || data.recipeStatus == 0)) {
+    status = `&status=${data.recipeStatus}`;
+  } else status = "";
+
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
-        apiConstant.GetRecipesList.concat(`${page}&page_size=10&${searchKey}`),
+        apiConstant.GetRecipesList.concat(
+          `${page}${searchKey}${type}${status}`
+        ),
         {
           headers: header(),
         }
@@ -396,6 +441,7 @@ export const GetRecipeList = (page, search) => {
       }
     } catch (error) {
       apiError(error);
+      reject(error);
     }
   });
 };
@@ -552,7 +598,6 @@ export const getFaqs = (page) => {
 };
 
 export const getFileContent = (url) => {
-  const token = store.getState().auth.isSignedIn;
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
@@ -654,6 +699,30 @@ export const ToggleFaqStatus = (faq_id) => {
       );
 
       if (response) {
+        resolve(response.data);
+      } else {
+        reject(response.data);
+      }
+    } catch (error) {
+      apiError(error);
+    }
+  });
+};
+
+export const ToggleRecipeStatus = (recipe_id, status) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await api.put(
+        `${apiConstant.ToggleRecipeStatus}/${recipe_id}`,
+        {
+          status: status,
+        },
+        {
+          headers: header(),
+        }
+      );
+
+      if (response.data.success) {
         resolve(response.data);
       } else {
         reject(response.data);

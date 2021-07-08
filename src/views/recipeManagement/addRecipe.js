@@ -51,8 +51,9 @@ export default function AddRecipe() {
     },
   ];
 
-  const [recipeType, setRecipeType] = useState(null);
+  const [recipeType, setRecipeType] = useState(1);
   const [disable, setDisable] = useState(false);
+  const [image, setImage] = useState({});
 
   const [show, setShow] = useState({
     phase_id: "",
@@ -92,15 +93,17 @@ export default function AddRecipe() {
       try {
         const result = await GetRecipeDetail(params.id);
         if (result) {
+          setRecipeType(result.recipeDetails.recipe_type);
           setShow(result.recipeDetails);
         }
       } catch (error) {
         console.log(error);
       }
     };
-
-    GetRecipe();
-  }, [params.id]);
+    if (params.id) {
+      GetRecipe();
+    }
+  }, []);
 
   const validateForm = () => {
     let valid = true;
@@ -165,26 +168,7 @@ export default function AddRecipe() {
       });
       return;
     }
-
-    var image = event.target.files[0];
-    var data = new FormData();
-    data.append("image", image, image.name);
-    data.append("folderName", "recipe");
-
-    try {
-      setDisable(true);
-      const result = await uploadImage(data);
-      if (result) {
-        setDisable(false);
-        setShow({ ...show, recipe_image_url: result.data.recipe_image_url });
-      }
-    } catch (error) {
-      console.log(error);
-      setError({
-        ...error,
-        recipe_image_url: { ...error.recipe_image_url, error: error },
-      });
-    }
+    setImage(event.target.files[0]);
   };
 
   const handleTitleChange = (e) => {
@@ -258,17 +242,40 @@ export default function AddRecipe() {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    if (params.id) {
-      const body = {
-        phase_id: Number(show.phase_id),
-        recipe_image_url: show.recipe_image_url,
-        recipe_title: show.recipe_title,
-        recipe_ingredients: show.recipe_ingredients,
-        recipe_methods: show.recipe_methods,
-        recipe_type: recipeType ? recipeType : show.recipe_type,
-      };
+    setLoading(true);
+    var body = {};
+    console.log("image", image);
+    if (image && image.type) {
+      var data = new FormData();
+      data.append("image", image, image.name);
+      data.append("folderName", "recipe");
+
       try {
-        setLoading(true);
+        setDisable(true);
+        const result = await uploadImage(data);
+        if (result) {
+          setDisable(false);
+          body.recipe_image_url = result.data.image_url;
+          setShow({ ...show, recipe_image_url: result.data.image_url });
+        }
+      } catch (error) {
+        console.log(error);
+        setError({
+          ...error,
+          recipe_image_url: { ...error.recipe_image_url, error: error },
+        });
+      }
+    } else if (params.id) {
+      body.recipe_image_url = show.recipe_image_url;
+    }
+
+    if (params.id) {
+      body.phase_id = Number(show.phase_id);
+      body.recipe_title = show.recipe_title;
+      body.recipe_ingredients = show.recipe_ingredients;
+      body.recipe_methods = show.recipe_methods;
+      body.recipe_type = recipeType ? recipeType : show.recipe_type;
+      try {
         const response = await EditPost(params.id, body);
         setLoading(false);
         if (response) {
@@ -279,16 +286,13 @@ export default function AddRecipe() {
         console.log(error);
       }
     } else {
-      const body = {
-        phase_id: Number(show.phase_id),
-        recipe_image_url: show.recipe_image_url,
-        recipe_title: show.recipe_title,
-        recipe_ingredients: show.recipe_ingredients,
-        recipe_methods: show.recipe_methods,
-        recipe_type: recipeType,
-      };
+      body.phase_id = Number(show.phase_id);
+      body.recipe_title = show.recipe_title;
+      body.recipe_ingredients = show.recipe_ingredients;
+      body.recipe_methods = show.recipe_methods;
+      body.recipe_type = recipeType ? recipeType : show.recipe_type;
+
       try {
-        setLoading(true);
         const response = await SavePost(body);
         setLoading(false);
         if (response) {
@@ -319,7 +323,7 @@ export default function AddRecipe() {
             <CCard>
               <CCardHeader style={{ fontFamily: "Lato" }}>
                 <h3>
-                  {location.state ? (
+                  {params.id ? (
                     <strong>Edit Recipe</strong>
                   ) : (
                     <strong>Add Recipe</strong>
@@ -368,7 +372,37 @@ export default function AddRecipe() {
                           </h6>
                         </CLabel>
                       </CCol>
-                      <CCol xs="12" md="9">
+                      {show.recipe_image_url ? (
+                        <CCol xs="12" md="9">
+                          <label
+                            className="block w-1/2 tracking-wide  mb-2 text-gray-300 h-50  w-1/2"
+                            for="images"
+                          >
+                            <img
+                              alt="Upload Image"
+                              style={{
+                                minHeight: "200px",
+                                minWidth: "100%",
+                                backgroundColor: "lightgray",
+                                textAlign: "center",
+                                height: "100px",
+                                cursor: "pointer",
+                              }}
+                              src={show.recipe_image_url}
+                              title={show.recipe_image_url}
+                            />
+                          </label>
+                        </CCol>
+                      ) : (
+                        ""
+                      )}
+                      <div
+                        style={
+                          show.recipe_image_url
+                            ? { paddingLeft: "200px" }
+                            : { paddingLeft: "17px" }
+                        }
+                      >
                         <CInputFile
                           id="recipe_image_url"
                           name="recipe_image_url"
@@ -378,13 +412,17 @@ export default function AddRecipe() {
                             showFile(e);
                           }}
                         />
-                        <div>Please upload 100*100 resolution image</div>
                         {error.recipe_image_url.error && (
                           <div className="email-validate">
                             {error.recipe_image_url.error}
                           </div>
                         )}
-                      </CCol>
+                        <span style={{ color: "red", fontSize: "13px" }}>
+                          {image.type || show.recipe_image_url
+                            ? ""
+                            : "*Recipe Image is required*"}
+                        </span>
+                      </div>
                     </CFormGroup>
                     <CFormGroup row>
                       <CCol md="3">
@@ -454,7 +492,8 @@ export default function AddRecipe() {
                             type="radio"
                             id={1}
                             formControlName="recipe_type"
-                            checked={show.recipe_type == 1 ? "checked" : ""}
+                            checked={recipeType == 1 ? "checked" : ""}
+                            value={show.recipe_type}
                             style={{
                               width: "60%",
                               marginTop: "-7px",
@@ -473,7 +512,7 @@ export default function AddRecipe() {
                             type="radio"
                             id={2}
                             formControlName="recipe_type"
-                            checked={show.recipe_type == 2 ? "checked" : ""}
+                            checked={recipeType == 2 ? "checked" : ""}
                             value={show.recipe_type}
                             style={{ width: "28%", marginTop: "-7px" }}
                             onChange={() => {
@@ -528,11 +567,14 @@ export default function AddRecipe() {
                       </div>
                     ) : (
                       <CButton
-                        // disabled={disable}
                         type="submit"
                         name="submit"
-                        color="success"
-                        style={{ width: "75px" }}
+                        style={{
+                          width: "75px",
+                          backgroundColor: "teal",
+                          color: "white",
+                          fontWeight: "bold",
+                        }}
                       >
                         Save
                       </CButton>

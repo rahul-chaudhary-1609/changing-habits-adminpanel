@@ -46,7 +46,7 @@ export default function Forgetpassword() {
     } catch (error) {
       setLoading(false);
       console.log(error);
-      actions.setFieldError("error", error.message);
+      actions.setFieldError("error", error);
     }
   };
 

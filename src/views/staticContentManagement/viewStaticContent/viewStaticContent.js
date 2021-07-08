@@ -4,18 +4,22 @@ import { getStaticContentDetails, getFileContent } from "../../../api";
 import { CButton } from "@coreui/react";
 import StaticContentFrame from "../getFrame";
 import apiConstant from "src/apiConstants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 const ViewStaticContent = () => {
   const history = useHistory();
   const params = useParams();
 
   const [staticContentDetails, setStaticContentDetails] = useState([]);
-let [srcURL, setSrcURL] = useState(null); 
+  let [srcURL, setSrcURL] = useState(null);
   useEffect(() => {
     const getDetails = async () => {
       try {
         getStaticContentDetails(Number(params.id)).then((data) => {
           setStaticContentDetails(data.staticContentDetails);
-          setSrcURL(`${apiConstant.baseURL}/${apiConstant.getTextFromHTML}?file_url=${data.staticContentDetails.page_url}`)
+          setSrcURL(
+            `${apiConstant.baseURL}/${apiConstant.getTextFromHTML}?file_url=${data.staticContentDetails.page_url}`
+          );
         });
       } catch (error) {
         console.log(error);
@@ -33,23 +37,41 @@ let [srcURL, setSrcURL] = useState(null);
             className="p-4 md:p-8 mt-6 lg:mt-0 rounded shadow bg-white"
           >
             <br />
-            <CButton
-              style={{ height: "3rem" }}
-              onClick={() => history.goBack()}
-              className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-              color="primary"
-            >
-              Back
-            </CButton>
-            <CButton
-              style={{ height: "3rem" }}
-              onClick={() => history.push(`/editStaticContent/${params.id}`)}
-              className="shadow bg-blue-500 ml-3 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-              color="primary"
-            >
-              Edit
-            </CButton>
-
+            <div style={{ textAlign: "right" }}>
+              <CButton
+                style={{
+                  cursor: "pointer",
+                  backgroundColor: "gray",
+                }}
+              >
+                <strong>
+                  {" "}
+                  <FontAwesomeIcon
+                    color="white"
+                    size="lg"
+                    style={{
+                      cursor: "pointer",
+                      color: "black",
+                    }}
+                    title="Click to go back"
+                    icon={faArrowLeft}
+                    onClick={() => history.goBack()}
+                  />
+                </strong>
+              </CButton>
+              <CButton
+                style={{
+                  width: "5rem",
+                  backgroundColor: "teal",
+                  color: "white",
+                  marginLeft: "10px",
+                }}
+                title="Click to add"
+                onClick={() => history.push(`/editStaticContent/${params.id}`)}
+              >
+                <strong>Edit</strong>
+              </CButton>
+            </div>
             <div
               style={{
                 marginTop: "20px",
@@ -65,7 +87,7 @@ let [srcURL, setSrcURL] = useState(null);
               <div className="flex mt-10 ">
                 <div className="flex flex-col ml-40">
                   <br />
-                  <StaticContentFrame srcURL={ srcURL}/>
+                  <StaticContentFrame srcURL={srcURL} />
                 </div>
               </div>
             </div>

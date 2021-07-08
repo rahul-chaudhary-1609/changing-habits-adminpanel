@@ -61,8 +61,7 @@ export default function AdminProfile() {
               <strong>Admin Profile</strong>
             </h2>
             <CButton
-              style={{ width: "8rem" }}
-              color="success"
+              style={{ width: "8rem", backgroundColor: "teal", color: "white" }}
               onClick={() =>
                 history.push({
                   pathname: "./editAdmin",
@@ -103,7 +102,7 @@ export default function AdminProfile() {
                   <td style={{ marginLeft: "8rem" }}>
                     <strong>Name</strong>
                   </td>
-                  <td style={{ marginLeft: "8rem" }}>
+                  <td style={{ marginLeft: "9.8rem" }}>
                     <>{userData["name"] ? String(userData["name"]) : ""}</>
                   </td>
                 </tr>

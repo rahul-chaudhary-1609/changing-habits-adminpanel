@@ -45,20 +45,20 @@ export default function ChangePassword() {
 
   const onSubmit = async (values, actions) => {
     setLoading(true);
+    let formData = {};
+    formData.old_password = values.oldpassword;
+    formData.new_password = values.newpassword;
+    formData.confirm_new_password = values.confirmpassword;
     try {
-      const result = await ChangePasswordApi(
-        values.oldpassword,
-        values.newpassword,
-        auth.userId
-      );
+      const result = await ChangePasswordApi(formData);
       if (result) {
         setModal(!modal);
         setLoading(false);
+        history.push("/login");
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
-      actions.setFieldError("error", error.message);
+      actions.setFieldError("error", error);
     }
   };
 
@@ -85,8 +85,7 @@ export default function ChangePassword() {
               <CCard className="p-4">
                 <CCardBody>
                   <CForm onSubmit={formik.handleSubmit}>
-                    <h1>Change Password</h1>
-                    <p className="text-muted">Enter old Password</p>
+                    <h1 style={{ marginBottom: "25px" }}>Change Password</h1>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
                         <CInputGroupText>
@@ -117,16 +116,17 @@ export default function ChangePassword() {
                             size="sm"
                             icon={showpass !== "password" ? faEye : faEyeSlash}
                           />{" "}
-                          {/* <i className={showpass !== 'password' ? "fa fa-eye" : "fa fa-eye-slash"} /> */}
                         </CInputGroupText>
                       </CInputGroupAppend>
                     </CInputGroup>
                     {formik.touched.oldpassword && formik.errors.oldpassword ? (
-                      <div className="email-validate">
+                      <div
+                        className="email-validate"
+                        style={{ marginTop: "-1.5rem" }}
+                      >
                         {formik.errors.oldpassword}
                       </div>
                     ) : null}
-                    <p className="text-muted">Enter new Password</p>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
                         <CInputGroupText>
@@ -157,16 +157,17 @@ export default function ChangePassword() {
                             size="sm"
                             icon={showpass2 !== "password" ? faEye : faEyeSlash}
                           />{" "}
-                          {/* <i className={showpass !== 'password' ? "fa fa-eye" : "fa fa-eye-slash"} /> */}
                         </CInputGroupText>
                       </CInputGroupAppend>
                     </CInputGroup>
                     {formik.touched.newpassword && formik.errors.newpassword ? (
-                      <div className="email-validate">
+                      <div
+                        className="email-validate"
+                        style={{ marginTop: "-1.5rem" }}
+                      >
                         {formik.errors.newpassword}
                       </div>
                     ) : null}
-                    <p className="text-muted">Confirm New Password</p>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
                         <CInputGroupText>
@@ -197,13 +198,15 @@ export default function ChangePassword() {
                             size="sm"
                             icon={showpass3 !== "password" ? faEye : faEyeSlash}
                           />{" "}
-                          {/* <i className={showpass !== 'password' ? "fa fa-eye" : "fa fa-eye-slash"} /> */}
                         </CInputGroupText>
                       </CInputGroupAppend>
                     </CInputGroup>
                     {formik.touched.confirmpassword &&
                     formik.errors.confirmpassword ? (
-                      <div className="email-validate">
+                      <div
+                        className="email-validate"
+                        style={{ marginTop: "-1.5rem" }}
+                      >
                         {formik.errors.confirmpassword}
                       </div>
                     ) : null}
@@ -213,11 +216,13 @@ export default function ChangePassword() {
                       </div>
                     ) : null}
                     <CRow>
-                      <CCol xs="10" style={{ marginRight: "5px" }}>
+                      <CCol
+                        style={{ marginRight: "-70px", marginLeft: "137px" }}
+                      >
                         {!loading ? (
                           <CButton
                             color="danger"
-                            className="px-6"
+                            style={{ width: "5.5rem" }}
                             onClick={() => history.goBack()}
                           >
                             Cancel
@@ -234,8 +239,8 @@ export default function ChangePassword() {
                       <CCol>
                         {!loading ? (
                           <CButton
-                            color="primary"
                             className="px-4"
+                            style={{ backgroundColor: "teal", color: "white" }}
                             type="submit"
                           >
                             Update

@@ -9,8 +9,10 @@ import {
   CButton,
 } from "@coreui/react";
 import { useHistory, useParams } from "react-router-dom";
-import { GetUserProfile } from "../../api";
+import { GetUserManagementDetails } from "../../api";
 import DefaultUser from "../../assets/svgs/defaultUser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const User = () => {
   const params = useParams();
@@ -20,7 +22,7 @@ const User = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await GetUserProfile(params.id);
+        const res = await GetUserManagementDetails(params.id);
 
         setData(res);
       } catch (error) {
@@ -47,11 +49,17 @@ const User = () => {
               <strong>User Details</strong>
             </h2>
             <CButton
-              style={{ width: "8rem" }}
-              color="primary"
+              style={{ backgroundColor: "gray" }}
               onClick={() => history.goBack()}
             >
-              <strong>Back</strong>
+              <strong>
+                <FontAwesomeIcon
+                  color="white"
+                  size="lg"
+                  style={{ cursor: "pointer", color: "black" }}
+                  icon={faArrowLeft}
+                />
+              </strong>
             </CButton>
           </CCardHeader>
           <CCardBody>
@@ -100,7 +108,7 @@ const User = () => {
                       <strong>User Name</strong>
                     </td>
                     <td style={{ marginLeft: "8rem", borderTop: "none" }}>
-                      <>{userData["name"] ? String(userData["name"]) : ""}</>
+                      <>{userData["name"] ? String(userData["name"]) : "N/A"}</>
                     </td>
                   </tr>
                   <tr
@@ -113,8 +121,10 @@ const User = () => {
                     <td style={{ marginLeft: "8rem", borderTop: "none" }}>
                       <strong>Email</strong>
                     </td>
-                    <td style={{ marginLeft: "9.8rem", borderTop: "none" }}>
-                      <>{userData["email"] ? String(userData["email"]) : ""}</>
+                    <td style={{ marginLeft: "10.4rem", borderTop: "none" }}>
+                      <>
+                        {userData["email"] ? String(userData["email"]) : "N/A"}
+                      </>
                     </td>
                   </tr>
                   <tr
@@ -127,11 +137,11 @@ const User = () => {
                     <td style={{ marginLeft: "8rem", borderTop: "none" }}>
                       <strong>Mobile</strong>
                     </td>
-                    <td style={{ marginLeft: "9.8rem", borderTop: "none" }}>
+                    <td style={{ marginLeft: "10rem", borderTop: "none" }}>
                       <>
                         {userData["phone_no"]
                           ? String(userData["phone_no"])
-                          : ""}
+                          : "N/A"}
                       </>
                     </td>
                   </tr>
@@ -145,11 +155,11 @@ const User = () => {
                     <td style={{ marginLeft: "8rem", borderTop: "none" }}>
                       <strong>Subscription token id</strong>
                     </td>
-                    <td style={{ marginLeft: "6.8rem", borderTop: "none" }}>
+                    <td style={{ marginLeft: "3.8rem", borderTop: "none" }}>
                       <>
                         {userData["subscription_token_id"]
                           ? String(userData["subscription_token_id"])
-                          : ""}
+                          : "N/A"}
                       </>
                     </td>
                   </tr>

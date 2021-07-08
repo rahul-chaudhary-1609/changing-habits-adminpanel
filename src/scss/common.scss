@@ -6,3 +6,19 @@ input[type='radio']:focus {
 .custom-control-input:focus ~ .custom-control-label::before {
     box-shadow: none !important;
 }
+
+input[type='checkbox']:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.teal {
+    background: teal !important;
+    color: white;
+}
+.page-link:hover {
+    z-index: 2;
+    text-decoration: none;
+    color: #231698;
+    background-color: teal;
+    border-color: teal;
+}

@@ -14,6 +14,9 @@ const RecipeManagement = React.lazy(() =>
 const RecipeAdd = React.lazy(() =>
   import("./views/recipeManagement/addRecipe")
 );
+const ViewRecipe = React.lazy(() =>
+  import("./views/recipeManagement/viewRecipe")
+);
 const User = React.lazy(() => import("./views/users/User"));
 const EditUser = React.lazy(() => import("./views/users/editUser"));
 const ChangePassword = React.lazy(() =>
@@ -86,6 +89,12 @@ const routes = [
     exact: true,
     name: "Add User",
     component: RecipeAdd,
+  },
+  {
+    path: "/viewRecipe/:id",
+    exact: true,
+    name: "View User",
+    component: ViewRecipe,
   },
   { path: "/users", exact: true, name: "Users", component: NewUsers },
   {

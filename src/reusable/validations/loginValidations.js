@@ -2,8 +2,12 @@ import * as yup from "yup";
 
 export const loginValidation = () => {
   return yup.object({
-    email: yup.string().email("Invalid Email address format").trim(),
-    password: yup.string().required("Password is required").trim(),
+    email_phone: yup
+      .string()
+      .required("Email or Phone is required")
+      .trim()
+      .nullable(),
+    password: yup.string().required("Password is required").trim().nullable(),
   });
 };
 
@@ -43,9 +47,23 @@ export const forgetpasswordValidation = () => {
 
 export const ChangePasswordValidation = () => {
   return yup.object({
+    oldpassword: yup
+      .string()
+      .required("Old Password is required")
+      .test(
+        "regex",
+        "Password must be min 8 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
+        (val) => {
+          let regExp = new RegExp(
+            "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+          );
+
+          return regExp.test(val);
+        }
+      ),
     newpassword: yup
       .string()
-      .required("Please Enter your password")
+      .required("New Password is required")
       .test(
         "regex",
         "Password must be min 8 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
@@ -99,7 +117,7 @@ export const updateEmail = () => {
   });
 };
 
-export const UserValidation = () => {
+export const UserValidation = (subscriptionStatus) => {
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   return yup.object({
     name: yup
@@ -119,9 +137,12 @@ export const UserValidation = () => {
       .trim(),
     phone_no: yup
       .string()
-      .matches(phoneRegExp, "Phone number is not valid")
-      .required("Please enter Phone Number")
+      .matches(phoneRegExp, "Phone Number is not valid")
+      .required("Phone Number is required")
       .max(10, "Phone Number cannot exceed 10 characters"),
-    country_code: yup.string().required("Please enter Country Code"),
+    country_code: yup.string().required("Please enter Country Code e.g. +91"),
+    subscription_token_id: subscriptionStatus
+      ? yup.string().required("Token Id is required")
+      : "",
   });
 };
