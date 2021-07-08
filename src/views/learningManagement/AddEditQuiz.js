@@ -18,7 +18,7 @@ import {
   CInputGroupAppend,
   CBadge
 } from "@coreui/react"
-import CIcon from "@coreui/icons-react";
+import { FaPlus,FaMinus } from 'react-icons/fa';
 import {getPhaseDays,getLearningQuiz,addLearningQuiz,editLearningQuiz} from "../../data/learningContentManagement"
 
 function AddEditLearningQuiz() {
@@ -280,11 +280,15 @@ let [question,setQuestion ] = useState("");
                               required
                           />                          
                           <CInputGroupAppend style={{display:optionInputField.isRequired?"none":"block"}}>                              
-                                  <CButton onClick={()=>handleRemoveOptionField(index)}><CBadge color="danger">Remove</CBadge></CButton>
+                                <CBadge style={{marginLeft:"0.5rem", cursor:"pointer"}} color="danger" onClick={()=>handleRemoveOptionField(index)}><FaMinus/></CBadge>
                           </CInputGroupAppend>
                       </CInputGroup>)
                     })}
-                  <CButton style={{marginTop:"0.5rem"}} color="secondary" onClick={handleAddOptionField}>Add</CButton>
+                    <CBadge
+                      style={{ marginTop: "0.5rem", cursor: "pointer",display:optionInputFields.length<6?"":"none" }}
+                      color="secondary"
+                      onClick={handleAddOptionField}
+                    ><FaPlus /></CBadge>
                           
                   </CFormGroup>
 

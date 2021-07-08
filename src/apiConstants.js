@@ -41,6 +41,15 @@ const apiConstant = {
   getLearningQuiz: "/api/v1/admin/getQuiz",
   editLearningQuiz: "/api/v1/admin/editQuiz",
   addLearningQuiz: "/api/v1/admin/addQuiz",
+
+  //food log category API's
+  listFoodLogCategory: "/api/v1/admin/listFoodType",
+  toggleFoodLogCategoryStatus: "/api/v1/admin/toggleFoodTypeStatus",
+  listPhases: "/api/v1/admin/listPhases",
+  getFoodLogCategory: "/api/v1/admin/getFoodType",
+  addFoodLogCategory: "/api/v1/admin/addFoodType",
+  editFoodLogCategory: "/api/v1/admin/editFoodType",
+  
 };
 
 export default apiConstant;

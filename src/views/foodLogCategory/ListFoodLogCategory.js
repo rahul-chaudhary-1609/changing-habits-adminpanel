@@ -1,25 +1,31 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useHistory } from "react-router-dom";
-import {
+import { Route, useHistory, Link} from "react-router-dom";
+import {    
+    CInputGroupText,
+    CCardBody,
+    CContainer,
+    CRow,
+    CCol,
+    CCard,
+    CCardHeader,
+    CButton,
     CDataTable,
     CBadge,
     CTooltip,
     CSwitch,
-    CButton,
     CInputGroup,
     CInputGroupPrepend,
-    CInputGroupText,
     CInput,
-    CCol,
-    CPagination
+    CPagination,
+    CSelect
 } from "@coreui/react"
-import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
+import { FaFilter,FaSearch } from 'react-icons/fa';
 
-import { listLearningContent,toggleLearningContentStatus } from "../../data/learningContentManagement"
-import StatusModal from "src/utils/components/modal";
+import { listFoodLogCategory,listPhases,toggleFoodLogCategoryStatus } from "../../data/foodLogCategory"
+import StatusModal from "../../utils/components/modal";
 
-function ListLearningContent() {
+function ListFoodLogCategory() {
     let history = useHistory();
 
     let [data, setData] = useState([])
@@ -39,13 +45,13 @@ function ListLearningContent() {
     let [status, setStatus] = useState(true);
     let [modal, setModal] = useState(false);
     let [toggleData, setToggleData] = useState(null);
+    let [phase, setPhase] = useState(0);
+    let [phases,setPhases]=useState([])
 
 
     const fields = [
         { key: 's_no',label:"S.No." },
-        { key: 'title', labellable: "Learning Content" },
-        { key: 'description',label:"Description" },
-        { key: 'phase_day',label:"Phase Day" },
+        { key: 'food_type', labellable: "Category" },
         { key: 'phase_id', label: "Phase" },
         { key: 'status', label: "Status" },
         { key: 'action',label:"Action" },
@@ -65,7 +71,7 @@ function ListLearningContent() {
                 },
                 data:{}
             }
-            let response = await toggleLearningContentStatus(req);
+            let response = await toggleFoodLogCategoryStatus(req);
             setStatus(!status)
             setErrorResponse({ message: null, code: null, isFound: false })
 
@@ -86,6 +92,14 @@ function ListLearningContent() {
     }
 
     useEffect(() => {
+        listPhases().then((response) => {
+            setPhases(response.phasesList)
+        }).catch((error) => {
+            console.log(error)
+        })
+    }, [])
+    
+    useEffect(() => {
         const getData = async () => {
             try {
                 let req = {
@@ -95,8 +109,11 @@ function ListLearningContent() {
                         page_size: page.size
                     }
                 }
+                if (phase > 0) {
+                    req.queryParams.phase_id=phase
+                }
                 setLoading(true)
-                let response = await listLearningContent(req);
+                let response = await listFoodLogCategory(req);
                 let updatedData = formatData(response.rows);
                 setData([...updatedData])
                 setDataCount(response.count)
@@ -117,11 +134,11 @@ function ListLearningContent() {
         getData();
         
         
-    },[page.number,searchKey,status])
-
-
+    },[page.number,searchKey,status,phase])
+    
+    
     return (
-        <>
+        <CContainer>
             <StatusModal
                 toggleModal={toggleModal}
                 modal={modal}
@@ -130,8 +147,24 @@ function ListLearningContent() {
                 setStatus={setStatus}
                 status={status}
             />
-                           
-                <CDataTable
+            <CRow>
+                <CCol sm="12">
+                    <CCard>
+                        <CCardHeader>
+                            <div style={{display:"flex", justifyContent:"space-between"}}>
+                                <h2>Food Log Category</h2>
+                                <CButton
+                                    color="success"
+                                    style={{ width: "5rem",}}
+                                    onClick={()=> history.push('/addFoodLogCategory')}
+                                >
+                                    <strong>Add</strong>
+                                </CButton>
+                            </div>
+                                            
+                        </CCardHeader>
+                        <CCardBody>
+                                <CDataTable
                     items={data}
                     fields={fields}
                     striped
@@ -140,11 +173,11 @@ function ListLearningContent() {
                     loading={isLoading}
                     noItemsViewSlot={isLoading ? <div>Loading...</div> : <div>{errorResponse.isFound ? errorResponse.message : "No Record Found"}</div>}
                     overTableSlot={
-                        <CCol style={{ marginBottom: "1rem", display: "flex" }}>
+                        <CCol style={{ marginBottom: "1rem", display: "flex", justifyContent:"start" }}>
                             <CInputGroup>
                                 <CInputGroupPrepend>
                                     <CInputGroupText className={'bg-info text-white'}>
-                                        <CIcon name={'cilSearch'} />
+                                        <FaSearch/>
                                     </CInputGroupText>
                                 </CInputGroupPrepend>
                                 <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search"
@@ -156,16 +189,38 @@ function ListLearningContent() {
                                 >
                                     Search
                                 </CButton>
-                                <CButton color="info" style={{ marginLeft: "1rem" }}
+                            
+                            
+                            
+                                <CInputGroupPrepend style={{marginLeft:"3rem",}}>
+                                    <CInputGroupText style={{ borderRadius:"2px"}} className={'bg-info text-white'}>
+                                        <FaFilter/>
+                                    </CInputGroupText>
+                                </CInputGroupPrepend>
+                                <CSelect
+                                    style={{ maxWidth: "14rem" }}
+                                    onChange={(e)=>setPhase(e.target.value)}
+                                    value={phase}
+                                    id="phase"
+                                    name="phase"
+                                    required
+                                    > <option value="0" defaultValue>All Phase</option>
+                                    {phases.map((phase) => {
+                                        return <option key={phase.id} value={phase.id}> {phase.phase_name}</option>
+                                    })}
+                                </CSelect> 
+                                <CButton color="info" style={{ marginLeft: "4rem" }}
                                     onClick={() => {
                                         setSearchValue("")
                                         setSearchKey(null)
+                                        setPhase(0)
                                     }}
                                 >
                                     Reset
                                 </CButton>
                             </CInputGroup>
                         </CCol>
+                        
                     }
                     underTableSlot={
                         <CCol style={{ marginBottom: "1rem", }}>
@@ -186,7 +241,7 @@ function ListLearningContent() {
                                         <CTooltip content={"Edit Content"} placement={"top-start"}>
                                             <CIcon style={{ color: "red", cursor: "pointer" }}
                                                 name={"cilPencil"}
-                                                onClick={()=>history.push(`/editLearningContent/${item.id}`)}
+                                                onClick={()=>history.push(`/editFoodLogCategory/${item.id}`)}
                                             />
                                         </CTooltip>
                                         <CSwitch
@@ -236,14 +291,14 @@ function ListLearningContent() {
                         setPage({ ...page, number: i })
                     }}
             />
-        </>
-  )
-    
-      
-    
+
+                        </CCardBody>
+                    </CCard>
+                </CCol>
+            </CRow>
+        </CContainer>
+        
+    )
 }
 
-export default ListLearningContent;
-
-
-  
+export default ListFoodLogCategory
