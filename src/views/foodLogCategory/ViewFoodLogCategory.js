@@ -103,7 +103,7 @@ let [categoryName,setCategoryName ] = useState("");
                     <tr>
                     <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase</CLabel></td>
                     <td>:</td>
-                      <td>{phases[phase]}</td>
+                      <td>{phases[phase-1]}</td>
                       </tr>
                       <tr>
                           <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="question">Category Name</CLabel></td>

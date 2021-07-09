@@ -87,7 +87,7 @@ let [categoryName,setCategoryName ] = useState("");
     }
     
     if (params.id) {
-      data.foodType_id = phase;
+      //data.foodType_id = phase;
 
       let req = {
         pathParams: {
@@ -155,23 +155,25 @@ let [categoryName,setCategoryName ] = useState("");
                 <div style={{color:"green",fontSize:"1rem", display:successResponse.isFound?"flex":"none", justifyContent:"center"}}>
                   <div><h5>{ successResponse.message}</h5></div>
                   </div>
-                            <CForm action="" method="post" onSubmit={handleSubmit}>
-                                <CFormGroup>
-                    
-                                    <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
-                                    <CSelect
-                                    onChange={(e)=>setPhase(e.target.value)}
-                                    value={phase}
-                                    id="phase"
-                      name="phase"
-                      custom
-                                    required
-                                    > <option value="" defaultValue disabled>Select Phase</option>
-                                    {phases.map((phase) => {
-                                        return <option key={phase.id} value={phase.id}> {phase.phase_name}</option>
-                                    })}
-                                    </CSelect>                   
-                                </CFormGroup>
+                  <CForm action="" method="post" onSubmit={handleSubmit}>
+                      <CFormGroup>
+          
+                          <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
+                          <CSelect
+                          onChange={(e)=>setPhase(e.target.value)}
+                          value={phase}
+                          id="phase"
+                          name="phase"
+                          custom
+                          required
+                          disabled={params.id?true:false}
+                          
+                          > <option value="" defaultValue disabled>Select Phase</option>
+                          {phases.map((phase) => {
+                              return <option key={phase.id} value={phase.id}> {phase.phase_name}</option>
+                          })}
+                          </CSelect>                   
+                      </CFormGroup>
                                 
                   <CFormGroup >                    
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="category_name">Category Name:</CLabel>

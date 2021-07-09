@@ -65,7 +65,7 @@ let [title,setTitle ] = useState("");
         setErrorResponse({ message: null, code: null, isFound: false })
         setTitle(response.learningContentDetails.title)
         setDescription(response.learningContentDetails.description)
-        setPhase(phases[response.learningContentDetails.phase_id])
+        setPhase(phases[response.learningContentDetails.phase_id-1])
         setPhaseDay(response.learningContentDetails.phase_day)
         setPhychologicalContentTypeCheck(response.learningContentDetails.content_type == 1 ? true:false)
         setNutritionContentTypeCheck(response.learningContentDetails.content_type == 2 ? true:false)

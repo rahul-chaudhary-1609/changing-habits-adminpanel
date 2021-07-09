@@ -69,7 +69,7 @@ let [question,setQuestion ] = useState("");
         setErrorResponse({ message: null, code: null, isFound: false })
         setQuestion(response.quizDetails.question)
         setDescription(response.quizDetails.description)
-        setPhase(phases[response.quizDetails.phase_id])
+        setPhase(phases[response.quizDetails.phase_id-1])
         setPhaseDay(response.quizDetails.phase_day)
         let currentOptionInputFields = [
           { option_no: 1, option_value:response.quizDetails.option_1 ,isRequired:true },
