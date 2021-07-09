@@ -110,7 +110,7 @@ const Recipes = () => {
 
   var recipe_status = [
     {
-      label: "Select recipe status",
+      label: "All Recipe Status",
       value: null,
     },
     {
@@ -129,7 +129,7 @@ const Recipes = () => {
 
   var recipe_type = [
     {
-      label: "Select recipe type",
+      label: "All Recipe Type",
       value: null,
     },
     {
@@ -241,68 +241,23 @@ const Recipes = () => {
   return (
     <CRow>
       <CModal
-        show={enableModal}
-        centered={true}
-        color="warning"
-        onClose={setEnableModal}
-        backdrop={true}
-        style={{ fontFamily: "Poppins" }}
-      >
-        <CModalHeader style={{ height: "3rem" }}>
-          <CModalTitle>{active ? "Block User?" : "Unblock User?"}</CModalTitle>
-        </CModalHeader>
-        <CModal
-          show={deleteModal}
-          centered={true}
-          backdrop={true}
-          color="warning"
-          onClose={setDeleteModal}
-        >
-          <CModalHeader closeButton>
-            <CModalTitle>Delete Category Genre?</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-            Are you sure you want to Delete this Category?
-          </CModalBody>
-          <CModalFooter>
-            <CButton color="success" onClick={handleDelete}>
-              Yes
-            </CButton>
-            <CButton color="secondary" onClick={() => setDeleteModal(false)}>
-              Cancel
-            </CButton>
-          </CModalFooter>
-        </CModal>
-        <CModalBody>
-          {active
-            ? "Are you sure you want to Block the User?"
-            : "Are you sure you want to Unblock the User?"}
-        </CModalBody>
-        <CModalFooter style={{ height: "4rem" }}>
-          <CButton color="success" onClick={handleEnable}>
-            Yes
-          </CButton>{" "}
-          <CButton color="secondary" onClick={() => setEnableModal(false)}>
-            Cancel
-          </CButton>
-        </CModalFooter>
-      </CModal>
-      <CModal
         show={deleteModal}
         centered={true}
         backdrop={true}
-        color="warning"
         onClose={setDeleteModal}
       >
-        <CModalHeader>
+        <CModalHeader style={{ backgroundColor: "teal", color: "white" }}>
           <CModalTitle>Delete Recipe?</CModalTitle>
         </CModalHeader>
         <CModalBody>Are you sure you want to Delete the Recipe?</CModalBody>
         <CModalFooter>
-          <CButton color="primary" onClick={handleDelete}>
+          <CButton
+            onClick={handleDelete}
+            style={{ backgroundColor: "teal", color: "white" }}
+          >
             Yes
           </CButton>{" "}
-          <CButton color="secondary" onClick={() => setDeleteModal(false)}>
+          <CButton color="danger" onClick={() => setDeleteModal(false)}>
             Cancel
           </CButton>
         </CModalFooter>
