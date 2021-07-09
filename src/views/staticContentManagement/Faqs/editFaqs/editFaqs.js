@@ -141,7 +141,7 @@ const EditFqs = () => {
             <div
               style={{
                 marginTop: "20px",
-                backgroundColor: "#929191",
+                backgroundColor: "lightgray",
                 padding: "20px",
                 height: "400px",
               }}

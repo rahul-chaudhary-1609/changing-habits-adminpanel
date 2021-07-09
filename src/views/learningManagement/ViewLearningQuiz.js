@@ -17,7 +17,9 @@ import {
    
 } from "@coreui/react"
 import CIcon from "@coreui/icons-react";
-import {getLearningQuiz} from "../../data/learningContentManagement"
+import { getLearningQuiz } from "../../data/learningContentManagement"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 function ViewLearningQuiz(props) {
   let history = useHistory();
@@ -109,23 +111,22 @@ let [question,setQuestion ] = useState("");
                   <h2>
                     View Learning Quiz
                     <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
-                  <div style={{display:"flex",justifyContent:"end"}}>  
+                 
                   <CButton
                         
-                        style={{marginRight:"2rem", width: "5rem",backgroundColor:"#008080",color:"#fff" }}
-                        onClick={()=>history.push(`/editLearningQuiz/${params.id}`)}
-                    >
-                        <strong>Edit</strong>
-                  </CButton>
-                  <CButton
-                        
-                        style={{ width: "5rem",backgroundColor:"#008080",color:"#fff" }}
+                        style={{ backgroundColor: "gray" }}
                         onClick={()=>history.goBack()}
                     >
-                        <strong>Back</strong>
+                        <strong>
+                        <FontAwesomeIcon
+                          color="white"
+                          size="lg"
+                          style={{ cursor: "pointer", color: "black" }}
+                          icon={faArrowLeft}
+                        />
+                      </strong>
                     </CButton>
                     </div>
-                </div>
                                             
               </CCardHeader>
               <CCardBody >

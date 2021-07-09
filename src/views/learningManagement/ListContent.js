@@ -141,7 +141,7 @@ function ListLearningContent() {
                     border
                     addTableClasses="table-class"
                     loading={isLoading}
-                    noItemsViewSlot={isLoading ? <div>Loading...</div> : <div>{errorResponse.isFound ? errorResponse.message : "No Record Found"}</div>}
+                    noItemsViewSlot={!isLoading ? "" : <div style={{ height: "14rem" }}></div>}
                     overTableSlot={
                         <CCol style={{ marginBottom: "1rem", display: "flex" }}>
                             <CInputGroup>
@@ -150,7 +150,7 @@ function ListLearningContent() {
                                         <CIcon name={'cilSearch'} />
                                     </CInputGroupText>
                                 </CInputGroupPrepend>
-                                <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search"
+                                <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by title"
                                     value={searchValue}
                                     onChange={(e) => { setSearchValue(e.target.value) }}
                                 />

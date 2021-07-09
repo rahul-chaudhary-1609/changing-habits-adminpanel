@@ -44,7 +44,7 @@ const getBadge = (status) => {
 
 var account_type = [
   {
-    label: "Select account type",
+    label: "All Accounts",
     value: null,
   },
   {
@@ -214,12 +214,13 @@ const Users = () => {
       <CModal
         show={enableModal}
         centered={true}
-        color="warning"
         onClose={setEnableModal}
         backdrop={true}
         style={{ fontFamily: "Poppins" }}
       >
-        <CModalHeader style={{ height: "3rem" }}>
+        <CModalHeader
+          style={{ height: "3rem", backgroundColor: "teal", color: "white" }}
+        >
           <CModalTitle>{active ? "Block User?" : "Unblock User?"}</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -228,10 +229,13 @@ const Users = () => {
             : "Are you sure you want to Unblock the User?"}
         </CModalBody>
         <CModalFooter style={{ height: "4rem" }}>
-          <CButton color="success" onClick={handleEnable}>
+          <CButton
+            onClick={handleEnable}
+            style={{ backgroundColor: "teal", color: "white" }}
+          >
             Yes
           </CButton>{" "}
-          <CButton color="secondary" onClick={() => setEnableModal(false)}>
+          <CButton color="danger" onClick={() => setEnableModal(false)}>
             Cancel
           </CButton>
         </CModalFooter>
@@ -338,7 +342,7 @@ const Users = () => {
                       }}
                       custom
                       value={accountType}
-                      placeholder="Select account type"
+                      placeholder="All account type"
                       name="status"
                       id="status"
                     >
