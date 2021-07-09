@@ -25,6 +25,18 @@ const _nav = [
       <CIcon content={freeSet.cilFile} customClasses="c-sidebar-nav-icon" />
     ),
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Today's Learning Management",
+    to: "/listLearning/content",
+    icon: <CIcon content={freeSet.cilBook} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Food Log Category",
+    to: "/listFoodLogCategory",
+    icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
+  },
 ];
 
 export default _nav;

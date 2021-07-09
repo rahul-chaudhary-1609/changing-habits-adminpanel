@@ -47,6 +47,38 @@ const EditFqs = React.lazy(() =>
   import("./views/staticContentManagement/Faqs/editFaqs/editFaqs")
 );
 
+const ListLearning= React.lazy(() =>
+  import("./views/learningManagement/ListLearning")
+);
+
+const ViewLearningContent= React.lazy(() =>
+  import("./views/learningManagement/ViewLearningContent")
+);
+
+const AddEditLearningContent= React.lazy(() =>
+  import("./views/learningManagement/AddEditContent")
+);
+
+const AddEditLearningQuiz= React.lazy(() =>
+  import("./views/learningManagement/AddEditQuiz")
+);
+
+const ViewLearningQuiz= React.lazy(() =>
+  import("./views/learningManagement/ViewLearningQuiz")
+);
+
+const ListFoodLogCategory= React.lazy(() =>
+  import("./views/foodLogCategory/ListFoodLogCategory")
+);
+
+const AddEditFoodLogCategory= React.lazy(() =>
+  import("./views/foodLogCategory/AddEditFoodLogCategory")
+);
+
+const ViewFoodLogCategory= React.lazy(() =>
+  import("./views/foodLogCategory/ViewFoodLogCategory")
+);
+
 const routes = [
   { path: "/", exact: true, name: "Users", component: User },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
@@ -149,6 +181,77 @@ const routes = [
     exact: true,
     name: "Edit Faqs",
     component: EditFqs,
+  },
+  {
+    path: `/listLearning/:type`,
+    exact: true,
+    name: "List Learning",
+    component: ListLearning,
+  },
+  {
+    path: `/viewLearningContent/:id`,
+    exact: true,
+    name: "View Learning Content",
+    component: ViewLearningContent,
+  },
+  {
+    path: `/addLearningContent`,
+    exact: true,
+    name: "Add Learning Content",
+    component: AddEditLearningContent,
+  },
+  
+  {
+    path: `/editLearningContent/:id`,
+    exact: true,
+    name: "Edit Learning Content",
+    component: AddEditLearningContent,
+  },
+  {
+    path: `/viewLearningQuiz/:id`,
+    exact: true,
+    name: "View Learning Quiz",
+    component: ViewLearningQuiz,
+  },
+
+ {
+    path: `/addLearningQuiz`,
+    exact: true,
+    name: "Add Learning Quiz",
+    component: AddEditLearningQuiz,
+  },
+  {
+    path: `/editLearningQuiz/:id`,
+    exact: true,
+    name: "Edit Learning Quiz",
+    component: AddEditLearningQuiz,
+  },
+
+  {
+    path: `/listFoodLogCategory`,
+    exact: true,
+    name: "List Food Log Category",
+    component: ListFoodLogCategory,
+  },
+  {
+    path: `/viewFoodLogCategory/:id`,
+    exact: true,
+    name: "View Food Log Category",
+    component: ViewFoodLogCategory,
+  },
+
+  {
+    path: `/addFoodLogCategory`,
+    exact: true,
+    name: "Add Food Log Category",
+    component: AddEditFoodLogCategory,
+  },
+
+   {
+    path: `/editFoodLogCategory/:id`,
+    exact: true,
+    name: "Edit Food Log Category",
+    component: AddEditFoodLogCategory,
   },
 
   { component: Page404 },
