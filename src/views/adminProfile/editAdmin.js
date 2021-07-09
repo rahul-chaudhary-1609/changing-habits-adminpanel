@@ -329,14 +329,6 @@ export default function EditAdmin() {
                   alignItems: "center",
                 }}
               >
-                <CButton
-                  onClick={() => history.push("/profile")}
-                  style={{ width: "5rem", marginRight: "-170px" }}
-                  type="reset"
-                  color="danger"
-                >
-                  <strong>Cancel</strong>
-                </CButton>
                 {loading ? (
                   <div className="spinner-border text-success" role="status">
                     <span className="sr-only">Loading...</span>
@@ -347,12 +339,21 @@ export default function EditAdmin() {
                     style={{
                       width: "5rem",
                       backgroundColor: "teal",
+                      marginRight: "-170px",
                       color: "white",
                     }}
                   >
                     <strong>Update</strong>
                   </CButton>
                 )}
+                <CButton
+                  onClick={() => history.push("/profile")}
+                  style={{ width: "5rem" }}
+                  type="reset"
+                  color="danger"
+                >
+                  <strong>Cancel</strong>
+                </CButton>
               </CCardFooter>
               <CCardFooter>
                 <CCol

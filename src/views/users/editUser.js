@@ -14,6 +14,7 @@ import {
   CLabel,
   CImg,
   CInputFile,
+  CRow,
 } from "@coreui/react";
 import { useFormik } from "formik";
 import {
@@ -388,7 +389,7 @@ export default function EditUser(props) {
                       <h6>Mobile Number</h6>
                     </CLabel>
                   </CCol>
-                  <CCol xs="12" md="9">
+                  <CCol md="3">
                     <CInput
                       type="text"
                       id="country_code"
@@ -397,14 +398,22 @@ export default function EditUser(props) {
                       onBlur={formik.handleBlur}
                       value={formik.values.country_code}
                       onChange={formik.handleChange}
-                      style={{ marginBottom: "5px", width: "30%" }}
+                      style={{ marginBottom: "5px" }}
                     />
                     {formik.touched.country_code &&
                     formik.errors.country_code ? (
-                      <div className="email-validate">
+                      <div
+                        style={{
+                          width: "max-content",
+                          color: "red",
+                          marginTop: "15px",
+                        }}
+                      >
                         {formik.errors.country_code}
                       </div>
                     ) : null}
+                  </CCol>
+                  <CCol md="6">
                     <CInput
                       type="text"
                       id="phone_no"

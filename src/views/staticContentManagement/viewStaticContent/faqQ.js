@@ -107,20 +107,25 @@ const FAQS = () => {
         show={deleteModal}
         centered={true}
         backdrop={true}
-        color="warning"
         onClose={setDeleteModal}
       >
-        <CModalHeader closeButton>
+        <CModalHeader
+          style={{ backgroundColor: "teal", color: "white" }}
+          closeButton
+        >
           <CModalTitle>Delete FAQ?</CModalTitle>
         </CModalHeader>
         <CModalBody>
           Are you sure you want to Delete this FAQ question?
         </CModalBody>
         <CModalFooter>
-          <CButton color="success" onClick={handleDelete}>
+          <CButton
+            onClick={handleDelete}
+            style={{ backgroundColor: "teal", color: "white" }}
+          >
             Yes
           </CButton>
-          <CButton color="secondary" onClick={() => setDeleteModal(false)}>
+          <CButton color="danger" onClick={() => setDeleteModal(false)}>
             Cancel
           </CButton>
         </CModalFooter>
@@ -129,12 +134,13 @@ const FAQS = () => {
       <CModal
         show={enableModal}
         centered={true}
-        color="warning"
         onClose={setEnableModal}
         backdrop={true}
         style={{ fontFamily: "Poppins" }}
       >
-        <CModalHeader style={{ height: "3rem" }}>
+        <CModalHeader
+          style={{ height: "3rem", backgroundColor: "teal", color: "white" }}
+        >
           <CModalTitle>{active ? "Disable Faq?" : "Enable Faq?"}</CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -143,10 +149,13 @@ const FAQS = () => {
             : "Are you sure you want to enable this Faq?"}
         </CModalBody>
         <CModalFooter style={{ height: "4rem" }}>
-          <CButton color="success" onClick={handleEnable}>
+          <CButton
+            style={{ backgroundColor: "teal", color: "white" }}
+            onClick={handleEnable}
+          >
             Yes
           </CButton>{" "}
-          <CButton color="secondary" onClick={() => setEnableModal(false)}>
+          <CButton color="danger" onClick={() => setEnableModal(false)}>
             Cancel
           </CButton>
         </CModalFooter>
