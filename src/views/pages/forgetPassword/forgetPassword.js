@@ -115,9 +115,12 @@ export default function Forgetpassword() {
                         <CCol xs="6">
                           {!loading ? (
                             <CButton
-                              color="primary"
                               className="px-4"
                               type="submit"
+                              style={{
+                                backgroundColor: "teal",
+                                color: "white",
+                              }}
                             >
                               Submit
                             </CButton>

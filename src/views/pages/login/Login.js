@@ -210,9 +210,9 @@ const Login = () => {
                       <CCol xs="6">
                         {!loading ? (
                           <CButton
-                            color="primary"
                             className="px-4"
                             type="submit"
+                            style={{ backgroundColor: "teal", color: "white" }}
                           >
                             Login
                           </CButton>
@@ -231,7 +231,7 @@ const Login = () => {
                           className="px-0"
                           onClick={() => handleForgotPassword()}
                         >
-                          Forgot Password?
+                          <u>Forgot Password?</u>
                         </CButton>
                       </CCol>
                     </CRow>
