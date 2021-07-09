@@ -18,6 +18,8 @@ import CIcon from "@coreui/icons-react";
 
 import { listLearningContent,toggleLearningContentStatus } from "../../data/learningContentManagement"
 import StatusModal from "src/utils/components/modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 function ListLearningContent() {
     let history = useHistory();
@@ -48,7 +50,7 @@ function ListLearningContent() {
         { key: 'phase_day',label:"Phase Day" },
         { key: 'phase_id', label: "Phase" },
         { key: 'status', label: "Status" },
-        { key: 'action',label:"Action" },
+        { key: 'action',label:"Action",_style: { minWidth: "7rem" } },
     ]
 
     let toggleModal = (item) => {
@@ -189,6 +191,19 @@ function ListLearningContent() {
                                                 size="lg"
                                                 name={"cilPencil"}
                                                 onClick={()=>history.push(`/editLearningContent/${item.id}`)}
+                                            />
+                                        </CTooltip>
+                                        <CTooltip content={`View Content`} placement={"top-start"}>
+                                            <FontAwesomeIcon
+                                                color="green"
+                                                size="lg"
+                                                style={{ cursor: "pointer" }}
+                                                onClick={() =>
+                                                history.push({
+                                                    pathname: `/viewLearningContent/${item.id}`,
+                                                })
+                                                }
+                                                icon={faEye}
                                             />
                                         </CTooltip>
                                         <CSwitch

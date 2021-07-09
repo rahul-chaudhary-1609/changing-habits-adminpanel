@@ -24,6 +24,8 @@ import { FaFilter} from 'react-icons/fa';
 
 import { listFoodLogCategory,listPhases,toggleFoodLogCategoryStatus } from "../../data/foodLogCategory"
 import StatusModal from "../../utils/components/modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 function ListFoodLogCategory() {
     let history = useHistory();
@@ -54,7 +56,7 @@ function ListFoodLogCategory() {
         { key: 'food_type', labellable: "Category" },
         { key: 'phase_id', label: "Phase" },
         { key: 'status', label: "Status" },
-        { key: 'action',label:"Action" },
+        { key: 'action',label:"Action",_style: { minWidth: "7rem" } },
     ]
 
     let toggleModal = (item) => {
@@ -155,8 +157,7 @@ function ListFoodLogCategory() {
                             <div style={{display:"flex", justifyContent:"space-between"}}>
                                 <h2>Food Log Category</h2>
                                 <CButton
-                                    color="success"
-                                    style={{ width: "5rem",}}
+                                    style={{ width: "5rem",backgroundColor:"#008080",color:"#fff"}}
                                     onClick={()=> history.push('/addFoodLogCategory')}
                                 >
                                     <strong>Add</strong>
@@ -240,11 +241,24 @@ function ListFoodLogCategory() {
                             return (
                                 <td>
                                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
-                                        <CTooltip content={"Edit Content"} placement={"top-start"}>
+                                        <CTooltip content={"Edit Food Log Category"} placement={"top-start"}>
                                             <CIcon style={{ color: "black", cursor: "pointer" }}
                                                 size="lg"
                                                 name={"cilPencil"}
                                                 onClick={()=>history.push(`/editFoodLogCategory/${item.id}`)}
+                                            />
+                                        </CTooltip>
+                                        <CTooltip content={`View Food Log Category`} placement={"top-start"}>
+                                            <FontAwesomeIcon
+                                                color="green"
+                                                size="lg"
+                                                style={{ cursor: "pointer" }}
+                                                onClick={() =>
+                                                history.push({
+                                                    pathname: `/viewFoodLogCategory/${item.id}`,
+                                                })
+                                                }
+                                                icon={faEye}
                                             />
                                         </CTooltip>
                                         <CSwitch

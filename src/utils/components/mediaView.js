@@ -10,7 +10,7 @@ function MediaView(props) {
                 alignItems:"center",
                 border:props.mediaInput.isError?"3.5px solid rgba(0,0,255,0.3)":"1px solid rgba(0,0,0,0.2)",
                 height: "135px",
-                width: "255px",
+                width: "190px",
                 padding: "10px",
                 borderRadius:"10px"
             }} >

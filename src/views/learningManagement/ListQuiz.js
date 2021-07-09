@@ -23,6 +23,8 @@ import CIcon from "@coreui/icons-react";
 
 import { listLearningQuiz,toggleLearningQuizStatus } from "../../data/learningContentManagement"
 import StatusModal from "src/utils/components/modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 function ListLearningQuiz() {
     let history = useHistory();
@@ -53,7 +55,7 @@ function ListLearningQuiz() {
         { key: 'phase_day',label:"Phase Day" },
         { key: 'phase_id', label: "Phase" },
         { key: 'status', label: "Status" },
-        { key: 'action',label:"Action" },
+        { key: 'action',label:"Action",_style: { minWidth: "7rem" } },
     ]
 
     let toggleModal = (item) => {
@@ -190,11 +192,24 @@ function ListLearningQuiz() {
                                         return (
                                             <td>
                                                 <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
-                                                    <CTooltip content={"Edit Content"} placement={"top-start"}>
+                                                    <CTooltip content={"Edit Quiz"} placement={"top-start"}>
                                                         <CIcon style={{ color: "black", cursor: "pointer" }}
                                                             size="lg"
                                                             name={"cilPencil"}
                                                             onClick={()=>history.push(`/editLearningQuiz/${item.id}`)}
+                                                        />
+                                                    </CTooltip>
+                                                    <CTooltip content={`View Quiz`} placement={"top-start"}>
+                                                        <FontAwesomeIcon
+                                                            color="green"
+                                                            size="lg"
+                                                            style={{ cursor: "pointer" }}
+                                                            onClick={() =>
+                                                            history.push({
+                                                                pathname: `/viewLearningQuiz/${item.id}`,
+                                                            })
+                                                            }
+                                                            icon={faEye}
                                                         />
                                                     </CTooltip>
                                                     <CSwitch

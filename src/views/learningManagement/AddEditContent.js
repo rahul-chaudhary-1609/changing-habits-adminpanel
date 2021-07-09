@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import {    
-    CFormText,
     CCardBody,
     CContainer,
     CRow,
@@ -17,6 +16,7 @@ import {
   CSelect,
   CInputCheckbox,
   CInputFile,
+  CSpinner
    
 } from "@coreui/react"
 import CIcon from "@coreui/icons-react";
@@ -84,6 +84,7 @@ let [title,setTitle ] = useState("");
   ]
 
   let [phaseDaysList, setPhaseDaysList] = useState([]);
+  let [spinnerShow,setSpinnerShow]=useState(false)
 
   useEffect(() => {
     setErrorResponse({ message: null, code: null, isFound: false })
@@ -110,10 +111,13 @@ let [title,setTitle ] = useState("");
       let req = {
         data:formData
       }
+      setSpinnerShow(true)
       upload(req).then((response) => {
         setErrorResponse({ message: null, code: null, isFound: false })
-        setMediaInput({...mediaInput,isError: false,type:fileType,source:response.image_url })
+        setMediaInput({ ...mediaInput, isError: false, type: fileType, source: response.image_url })
+        setSpinnerShow(false)
       }).catch((error) => {
+        setSpinnerShow(false)
         setMediaInput({ ...mediaInput, isError: true });
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
@@ -128,7 +132,9 @@ let [title,setTitle ] = useState("");
             id: phase,
         },
     }
+    setSpinnerShow(true)
     getPhaseDays(req).then((response) => {
+      setSpinnerShow(false)
       let newPhaseDaysList = []
       for (let i = 1; i <= response.phaseDays; i++){
         newPhaseDaysList.push(i)
@@ -136,6 +142,7 @@ let [title,setTitle ] = useState("");
       setPhaseDaysList([...newPhaseDaysList]);
       setErrorResponse({ message: null, code: null, isFound: false })
     }).catch((error) => {
+      setSpinnerShow(false)
       setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
     })
   }, [phase])
@@ -146,7 +153,8 @@ let [title,setTitle ] = useState("");
         pathParams: {
             id: params.id,
         },
-    }
+      }
+      setSpinnerShow(true)
       getLearningContent(req).then((response) => {
         setErrorResponse({ message: null, code: null, isFound: false })
         setTitle(response.learningContentDetails.title)
@@ -163,7 +171,9 @@ let [title,setTitle ] = useState("");
             isError: false,
           })
         }
+        setSpinnerShow(false)
       }).catch((error) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     }
@@ -172,6 +182,7 @@ let [title,setTitle ] = useState("");
 
   let handleSubmit = (e) => {
     e.preventDefault();
+    setSpinnerShow(true)
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
     if (mediaInput.source == "https://changinghabits-dev-backend.s3.amazonaws.com/changinghabits/learning_content/loading-buffering_1625498388794.gif" || !mediaInput.source) {
@@ -189,8 +200,6 @@ let [title,setTitle ] = useState("");
       phase_id: phase,
       phase_day: phaseDay,
       content_type: phychologicalContentTypeCheck ? 1 : 2,
-      // image_url: mediaInput.type == "image" ? mediaInput.source : null,
-      // video_url: mediaInput.type == "video" ? mediaInput.source : null,
     }
     if (mediaInput.type == "image" || mediaInput.type == "video") {
       data[`${mediaInput.type}_url`]=mediaInput.source
@@ -205,9 +214,12 @@ let [title,setTitle ] = useState("");
       }
 
       editLearningContent(req).then((response) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: null, code: null, isFound: false })
-        setSuccessResponse({ message:"Updated Successfully" || null, code: 200 || null, isFound: true })
+        setSuccessResponse({ message: "Updated Successfully" || null, code: 200 || null, isFound: true })
+        history.push('/listLearning/content')
       }).catch((error) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     } else {
@@ -215,10 +227,12 @@ let [title,setTitle ] = useState("");
         data
       }
       addLearningContent(req).then((response) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: null, code: null, isFound: false })
         setSuccessResponse({ message:"Saved Successfully" || null, code: 200 || null, isFound: true })
-        //history.push('/listLearning/content')
+        history.push('/listLearning/content')
       }).catch((error) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     }
@@ -241,6 +255,7 @@ let [title,setTitle ] = useState("");
       source: null,
       isError:false,
     })
+    setSpinnerShow(false)
   }
 
     return (
@@ -250,7 +265,9 @@ let [title,setTitle ] = useState("");
             <CCard>
               <CCardHeader>
                 <div style={{display:"flex", justifyContent:"space-between"}}>
-                    <h2>{history.location.pathname=="/addLearningContent"?"Add Learning Content":"Edit Learning Content"}</h2>
+                  <h2>
+                    {history.location.pathname == "/addLearningContent" ? "Add Learning Content" : "Edit Learning Content"}
+                  <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
                     <CButton
                         
                         style={{ width: "5rem",backgroundColor:"#008080",color:"#fff" }}
@@ -392,7 +409,11 @@ let [title,setTitle ] = useState("");
                   </CFormGroup>
                   
                   <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"space-around"}}>
-                    <CButton style={{width:"10rem",backgroundColor:"#008080",color:"#fff"}} type="submit" >Save</CButton>
+                    <CButton
+                      disabled={spinnerShow}
+                      style={{ width: "10rem", backgroundColor: "#008080", color: "#fff" }}
+                      type="submit"
+                    >Save <CSpinner style={{ color: "#fff", marginLeft: "1rem", display:spinnerShow?"":"none" }} size="sm" /></CButton>
                     <CButton style={{width:"10rem"}} type="reset" color="secondary" onClick={handleReset} >Reset</CButton>
                   </CFormGroup>
                   

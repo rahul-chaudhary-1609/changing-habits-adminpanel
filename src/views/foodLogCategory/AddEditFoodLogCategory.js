@@ -12,7 +12,8 @@ import {
     CLabel,
     CInput,
   CButton,
-  CSelect
+  CSelect,
+  CSpinner
 } from "@coreui/react"
 import {listPhases,getFoodLogCategory,addFoodLogCategory,editFoodLogCategory} from "../../data/foodLogCategory"
 
@@ -34,7 +35,9 @@ let [categoryName,setCategoryName ] = useState("");
         isFound: true,
   });
 
- let [phases,setPhases]=useState([])
+  let [phases, setPhases] = useState([])
+  let [spinnerShow,setSpinnerShow]=useState(false)
+  //let spinnerShow = false;
 
   useEffect(() => {
     setErrorResponse({ message: null, code: null, isFound: false })
@@ -42,10 +45,13 @@ let [categoryName,setCategoryName ] = useState("");
   },[categoryName,phase,phases])
 
   useEffect(() => {
+    setSpinnerShow(true)
     listPhases().then((response) => {
-            setPhases(response.phasesList)
-        }).catch((error) => {
-            console.log(error)
+      setPhases(response.phasesList)
+      setSpinnerShow(false)
+    }).catch((error) => {
+          setSpinnerShow(false)
+            setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
         })
     
     if (params.id) {
@@ -53,13 +59,16 @@ let [categoryName,setCategoryName ] = useState("");
         pathParams: {
             id: params.id,
         },
-    }
+      }
+      setSpinnerShow(true)
       getFoodLogCategory(req).then((response) => {
         setErrorResponse({ message: null, code: null, isFound: false })
         setCategoryName(response.foodType.food_type)
         setPhase(response.foodType.phase_id)
+        setSpinnerShow(false)
         
       }).catch((error) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     }
@@ -68,6 +77,7 @@ let [categoryName,setCategoryName ] = useState("");
 
   let handleSubmit = (e) => {
     e.preventDefault();
+    setSpinnerShow(true)
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
 
@@ -87,9 +97,12 @@ let [categoryName,setCategoryName ] = useState("");
       }
 
       editFoodLogCategory(req).then((response) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: null, code: null, isFound: false })
-        setSuccessResponse({ message:"Updated Successfully" || null, code: 200 || null, isFound: true })
+        setSuccessResponse({ message: "Updated Successfully" || null, code: 200 || null, isFound: true })
+        history.push('/listFoodLogCategory')
       }).catch((error) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     } else {
@@ -99,10 +112,12 @@ let [categoryName,setCategoryName ] = useState("");
         data
       }
       addFoodLogCategory(req).then((response) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: null, code: null, isFound: false })
         setSuccessResponse({ message: "Saved Successfully" || null, code: 200 || null, isFound: true })
-        //history.push('/listLearning/quiz')
+        history.push('/listFoodLogCategory')
       }).catch((error) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     }    
@@ -110,6 +125,7 @@ let [categoryName,setCategoryName ] = useState("");
 
   let handleReset = (e) => {
     e.preventDefault();
+    setSpinnerShow(false)
     setCategoryName("")
     setPhase(1)  
   }
@@ -121,10 +137,10 @@ let [categoryName,setCategoryName ] = useState("");
             <CCard>
               <CCardHeader>
                 <div style={{display:"flex", justifyContent:"space-between"}}>
-                    <h2>{history.location.pathname=="/addFoodLogCategory"?"Add Food Log Category":"Edit Food Log Category"}</h2>
+                  <h2>{history.location.pathname == "/addFoodLogCategory" ? "Add Food Log Category" : "Edit Food Log Category"}
+                  <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
                     <CButton
-                        color="success"
-                        style={{ width: "5rem"}}
+                        style={{ width: "5rem",backgroundColor:"#008080",color:"#fff"}}
                         onClick={()=>history.goBack()}
                     >
                         <strong>Back</strong>
@@ -173,7 +189,11 @@ let [categoryName,setCategoryName ] = useState("");
                   
                   
                   <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"space-around"}}>
-                    <CButton style={{width:"10rem"}} color="success" type="submit" >Save</CButton>
+                    <CButton
+                      disabled={spinnerShow}
+                      style={{ width: "10rem", backgroundColor: "#008080", color: "#fff" }}
+                      type="submit"
+                    >Save <CSpinner style={{ color: "#fff", marginLeft: "1rem", display:spinnerShow?"":"none" }} size="sm" /></CButton>
                     <CButton style={{width:"10rem"}} type="reset" color="secondary" onClick={handleReset} >Reset</CButton>
                   </CFormGroup>
                   

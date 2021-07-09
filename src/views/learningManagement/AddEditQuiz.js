@@ -16,7 +16,8 @@ import {
   CSelect,
   CInputGroup,
   CInputGroupAppend,
-  CBadge
+  CBadge,
+  CSpinner
 } from "@coreui/react"
 import { FaPlus,FaMinus } from 'react-icons/fa';
 import {getPhaseDays,getLearningQuiz,addLearningQuiz,editLearningQuiz} from "../../data/learningContentManagement"
@@ -79,7 +80,8 @@ let [question,setQuestion ] = useState("");
     
   ]
 
-    let [phaseDaysList, setPhaseDaysList] = useState([]);
+  let [phaseDaysList, setPhaseDaysList] = useState([]);
+  let [spinnerShow,setSpinnerShow]=useState(false)
 
   useEffect(() => {
     setErrorResponse({ message: null, code: null, isFound: false })
@@ -92,8 +94,10 @@ let [question,setQuestion ] = useState("");
         pathParams: {
             id: params.id,
         },
-    }
+      }
+      setSpinnerShow(true)
       getLearningQuiz(req).then((response) => {
+        
         setErrorResponse({ message: null, code: null, isFound: false })
         setQuestion(response.quizDetails.question)
         setDescription(response.quizDetails.description)
@@ -113,8 +117,10 @@ let [question,setQuestion ] = useState("");
         }        
         setOptionInputFields(currentOptionInputFields)
         setCorrectOption(response.quizDetails.correct_option)
+        setSpinnerShow(false)
         
       }).catch((error) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     }
@@ -127,7 +133,9 @@ let [question,setQuestion ] = useState("");
             id: phase,
         },
     }
+    setSpinnerShow(true)
     getPhaseDays(req).then((response) => {
+      setSpinnerShow(false)
       let newPhaseDaysList = []
       for (let i = 1; i <= response.phaseDays; i++){
         newPhaseDaysList.push(i)
@@ -135,6 +143,7 @@ let [question,setQuestion ] = useState("");
       setPhaseDaysList([...newPhaseDaysList]);
       setErrorResponse({ message: null, code: null, isFound: false })
     }).catch((error) => {
+      setSpinnerShow(false)
       setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
     })
   }, [phase])
@@ -164,10 +173,11 @@ let [question,setQuestion ] = useState("");
 
   let handleSubmit = (e) => {
     e.preventDefault();
+    setSpinnerShow(true)
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
 
-    
+    console.log("correctOption",correctOption)
     let data = {
       question: question,
       description: description,
@@ -190,9 +200,12 @@ let [question,setQuestion ] = useState("");
       }
 
       editLearningQuiz(req).then((response) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: null, code: null, isFound: false })
-        setSuccessResponse({ message:"Updated Successfully" || null, code: 200 || null, isFound: true })
+        setSuccessResponse({ message: "Updated Successfully" || null, code: 200 || null, isFound: true })
+        history.push('/listLearning/quiz')
       }).catch((error) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     } else {
@@ -200,10 +213,12 @@ let [question,setQuestion ] = useState("");
         data
       }
       addLearningQuiz(req).then((response) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: null, code: null, isFound: false })
         setSuccessResponse({ message:"Saved Successfully" || null, code: 200 || null, isFound: true })
-        //history.push('/listLearning/quiz')
+        history.push('/listLearning/quiz')
       }).catch((error) => {
+        setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     }    
@@ -223,6 +238,7 @@ let [question,setQuestion ] = useState("");
       { option_no: 3, option_value: "",isRequired:true },
       { option_no: 4, option_value: "",isRequired:true },
     ])
+    setSpinnerShow(false)
     
   }
 
@@ -233,7 +249,8 @@ let [question,setQuestion ] = useState("");
             <CCard>
               <CCardHeader>
                 <div style={{display:"flex", justifyContent:"space-between"}}>
-                    <h2>{history.location.pathname=="/addLearningQuiz"?"Add Learning Quiz":"Edit Learning Quiz"}</h2>
+                  <h2>{history.location.pathname == "/addLearningQuiz" ? "Add Learning Quiz" : "Edit Learning Quiz"}
+                  <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
                     <CButton
                         style={{ width: "5rem",backgroundColor:"#008080",color:"#fff"}}
                         onClick={()=>history.goBack()}
@@ -265,7 +282,7 @@ let [question,setQuestion ] = useState("");
                   </CFormGroup>
 
                   <CFormGroup>
-                    <CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="option">Option:</CLabel>
+                    <CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="option">Options:</CLabel>
                     {optionInputFields.map((optionInputField,index) => {
                       return(
                       <CInputGroup style={{display:"flex",alignItems:"center",marginTop:optionInputField.option_no>1?"0.5rem":"none"}}>
@@ -361,7 +378,11 @@ let [question,setQuestion ] = useState("");
                     </div>
                   
                   <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"space-around"}}>
-                    <CButton style={{width:"10rem",backgroundColor:"#008080",color:"#fff"}} type="submit" >Save</CButton>
+                    <CButton
+                      disabled={spinnerShow}
+                      style={{ width: "10rem", backgroundColor: "#008080", color: "#fff" }}
+                      type="submit"
+                    >Save <CSpinner style={{ color: "#fff", marginLeft: "1rem", display:spinnerShow?"":"none" }} size="sm" /></CButton>
                     <CButton style={{width:"10rem"}} type="reset" color="secondary" onClick={handleReset} >Reset</CButton>
                   </CFormGroup>
                   

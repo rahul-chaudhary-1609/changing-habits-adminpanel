@@ -51,6 +51,9 @@ const ListLearning= React.lazy(() =>
   import("./views/learningManagement/ListLearning")
 );
 
+const ViewLearningContent= React.lazy(() =>
+  import("./views/learningManagement/ViewLearningContent")
+);
 
 const AddEditLearningContent= React.lazy(() =>
   import("./views/learningManagement/AddEditContent")
@@ -60,12 +63,20 @@ const AddEditLearningQuiz= React.lazy(() =>
   import("./views/learningManagement/AddEditQuiz")
 );
 
+const ViewLearningQuiz= React.lazy(() =>
+  import("./views/learningManagement/ViewLearningQuiz")
+);
+
 const ListFoodLogCategory= React.lazy(() =>
   import("./views/foodLogCategory/ListFoodLogCategory")
 );
 
 const AddEditFoodLogCategory= React.lazy(() =>
   import("./views/foodLogCategory/AddEditFoodLogCategory")
+);
+
+const ViewFoodLogCategory= React.lazy(() =>
+  import("./views/foodLogCategory/ViewFoodLogCategory")
 );
 
 const routes = [
@@ -178,6 +189,12 @@ const routes = [
     component: ListLearning,
   },
   {
+    path: `/viewLearningContent/:id`,
+    exact: true,
+    name: "View Learning Content",
+    component: ViewLearningContent,
+  },
+  {
     path: `/addLearningContent`,
     exact: true,
     name: "Add Learning Content",
@@ -189,6 +206,12 @@ const routes = [
     exact: true,
     name: "Edit Learning Content",
     component: AddEditLearningContent,
+  },
+  {
+    path: `/viewLearningQuiz/:id`,
+    exact: true,
+    name: "View Learning Quiz",
+    component: ViewLearningQuiz,
   },
 
  {
@@ -209,6 +232,12 @@ const routes = [
     exact: true,
     name: "List Food Log Category",
     component: ListFoodLogCategory,
+  },
+  {
+    path: `/viewFoodLogCategory/:id`,
+    exact: true,
+    name: "View Food Log Category",
+    component: ViewFoodLogCategory,
   },
 
   {
