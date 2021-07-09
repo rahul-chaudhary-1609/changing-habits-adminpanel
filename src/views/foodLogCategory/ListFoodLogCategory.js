@@ -53,7 +53,7 @@ function ListFoodLogCategory() {
 
     const fields = [
         { key: 's_no',label:"S.No." },
-        { key: 'food_type', labellable: "Category" },
+        { key: 'food_type', lable: "Category" },
         { key: 'phase_id', label: "Phase" },
         { key: 'status', label: "Status" },
         { key: 'action',label:"Action",_style: { minWidth: "7rem" } },
@@ -173,7 +173,7 @@ function ListFoodLogCategory() {
                     border
                     addTableClasses="table-class"
                     loading={isLoading}
-                    noItemsViewSlot={isLoading ? <div>Loading...</div> : <div>{errorResponse.isFound ? errorResponse.message : "No Record Found"}</div>}
+                    noItemsViewSlot={!isLoading ? "" : <div style={{ height: "14rem" }}></div>}
                     overTableSlot={
                         <CCol style={{ marginBottom: "1rem", display: "flex", justifyContent:"start" }}>
                             <CInputGroup>
@@ -182,7 +182,7 @@ function ListFoodLogCategory() {
                                         <CIcon name={'cilSearch'} />
                                     </CInputGroupText>
                                 </CInputGroupPrepend>
-                                <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search"
+                                <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by category"
                                     value={searchValue}
                                     onChange={(e) => { setSearchValue(e.target.value) }}
                                 />

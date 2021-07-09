@@ -16,7 +16,9 @@ import {
 } from "@coreui/react"
 import CIcon from "@coreui/icons-react";
 import MediaView from "src/utils/components/mediaView";
-import {getLearningContent} from "../../data/learningContentManagement"
+import { getLearningContent } from "../../data/learningContentManagement"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 function ViewLearningContent(props) {
   let history = useHistory();
@@ -71,8 +73,8 @@ let [title,setTitle ] = useState("");
         setNutritionContentTypeCheck(response.learningContentDetails.content_type == 2 ? true:false)
         if (response.learningContentDetails.image_url || response.learningContentDetails.video_url) {
           setMediaInput({
-            type: response.learningContentDetails.image_url?"image":"video",
-            source: response.learningContentDetails.image_url || response.learningContentDetails.video_url,
+             type: response.learningContentDetails.image_url && response.learningContentDetails.image_url!="https://null"?"image":"video",
+            source: response.learningContentDetails.image_url && response.learningContentDetails.image_url!="https://null"?response.learningContentDetails.image_url: response.learningContentDetails.video_url,
             isError: false,
           })
         }
@@ -97,23 +99,22 @@ let [title,setTitle ] = useState("");
                   <h2>
                     View Learning Content
                     <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
-                  <div style={{display:"flex",justifyContent:"end"}}>  
+                 
                   <CButton
                         
-                        style={{marginRight:"2rem", width: "5rem",backgroundColor:"#008080",color:"#fff" }}
-                        onClick={()=>history.push(`/editLearningContent/${params.id}`)}
-                    >
-                        <strong>Edit</strong>
-                  </CButton>
-                  <CButton
-                        
-                        style={{ width: "5rem",backgroundColor:"#008080",color:"#fff" }}
+                        style={{ backgroundColor: "gray" }}
                         onClick={()=>history.goBack()}
                     >
-                        <strong>Back</strong>
+                        <strong>
+                        <FontAwesomeIcon
+                          color="white"
+                          size="lg"
+                          style={{ cursor: "pointer", color: "black" }}
+                          icon={faArrowLeft}
+                        />
+                      </strong>
                     </CButton>
                     </div>
-                </div>
                                             
               </CCardHeader>
               <CCardBody >

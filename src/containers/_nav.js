@@ -27,7 +27,7 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Today's Learning Management",
+    name: "Learning Management",
     to: "/listLearning/content",
     icon: <CIcon content={freeSet.cilBook} customClasses="c-sidebar-nav-icon" />,
   },

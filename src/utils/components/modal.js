@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react'
-import { CModal, CButton, CModalHeader, CModalFooter, CModalBody } from '@coreui/react'
+import { CModal, CButton, CModalHeader, CModalFooter, CModalBody,CModalTitle } from '@coreui/react'
 
 
 export default function StatusModal(props) {
@@ -14,18 +14,20 @@ export default function StatusModal(props) {
                 backdrop
                 centered
                 //color={props.status == 1 ? "danger" : "success" }
+                color="warning"
                 
             >
                 <CModalHeader
-                    style={{backgroundColor:"#008080",color:"#fff"}}
+                    style={{height:"3rem"}}
                     closeButton
-                ><strong>{props.status==1?"Block Learning Content":"Unblock Learning Content"}</strong></CModalHeader>
+                ><CModalTitle>{props.status==1?`Block ${props.info}`:`Unblock ${props.info}`}</CModalTitle></CModalHeader>
                 <CModalBody>
                     Are you sure you want to {props.status == 1 ? "block" : "unblock"} this { props.info}?
           </CModalBody>
                 <CModalFooter>
                     <CButton
-                        style={{backgroundColor:"#008080",color:"#fff"}}
+                        color="success"
+                        //style={{backgroundColor:"#008080",color:"#fff"}}
                         onClick={()=>props.toggleStatus(props.toggleData)}
                     >Yes</CButton>
                     <CButton

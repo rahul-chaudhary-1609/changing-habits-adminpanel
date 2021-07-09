@@ -17,12 +17,15 @@ import {
 } from "@coreui/react"
 import {listPhases,getFoodLogCategory,addFoodLogCategory,editFoodLogCategory} from "../../data/foodLogCategory"
 
+
 function AddEditFoodLogCategory() {
   let history = useHistory();
   let params = useParams();
 
-let [categoryName,setCategoryName ] = useState("");
-  let [phase,setPhase] = useState(1);
+  let [categoryName, setCategoryName] = useState("");
+  let [categoryNameCheck,setCategoryNameCheck ] = useState(false);
+  let [phase, setPhase] = useState(0);
+  let [phaseCheck,setPhaseCheck] = useState(false);
   let [errorResponse, setErrorResponse] = useState({
         message: null,
         code: null,
@@ -74,9 +77,27 @@ let [categoryName,setCategoryName ] = useState("");
     }
   }, [])
 
+  let validateField = () => {
+    let result = true;
+    if (!categoryName || categoryName.trim() == "") {
+      setCategoryNameCheck(true)
+      result=false
+    }
+    if (!phase || phase == 0) {
+      setPhaseCheck(true)
+      result=false
+    }
+
+    return result
+  }
+
+
 
   let handleSubmit = (e) => {
     e.preventDefault();
+    if (!validateField()) {
+      return
+    }
     setSpinnerShow(true)
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
@@ -127,7 +148,9 @@ let [categoryName,setCategoryName ] = useState("");
     e.preventDefault();
     setSpinnerShow(false)
     setCategoryName("")
-    setPhase(1)  
+    setPhase(1)
+    setPhaseCheck(false)
+    setCategoryNameCheck(false)
   }
 
     return (
@@ -139,12 +162,12 @@ let [categoryName,setCategoryName ] = useState("");
                 <div style={{display:"flex", justifyContent:"space-between"}}>
                   <h2>{history.location.pathname == "/addFoodLogCategory" ? "Add Food Log Category" : "Edit Food Log Category"}
                   <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
-                    <CButton
+                    {/* <CButton
                         style={{ width: "5rem",backgroundColor:"#008080",color:"#fff"}}
                         onClick={()=>history.goBack()}
                     >
                         <strong>Back</strong>
-                    </CButton>
+                    </CButton> */}
                 </div>
                                             
               </CCardHeader>
@@ -160,7 +183,10 @@ let [categoryName,setCategoryName ] = useState("");
           
                           <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
                           <CSelect
-                          onChange={(e)=>setPhase(e.target.value)}
+                      onChange={(e) => {
+                        setPhaseCheck(false)
+                        setPhase(e.target.value)
+                      }}
                           value={phase}
                           id="phase"
                           name="phase"
@@ -168,35 +194,40 @@ let [categoryName,setCategoryName ] = useState("");
                           required
                           disabled={params.id?true:false}
                           
-                          > <option value="" defaultValue disabled>Select Phase</option>
+                          > <option value="0" defaultValue>Select Phase</option>
                           {phases.map((phase) => {
                               return <option key={phase.id} value={phase.id}> {phase.phase_name}</option>
                           })}
-                          </CSelect>                   
+                    </CSelect>
+                    <div style={{color:"red",marginLeft:"0.1rem", display:phaseCheck?"":"none"}}>Phase is required</div>
                       </CFormGroup>
                                 
                   <CFormGroup >                    
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="category_name">Category Name:</CLabel>
                     <CInput
-                      onChange={(e) => setCategoryName(e.target.value)}
+                      onChange={(e) => {
+                        setCategoryNameCheck(false)
+                        setCategoryName(e.target.value)
+                      }}
                       value={categoryName}
                       type="text"
                       id="category_name"
                       name="category_name"
                       placeholder="Enter Category Name"
-                      required
-                    />                    
+                      //required
+                    />
+                    <div style={{color:"red",marginLeft:"0.1rem", display:categoryNameCheck?"":"none"}}>Category name is required</div>
                   </CFormGroup>
 
                   
                   
-                  <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"space-around"}}>
+                 <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
                     <CButton
                       disabled={spinnerShow}
-                      style={{ width: "10rem", backgroundColor: "#008080", color: "#fff" }}
+                      style={{ width: "10rem", marginRight:"3rem",backgroundColor: "#008080", color: "#fff" }}
                       type="submit"
                     >Save <CSpinner style={{ color: "#fff", marginLeft: "1rem", display:spinnerShow?"":"none" }} size="sm" /></CButton>
-                    <CButton style={{width:"10rem"}} type="reset" color="secondary" onClick={handleReset} >Reset</CButton>
+                    <CButton style={{width:"10rem",marginLeft:"3rem"}} color="danger" onClick={(e)=>history.goBack()} >Cancel</CButton>
                   </CFormGroup>
                   
                   </CForm>

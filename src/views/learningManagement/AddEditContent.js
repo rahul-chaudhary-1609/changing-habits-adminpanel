@@ -16,22 +16,28 @@ import {
   CSelect,
   CInputCheckbox,
   CInputFile,
-  CSpinner
+  CSpinner,
+  CFormText
    
 } from "@coreui/react"
 import CIcon from "@coreui/icons-react";
 import { upload } from "../../data/upload";
 import MediaView from "src/utils/components/mediaView";
 import {getPhaseDays,getLearningContent,addLearningContent,editLearningContent} from "../../data/learningContentManagement"
+import { faLaptopHouse } from "@fortawesome/free-solid-svg-icons";
 
 function AddEditLearningContent(props) {
   let history = useHistory();
   let params = useParams();
 
-let [title,setTitle ] = useState("");
-  let [description,setDescription] = useState("");
-  let [phase,setPhase] = useState(1);
-  let [ phaseDay,setPhaseDay ] = useState(1);
+  let [title, setTitle] = useState("");
+  let [titleCheck,setTitleCheck ] = useState(false);
+  let [description, setDescription] = useState("");
+  let [descriptionCheck,setDescriptionCheck] = useState(false);
+  let [phase, setPhase] = useState(0);
+  let [phaseCheck,setPhaseCheck] = useState(false);
+  let [phaseDay, setPhaseDay] = useState(0);
+  let [phaseDayCheck,setPhaseDayCheck] = useState(false);
   let [phychologicalContentTypeCheck,setPhychologicalContentTypeCheck]  = useState(false);
   let [nutritionContentTypeCheck, setNutritionContentTypeCheck] = useState(false);
   let [checkRequired, setCheckRequired] = useState(false);
@@ -52,7 +58,7 @@ let [title,setTitle ] = useState("");
     type: "image",
     source: null,
     isError: false,
-    errorMessage:"Required",
+    errorMessage:"Image/Video is Required",
   })
 
   let phases = [
@@ -122,29 +128,34 @@ let [title,setTitle ] = useState("");
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     } else {
-      setMediaInput({...mediaInput,type:null, source:null, isError: true, errorMessage: "Required" });
+      setMediaInput({...mediaInput,type:null, source:null, isError: true, errorMessage: "Image/Video is Required" });
     }
   }
 
   useEffect(() => {
-    let req = {
+    if (phase > 0) {
+      let req = {
         pathParams: {
-            id: phase,
+          id: phase,
         },
-    }
-    setSpinnerShow(true)
-    getPhaseDays(req).then((response) => {
-      setSpinnerShow(false)
-      let newPhaseDaysList = []
-      for (let i = 1; i <= response.phaseDays; i++){
-        newPhaseDaysList.push(i)
       }
-      setPhaseDaysList([...newPhaseDaysList]);
-      setErrorResponse({ message: null, code: null, isFound: false })
-    }).catch((error) => {
-      setSpinnerShow(false)
-      setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
-    })
+      setSpinnerShow(true)
+      getPhaseDays(req).then((response) => {
+        setSpinnerShow(false)
+        let newPhaseDaysList = []
+        for (let i = 1; i <= response.phaseDays; i++) {
+          newPhaseDaysList.push(i)
+        }
+        setPhaseDaysList([...newPhaseDaysList]);
+        setErrorResponse({ message: null, code: null, isFound: false })
+      }).catch((error) => {
+        setSpinnerShow(false)
+        setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+      })
+    }
+    else {
+      setPhaseDaysList([]);
+    }
   }, [phase])
   
   useEffect(() => {
@@ -166,8 +177,8 @@ let [title,setTitle ] = useState("");
         setCheckRequired(false)
         if (response.learningContentDetails.image_url || response.learningContentDetails.video_url) {
           setMediaInput({
-            type: response.learningContentDetails.image_url?"image":"video",
-            source: response.learningContentDetails.image_url || response.learningContentDetails.video_url,
+            type: response.learningContentDetails.image_url && response.learningContentDetails.image_url!="https://null"?"image":"video",
+            source: response.learningContentDetails.image_url && response.learningContentDetails.image_url!="https://null"?response.learningContentDetails.image_url: response.learningContentDetails.video_url,
             isError: false,
           })
         }
@@ -177,22 +188,48 @@ let [title,setTitle ] = useState("");
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     }
-  },[])
+  }, [])
+  
+  let validateField = () => {
+    let result = true;
+    if (!title || title.trim() == "") {
+      setTitleCheck(true)
+      result=false
+    }
+    if (!description || description.trim() == "") {
+      setDescriptionCheck(true)
+      result=false
+    }
+    if (!phase || phase == 0) {
+      setPhaseCheck(true)
+      result=false
+    }
+    if (!phaseDay || phaseDay == 0) {
+      setPhaseDayCheck(true)
+      result=false
+    }
+    if (mediaInput.source == "https://changinghabits-dev-backend.s3.amazonaws.com/changinghabits/learning_content/loading-buffering_1625498388794.gif" || !mediaInput.source) {
+      setMediaInput({ ...mediaInput, isError: true });
+      result=false
+    }
+    if (!phychologicalContentTypeCheck && !nutritionContentTypeCheck) {
+      setCheckRequired(true)
+      result=false
+    }
+
+    return result
+  }
 
 
   let handleSubmit = (e) => {
     e.preventDefault();
+    if (!validateField()) {
+      return
+    }
     setSpinnerShow(true)
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
-    if (mediaInput.source == "https://changinghabits-dev-backend.s3.amazonaws.com/changinghabits/learning_content/loading-buffering_1625498388794.gif" || !mediaInput.source) {
-      setMediaInput({ ...mediaInput, isError: true });
-      return
-    }
-    if (!phychologicalContentTypeCheck && !nutritionContentTypeCheck) {
-      setCheckRequired(true)
-      return
-    }
+    
     
     let data = {
       title: title,
@@ -200,10 +237,12 @@ let [title,setTitle ] = useState("");
       phase_id: phase,
       phase_day: phaseDay,
       content_type: phychologicalContentTypeCheck ? 1 : 2,
+      image_url: mediaInput.type == "image"?mediaInput.source:"https://null",
+      video_url:mediaInput.type == "video"?mediaInput.source:"https://null"
     }
-    if (mediaInput.type == "image" || mediaInput.type == "video") {
-      data[`${mediaInput.type}_url`]=mediaInput.source
-    }
+    // if (mediaInput.type == "image" || mediaInput.type == "video") {
+    //   data[`${mediaInput.type}_url`]=mediaInput.source
+    // }
 
     if (params.id) {
       let req = {
@@ -212,6 +251,8 @@ let [title,setTitle ] = useState("");
         },
         data
       }
+
+      console.log("data",data)
 
       editLearningContent(req).then((response) => {
         setSpinnerShow(false)
@@ -256,6 +297,10 @@ let [title,setTitle ] = useState("");
       isError:false,
     })
     setSpinnerShow(false)
+    setTitleCheck(false)
+    setDescriptionCheck(false)
+    setPhaseCheck(false)
+    setPhaseDayCheck(false)
   }
 
     return (
@@ -268,13 +313,13 @@ let [title,setTitle ] = useState("");
                   <h2>
                     {history.location.pathname == "/addLearningContent" ? "Add Learning Content" : "Edit Learning Content"}
                   <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
-                    <CButton
+                    {/* <CButton
                         
                         style={{ width: "5rem",backgroundColor:"#008080",color:"#fff" }}
                         onClick={()=>history.goBack()}
                     >
                         <strong>Back</strong>
-                    </CButton>
+                    </CButton> */}
                 </div>
                                             
               </CCardHeader>
@@ -289,15 +334,18 @@ let [title,setTitle ] = useState("");
                   <CFormGroup >                    
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="title">Title:</CLabel>
                     <CInput
-                      onChange={(e) => setTitle(e.target.value)}
+                      onChange={(e) => {
+                        setTitleCheck(false)
+                        setTitle(e.target.value)
+                      }}
                       value={title}
                       type="text"
                       id="title"
                       name="title"
                       placeholder="Enter Title"
-                      required
+                      //required
                     />
-                    
+                    <div style={{color:"red",marginLeft:"0.1rem", display:titleCheck?"":"none"}}>Title is required</div>
                       </CFormGroup>
                    <CFormGroup style={{display:"flex", alignItems:"center"}}>
                     <CLabel style={{marginRight:"2rem",fontWeight:"600",fontSize:"1rem"}} htmlFor="media">Upload Image/Video:</CLabel>
@@ -319,9 +367,12 @@ let [title,setTitle ] = useState("");
                   </CFormGroup>
                   <CFormGroup >
                     
-                      <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="description">Description:</CLabel>
+                      <CLabel style={{fontWeight:"600",fontSize:"1rem",}} htmlFor="description">Description:</CLabel>
                     <CTextarea
-                      onChange={(e) => setDescription(e.target.value)}
+                      onChange={(e) => {
+                        setDescriptionCheck(false)
+                        setDescription(e.target.value)
+                      }}
                       value={description}
                       id="description"
                       name="description"
@@ -330,46 +381,54 @@ let [title,setTitle ] = useState("");
                           id="title"
                           name="title"
                       placeholder="Enter Description"
-                      required
+                      //required
                         />       
-                    
+                    <div style={{color:"red",marginLeft:"0.1rem", display:descriptionCheck?"":"none"}}>Description is required</div>
                   </CFormGroup>
                   <div style={{display:"flex", justifyContent:"space-between"}}>
                   <CFormGroup style={{width:"45%"}}>
                     
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
                     <CSelect
-                      onChange={(e)=>setPhase(e.target.value)}
+                        onChange={(e) => {
+                          setPhaseCheck(false)
+                          setPhase(e.target.value)
+                        }}
                       value={phase}
                       id="phase"
                         name="phase"
                         custom
-                      required
-                    > <option value="" defaultValue disabled>Select Phase</option>
+                      //required
+                    > <option value="0" defaultValue>Select Phase</option>
                       {phases.map((phase) => {
                         return <option key={phase.id} value={phase.id}> {phase.name}</option>
                     })}
-                    </CSelect>                   
+                      </CSelect>
+                    <div style={{color:"red",marginLeft:"0.1rem", display:phaseCheck?"":"none"}}>Phase is required</div>  
                   </CFormGroup>
                   
                   <CFormGroup style={{width:"45%"}}>
                     
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase_day">Phase Day:</CLabel>
                     <CSelect
-                      onChange={(e) => setPhaseDay(e.target.value)}
+                        onChange={(e) => {
+                          setPhaseDayCheck(false)
+                          setPhaseDay(e.target.value)
+                        }}
                       value={phaseDay}
                       id="phase_day"
                         name="phase_day"
                         custom
-                      required
-                    > <option value="" defaultValue disabled>Select Day</option>
+                      //required
+                    > <option value="0" defaultValue>Select Day</option>
                       {phaseDaysList.map((day) => {
                         return <option key={day} value={day}> {day}</option>
                     })}
-                    </CSelect>  
+                      </CSelect>
+                      <div style={{color:"red",marginLeft:"0.1rem", display:phaseDayCheck?"":"none"}}>Phase Day is required</div>
                     </CFormGroup>
                     </div>
-                  <CFormGroup style={{display:"flex", alignItems:"center",border:checkRequired?"3.5px solid rgba(0,0,255,0.3)":"none",}} >                    
+                  <CFormGroup style={{display:"flex", alignItems:"center",}} >                    
                       <CLabel style={{marginRight:"2rem",fontWeight:"600",fontSize:"1rem"}} htmlFor="title">Content Type:</CLabel>
                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent:"space-around",  }}>
                       
@@ -405,16 +464,17 @@ let [title,setTitle ] = useState("");
                       />Nutrition</CLabel></div>
                       
                       </div>
-                    <label style={{color:"red",marginLeft:"2.5rem",display:checkRequired?"block":"none"}}>Required</label>
+                   
+                    <div style={{color:"red",marginLeft:"2.5rem",display: checkRequired ? "" : "none"}}>Content type is required</div>
                   </CFormGroup>
                   
-                  <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"space-around"}}>
+                  <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
                     <CButton
                       disabled={spinnerShow}
-                      style={{ width: "10rem", backgroundColor: "#008080", color: "#fff" }}
+                      style={{ width: "10rem", marginRight:"3rem", backgroundColor: "#008080", color: "#fff" }}
                       type="submit"
                     >Save <CSpinner style={{ color: "#fff", marginLeft: "1rem", display:spinnerShow?"":"none" }} size="sm" /></CButton>
-                    <CButton style={{width:"10rem"}} type="reset" color="secondary" onClick={handleReset} >Reset</CButton>
+                    <CButton style={{width:"10rem",marginLeft:"3rem",}} color="danger" onClick={(e)=>history.goBack()} >Cancel</CButton>
                   </CFormGroup>
                   
                   </CForm>
