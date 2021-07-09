@@ -165,7 +165,7 @@ export default function ResetPassword() {
                       <CCol xs="6">
                         {!loading ? (
                           <CButton
-                            color="primary"
+                            style={{ backgroundColor: "teal", color: "white" }}
                             className="px-4"
                             type="submit"
                           >
