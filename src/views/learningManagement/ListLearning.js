@@ -33,15 +33,15 @@ function Learning(props) {
                 <CCol sm="12">
                     <CCard>
                         <CCardHeader>
-                            <div style={{display:"flex", justifyContent:"space-between"}}>
+                            {/* <div style={{display:"flex", justifyContent:"space-between"}}> */}
                                 <h2>Today's Learning Management</h2>
                                 <CButton
-                                    style={{ width: "5rem", backgroundColor:"#008080",color:"#fff"}}
+                                    style={{ width: "5rem", float:"right", backgroundColor:"#008080",color:"#fff"}}
                                     onClick={()=>quizButton? history.push('/addLearningQuiz'):history.push('/addLearningContent')}
                                 >
                                     <strong>Add</strong>
                                 </CButton>
-                            </div>
+                            {/* </div> */}
                                             
                         </CCardHeader>
                         <CCardBody>

@@ -53,7 +53,7 @@ function AddEditLearningQuiz() {
       { option_no: 1, option_value: "",isRequired:true,check:false },
       { option_no: 2, option_value: "",isRequired:true,check:false },
       { option_no: 3, option_value: "",isRequired:true,check:false },
-      { option_no: 4, option_value: "",isRequired:true,check:false },
+      //{ option_no: 4, option_value: "",isRequired:true,check:false },
     ]
   )
 
@@ -112,8 +112,11 @@ function AddEditLearningQuiz() {
           { option_no: 1, option_value:response.quizDetails.option_1 ,isRequired:true },
           { option_no: 2, option_value: response.quizDetails.option_2,isRequired:true },
           { option_no: 3, option_value: response.quizDetails.option_3,isRequired:true },
-          { option_no: 4, option_value: response.quizDetails.option_4,isRequired:true },
+          //{ option_no: 4, option_value: response.quizDetails.option_4, isRequired: true },
         ];
+        if (response.quizDetails.option_4) {
+          currentOptionInputFields.push({ option_no: 4, option_value:response.quizDetails.option_4 ,isRequired:false })
+        }
         if (response.quizDetails.option_5) {
           currentOptionInputFields.push({ option_no: 5, option_value:response.quizDetails.option_5 ,isRequired:false })
         }
@@ -500,7 +503,7 @@ function AddEditLearningQuiz() {
                         name="phase_day"
                         custom
                       //required
-                    > <option value="" defaultValue disabled>Select Day</option>
+                    > <option value="0" defaultValue>Select Day</option>
                       {phaseDaysList.map((day) => {
                         return <option key={day} value={day}> {day}</option>
                     })}
@@ -512,17 +515,17 @@ function AddEditLearningQuiz() {
                   <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
                     <CButton
                       disabled={spinnerShow}
-                      style={{ width: "10rem", marginRight:"3rem",backgroundColor: "#008080", color: "#fff" }}
+                      style={{ width: "5rem", marginRight:"3rem",backgroundColor: "#008080", color: "#fff" }}
                       type="submit"
                     >Save <CSpinner style={{ color: "#fff", marginLeft: "1rem", display: spinnerShow ? "" : "none" }} size="sm" /></CButton>
                     
                     <CButton      
                       disabled={spinnerShow}
-                      style={{ width: "15rem",marginLeft:"3rem", marginRight: "3rem", backgroundColor: "#008080", color: "#fff", display: params.id ? "none":"", }}
+                      style={{ width: "13rem",marginLeft:"3rem", marginRight: "3rem", backgroundColor: "#008080", color: "#fff", display: params.id ? "none":"", }}
                       onClick={handleAddAnotherQuestion}
                     >Add Another Question <CSpinner style={{ color: "#fff", marginLeft: "1rem", display: spinnerShow ? "" : "none" }} size="sm" /></CButton>
                     
-                    <CButton style={{width:"10rem",marginLeft:"3rem"}} color="danger" onClick={(e)=>history.goBack()} >Cancel</CButton>
+                    <CButton style={{width:"5rem",marginLeft:"3rem"}} color="danger" onClick={(e)=>history.goBack()} >Cancel</CButton>
                   </CFormGroup>
                   
                   </CForm>

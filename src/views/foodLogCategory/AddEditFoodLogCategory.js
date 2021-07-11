@@ -224,10 +224,10 @@ function AddEditFoodLogCategory() {
                  <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
                     <CButton
                       disabled={spinnerShow}
-                      style={{ width: "10rem", marginRight:"3rem",backgroundColor: "#008080", color: "#fff" }}
+                      style={{ width: "5rem", marginRight:"3rem",backgroundColor: "#008080", color: "#fff" }}
                       type="submit"
                     >Save <CSpinner style={{ color: "#fff", marginLeft: "1rem", display:spinnerShow?"":"none" }} size="sm" /></CButton>
-                    <CButton style={{width:"10rem",marginLeft:"3rem"}} color="danger" onClick={(e)=>history.goBack()} >Cancel</CButton>
+                    <CButton style={{width:"5rem",marginLeft:"3rem"}} color="danger" onClick={(e)=>history.goBack()} >Cancel</CButton>
                   </CFormGroup>
                   
                   </CForm>

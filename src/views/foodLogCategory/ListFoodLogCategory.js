@@ -154,15 +154,15 @@ function ListFoodLogCategory() {
                 <CCol sm="12">
                     <CCard>
                         <CCardHeader>
-                            <div style={{display:"flex", justifyContent:"space-between"}}>
+                            {/* <div style={{display:"flex", justifyContent:"space-between"}}> */}
                                 <h2>Food Log Category</h2>
                                 <CButton
-                                    style={{ width: "5rem",backgroundColor:"#008080",color:"#fff"}}
+                                    style={{ width: "5rem",float:"right",backgroundColor:"#008080",color:"#fff"}}
                                     onClick={()=> history.push('/addFoodLogCategory')}
                                 >
                                     <strong>Add</strong>
                                 </CButton>
-                            </div>
+                            {/* </div> */}
                                             
                         </CCardHeader>
                         <CCardBody>
