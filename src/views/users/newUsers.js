@@ -26,6 +26,7 @@ import {
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import moment from "moment";
+import { FaFilter } from "react-icons/fa";
 
 import { GetUserList, ChangeUserStatus } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -336,6 +337,15 @@ const Users = () => {
                     </CButton>
                   </CInputGroup>
                   <CInputGroup style={{ width: "30%" }}>
+                    <CInputGroupText
+                      style={{
+                        borderRadius: "2px",
+                        backgroundColor: "#008080",
+                        color: "#fff",
+                      }}
+                    >
+                      <FaFilter />
+                    </CInputGroupText>
                     <CSelect
                       onChange={(e) => {
                         setAccountType(e.target.value);
