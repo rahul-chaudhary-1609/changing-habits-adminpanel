@@ -19,6 +19,9 @@ const ViewRecipe = React.lazy(() =>
 );
 const User = React.lazy(() => import("./views/users/User"));
 const EditUser = React.lazy(() => import("./views/users/editUser"));
+const ChangeUserPassword = React.lazy(() =>
+  import("./views/users/changeUserPassword")
+);
 const ChangePassword = React.lazy(() =>
   import("./views/changePassword/changePassword")
 );
@@ -47,35 +50,35 @@ const EditFqs = React.lazy(() =>
   import("./views/staticContentManagement/Faqs/editFaqs/editFaqs")
 );
 
-const ListLearning= React.lazy(() =>
+const ListLearning = React.lazy(() =>
   import("./views/learningManagement/ListLearning")
 );
 
-const ViewLearningContent= React.lazy(() =>
+const ViewLearningContent = React.lazy(() =>
   import("./views/learningManagement/ViewLearningContent")
 );
 
-const AddEditLearningContent= React.lazy(() =>
+const AddEditLearningContent = React.lazy(() =>
   import("./views/learningManagement/AddEditContent")
 );
 
-const AddEditLearningQuiz= React.lazy(() =>
+const AddEditLearningQuiz = React.lazy(() =>
   import("./views/learningManagement/AddEditQuiz")
 );
 
-const ViewLearningQuiz= React.lazy(() =>
+const ViewLearningQuiz = React.lazy(() =>
   import("./views/learningManagement/ViewLearningQuiz")
 );
 
-const ListFoodLogCategory= React.lazy(() =>
+const ListFoodLogCategory = React.lazy(() =>
   import("./views/foodLogCategory/ListFoodLogCategory")
 );
 
-const AddEditFoodLogCategory= React.lazy(() =>
+const AddEditFoodLogCategory = React.lazy(() =>
   import("./views/foodLogCategory/AddEditFoodLogCategory")
 );
 
-const ViewFoodLogCategory= React.lazy(() =>
+const ViewFoodLogCategory = React.lazy(() =>
   import("./views/foodLogCategory/ViewFoodLogCategory")
 );
 
@@ -121,6 +124,12 @@ const routes = [
     exact: true,
     name: "Edit User",
     component: EditUser,
+  },
+  {
+    path: "/editUser/:id/changePassword",
+    exact: true,
+    name: "Change User Pass",
+    component: ChangeUserPassword,
   },
   {
     path: "/addUser",
@@ -200,7 +209,7 @@ const routes = [
     name: "Add Learning Content",
     component: AddEditLearningContent,
   },
-  
+
   {
     path: `/editLearningContent/:id`,
     exact: true,
@@ -214,7 +223,7 @@ const routes = [
     component: ViewLearningQuiz,
   },
 
- {
+  {
     path: `/addLearningQuiz`,
     exact: true,
     name: "Add Learning Quiz",
@@ -247,7 +256,7 @@ const routes = [
     component: AddEditFoodLogCategory,
   },
 
-   {
+  {
     path: `/editFoodLogCategory/:id`,
     exact: true,
     name: "Edit Food Log Category",

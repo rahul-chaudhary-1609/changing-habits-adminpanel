@@ -15,6 +15,12 @@ import {
   CImg,
   CInputFile,
   CRow,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
+  CLink,
 } from "@coreui/react";
 import { useFormik } from "formik";
 import {
@@ -22,6 +28,7 @@ import {
   addUserList,
   ViewUserDetails,
   uploadImage,
+  upgradeAppAccess,
 } from "../../api";
 import { useHistory, useParams } from "react-router-dom";
 import { UserValidation } from "../../reusable/validations/loginValidations";
@@ -37,6 +44,10 @@ export default function EditUser(props) {
   const [msgError, setMsgError] = useState(null);
   const [image, setImage] = useState({});
   const [subscriptionStatus, setSubscriptionStatus] = useState(0);
+  const [upgradeModal, setUpgradeModal] = useState(false);
+  const [tokenId, setTokenId] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   const initialValues = {
     name: userDetails.name ? userDetails.name : "",
@@ -57,8 +68,11 @@ export default function EditUser(props) {
   const formdata = new FormData();
 
   useEffect(() => {
-    if (params.id) getUserDetails();
-  }, []);
+    if (params.id) {
+      getUserDetails();
+      setSuccessMsg(null);
+    }
+  }, [refresh]);
 
   const getUserDetails = async () => {
     try {
@@ -77,6 +91,17 @@ export default function EditUser(props) {
 
   const handleSubscriptionStatus = (type) => {
     setSubscriptionStatus(type);
+  };
+
+  const handleUpgradeSubscription = async () => {
+    try {
+      const res = await upgradeAppAccess(tokenId, params.id);
+      if (res) {
+        setSuccessMsg("Subscription upgraded successfully");
+        setUpgradeModal(!upgradeModal);
+        setRefresh(!refresh);
+      }
+    } catch (error) {}
   };
 
   const onSubmit = async (values, actions) => {
@@ -139,6 +164,61 @@ export default function EditUser(props) {
       }}
     >
       <CCol xs="12" md="6">
+        {successMsg && (
+          <div
+            style={{
+              backgroundColor: "#9ACD32",
+              padding: "10px",
+              marginLeft: "auto",
+              marginRight: "auto",
+              marginTop: "24px",
+              width: "fit-content",
+            }}
+          >
+            {successMsg}
+          </div>
+        )}
+        <CModal
+          show={upgradeModal}
+          centered={true}
+          backdrop={false}
+          onClose={setUpgradeModal}
+          style={{ fontFamily: "Poppins" }}
+        >
+          <CModalHeader
+            style={{ backgroundColor: "teal", color: "white" }}
+            closeButton
+          >
+            <CModalTitle>Upgrade To Paid Subscription</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormGroup row>
+              <CCol md="3">
+                <CLabel htmlFor="hf-categorytype">
+                  <h6>subscription token id:</h6>
+                </CLabel>
+              </CCol>
+              <CCol xs="12" md="9">
+                <CInput
+                  type="text"
+                  id="subscription_token_id"
+                  name="subscription_token_id"
+                  onChange={(e) => {
+                    setTokenId(e.target.value);
+                  }}
+                />
+              </CCol>
+            </CFormGroup>
+          </CModalBody>
+          <CModalFooter>
+            <CButton
+              style={{ backgroundColor: "teal", color: "white" }}
+              onClick={handleUpgradeSubscription}
+            >
+              Yes
+            </CButton>
+          </CModalFooter>
+        </CModal>
         {params.id ? (
           <CCard>
             <CCardHeader style={{ fontFamily: "Lato" }}>
@@ -203,7 +283,7 @@ export default function EditUser(props) {
                 <CFormGroup row>
                   <CCol md="3">
                     <CLabel htmlFor="hf-categorytype">
-                      <h6>Enter User Name</h6>
+                      <h6>User Name</h6>
                     </CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
@@ -223,7 +303,7 @@ export default function EditUser(props) {
                 <CFormGroup row>
                   <CCol md="3">
                     <CLabel htmlFor="hf-categorytype">
-                      <h6>Enter Email</h6>
+                      <h6>Email</h6>
                     </CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
@@ -246,7 +326,7 @@ export default function EditUser(props) {
                 <CFormGroup row>
                   <CCol md="3">
                     <CLabel htmlFor="hf-categorytype">
-                      <h6>Enter Mobile Number</h6>
+                      <h6>Mobile Number</h6>
                     </CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
@@ -266,6 +346,34 @@ export default function EditUser(props) {
                     ) : null}
                   </CCol>
                 </CFormGroup>
+                {userDetails.subscription_status ? (
+                  <CFormGroup row>
+                    <CCol md="3">
+                      <CLabel htmlFor="hf-categorytype">
+                        <h6>Subscription token Id</h6>
+                      </CLabel>
+                    </CCol>
+                    <CCol xs="12" md="9">
+                      <CInput
+                        type="text"
+                        id="subscription_token_id"
+                        name="subscription_token_id"
+                        disabled="true"
+                        onBlur={formik.handleBlur}
+                        value={formik.values.subscription_token_id}
+                        onChange={formik.handleChange}
+                      />
+                      {formik.touched.subscription_token_id &&
+                      formik.errors.subscription_token_id ? (
+                        <div className="email-validate">
+                          {formik.errors.subscription_token_id}
+                        </div>
+                      ) : null}
+                    </CCol>
+                  </CFormGroup>
+                ) : (
+                  ""
+                )}
                 <CCardFooter
                   style={{
                     display: "flex",
@@ -301,6 +409,47 @@ export default function EditUser(props) {
                 </CCardFooter>
               </CForm>
             </CCardBody>
+            <CCardFooter
+              style={{
+                borderTop: "0px",
+                marginBottom: "15px",
+                paddingTop: "0px",
+              }}
+            >
+              {userDetails.subscription_status == 0 ? (
+                <CCol
+                  style={{
+                    textAlign: "center",
+                    cursor: "pointer",
+                    paddingBottom: "10px",
+                  }}
+                >
+                  <CLink onClick={() => setUpgradeModal(!upgradeModal)}>
+                    <u>
+                      <strong>Upgrade Subscription ?</strong>
+                    </u>
+                  </CLink>
+                </CCol>
+              ) : (
+                ""
+              )}
+              <CCol
+                style={{
+                  textAlign: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <CLink
+                  onClick={() =>
+                    history.push(`/editUser/${params.id}/changePassword`)
+                  }
+                >
+                  <u>
+                    <strong>Change User Password ?</strong>
+                  </u>
+                </CLink>
+              </CCol>
+            </CCardFooter>
           </CCard>
         ) : (
           <CCard>
