@@ -25,6 +25,7 @@ import {
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import moment from "moment";
+import { FaFilter } from "react-icons/fa";
 
 import { GetRecipeList, ChangeUserStatus, DeleteRecipe } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -335,7 +336,16 @@ const Recipes = () => {
                       Reset
                     </CButton>
                   </CInputGroup>
-                  <CInputGroup style={{ width: "30%", marginRight: "10px" }}>
+                  <CInputGroup style={{ width: "36%", marginRight: "10px" }}>
+                    <CInputGroupText
+                      style={{
+                        borderRadius: "2px",
+                        backgroundColor: "#008080",
+                        color: "#fff",
+                      }}
+                    >
+                      <FaFilter />
+                    </CInputGroupText>
                     <CSelect
                       onChange={(e) => {
                         setRecipeStatus(e.target.value);
@@ -352,7 +362,16 @@ const Recipes = () => {
                       ))}
                     </CSelect>
                   </CInputGroup>
-                  <CInputGroup style={{ width: "30%" }}>
+                  <CInputGroup style={{ width: "34%" }}>
+                    <CInputGroupText
+                      style={{
+                        borderRadius: "2px",
+                        backgroundColor: "#008080",
+                        color: "#fff",
+                      }}
+                    >
+                      <FaFilter />
+                    </CInputGroupText>
                     <CSelect
                       onChange={(e) => {
                         setRecipeType(e.target.value);

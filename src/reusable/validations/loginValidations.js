@@ -146,3 +146,27 @@ export const UserValidation = (subscriptionStatus) => {
       : "",
   });
 };
+
+export const ChangeUserPasswordValidation = () => {
+  return yup.object({
+    newpassword: yup
+      .string()
+      .required("New Password is required")
+      .test(
+        "regex",
+        "Password must be min 8 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
+        (val) => {
+          let regExp = new RegExp(
+            "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+          );
+
+          return regExp.test(val);
+        }
+      ),
+    confirmpassword: yup
+      .string()
+      .required("Confirm Password is required")
+      .oneOf([yup.ref("newpassword"), null], "Passwords must match")
+      .trim(),
+  });
+};

@@ -14,6 +14,7 @@ const apiConstant = {
   uploadImage: `/api/v1/admin/uploadImage`,
   ResetPassword: `/api/v1/admin/resetPassword`,
   ChangePassword: `/api/v1/admin/changePassword`,
+  ChangeUserPassword: `/api/v1/admin/changeUserPassword`,
   Login: `/api/v1/admin/login`,
   GetRecipesList: `/api/v1/admin/listRecipes?page=`,
   DeleteRecipe: `/api/v1/admin/deleteRecipe`,
@@ -30,6 +31,7 @@ const apiConstant = {
   addFaq: "/api/v1/admin/addFaq",
   getTextFromHTML: "/api/v1/admin/htmlFileToText",
   ToggleFaqStatus: "/api/v1/admin/toggleFaqStatus",
+  upgradeAppAccess: `/api/v1/admin/upgradeAppAccess`,
 
   //learnning content management API's
   listLearningContent: "/api/v1/admin/listLearningContent",
@@ -51,7 +53,6 @@ const apiConstant = {
   getFoodLogCategory: "/api/v1/admin/getFoodType",
   addFoodLogCategory: "/api/v1/admin/addFoodType",
   editFoodLogCategory: "/api/v1/admin/editFoodType",
-  
 };
 
 export default apiConstant;
