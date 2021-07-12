@@ -732,3 +732,52 @@ export const ToggleRecipeStatus = (recipe_id, status) => {
     }
   });
 };
+
+export const ChangeUserPassword = (formData, user_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await api.put(
+        `${apiConstant.ChangeUserPassword}/${user_id}`,
+        JSON.stringify(formData),
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: store.getState().auth.isSignedIn,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.success) {
+        resolve(response.data);
+      } else {
+        reject(response.data);
+      }
+    } catch (error) {
+      apiError(error);
+    }
+  });
+};
+
+export const upgradeAppAccess = (subscription_token_id, user_id) => {
+  let data = {};
+  data.subscription_token_id = subscription_token_id;
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await api.put(
+        `${apiConstant.upgradeAppAccess}/${user_id}`,
+        data,
+        {
+          headers: header(),
+        }
+      );
+
+      if (response.data.success) {
+        resolve(response.data);
+      } else {
+        reject(response.data);
+      }
+    } catch (error) {
+      apiError(error);
+    }
+  });
+};
