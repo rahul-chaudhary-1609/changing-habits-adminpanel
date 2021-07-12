@@ -105,10 +105,10 @@ function AddEditFoodLogCategory() {
     
     let data = {
       food_type: categoryName,
+      phase_id: phase
     }
     
     if (params.id) {
-      //data.foodType_id = phase;
 
       let req = {
         pathParams: {
@@ -127,7 +127,6 @@ function AddEditFoodLogCategory() {
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     } else {
-      data.phase_id = phase;
 
       let req = {
         data
@@ -192,7 +191,6 @@ function AddEditFoodLogCategory() {
                           name="phase"
                           custom
                           required
-                          disabled={params.id?true:false}
                           
                           > <option value="0" defaultValue>Select Phase</option>
                           {phases.map((phase) => {
@@ -226,7 +224,7 @@ function AddEditFoodLogCategory() {
                       disabled={spinnerShow}
                       style={{ width: "5rem", marginRight:"3rem",backgroundColor: "#008080", color: "#fff" }}
                       type="submit"
-                    >Save <CSpinner style={{ color: "#fff", marginLeft: "1rem", display:spinnerShow?"":"none" }} size="sm" /></CButton>
+                    >{spinnerShow?<CSpinner style={{ color: "#fff"}} size="sm" />:"Save"}</CButton>
                     <CButton style={{width:"5rem",marginLeft:"3rem"}} color="danger" onClick={(e)=>history.goBack()} >Cancel</CButton>
                   </CFormGroup>
                   

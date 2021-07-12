@@ -177,8 +177,8 @@ function AddEditLearningContent(props) {
         setCheckRequired(false)
         if (response.learningContentDetails.image_url || response.learningContentDetails.video_url) {
           setMediaInput({
-            type: response.learningContentDetails.image_url && response.learningContentDetails.image_url!="https://null"?"image":"video",
-            source: response.learningContentDetails.image_url && response.learningContentDetails.image_url!="https://null"?response.learningContentDetails.image_url: response.learningContentDetails.video_url,
+            type: response.learningContentDetails.image_url?"image":"video",
+            source: response.learningContentDetails.image_url ?response.learningContentDetails.image_url: response.learningContentDetails.video_url,
             isError: false,
           })
         }
@@ -237,8 +237,8 @@ function AddEditLearningContent(props) {
       phase_id: phase,
       phase_day: phaseDay,
       content_type: phychologicalContentTypeCheck ? 1 : 2,
-      image_url: mediaInput.type == "image"?mediaInput.source:"https://null",
-      video_url:mediaInput.type == "video"?mediaInput.source:"https://null"
+      image_url: mediaInput.type == "image"?mediaInput.source:null,
+      video_url:mediaInput.type == "video"?mediaInput.source:null
     }
     // if (mediaInput.type == "image" || mediaInput.type == "video") {
     //   data[`${mediaInput.type}_url`]=mediaInput.source
@@ -473,7 +473,7 @@ function AddEditLearningContent(props) {
                       disabled={spinnerShow}
                       style={{ width: "5rem", marginRight:"3rem", backgroundColor: "#008080", color: "#fff" }}
                       type="submit"
-                    >Save <CSpinner style={{ color: "#fff", marginLeft: "1rem", display:spinnerShow?"":"none" }} size="sm" /></CButton>
+                    >{spinnerShow?<CSpinner style={{ color: "#fff"}} size="sm" />:"Save"}</CButton>
                     <CButton style={{width:"5rem",marginLeft:"3rem",}} color="danger" onClick={(e)=>history.goBack()} >Cancel</CButton>
                   </CFormGroup>
                   

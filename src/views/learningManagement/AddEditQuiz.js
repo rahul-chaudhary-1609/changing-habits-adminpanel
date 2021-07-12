@@ -17,7 +17,11 @@ import {
   CInputGroup,
   CInputGroupAppend,
   CBadge,
-  CSpinner
+  CSpinner,
+  CToaster,
+  CToast,
+  CToastHeader,
+  CToastBody
 } from "@coreui/react"
 import { FaPlus,FaMinus } from 'react-icons/fa';
 import {getPhaseDays,getLearningQuiz,addLearningQuiz,editLearningQuiz} from "../../data/learningContentManagement"
@@ -297,38 +301,30 @@ function AddEditLearningQuiz() {
       data[`option_${optionInputField.option_no}`]=optionInputField.option_value
     })
     
-    
-    if (params.id) {
-      let req = {
-        pathParams: {
-          id: params.id,
-        },
-        data
-      }
-
-      editLearningQuiz(req).then((response) => {
-        setSpinnerShow(false)
-        setErrorResponse({ message: null, code: null, isFound: false })
-        setSuccessResponse({ message: "Updated Successfully" || null, code: 200 || null, isFound: true })
-        //history.push('/listLearning/quiz')
-      }).catch((error) => {
-        setSpinnerShow(false)
-        setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
-      })
-    } else {
       let req = {
         data
       }
       addLearningQuiz(req).then((response) => {
         setSpinnerShow(false)
         setErrorResponse({ message: null, code: null, isFound: false })
-        setSuccessResponse({ message:"Saved Successfully" || null, code: 200 || null, isFound: true })
-        //history.push('/listLearning/quiz')
+        setQuestion("")
+        setDescription("")
+        setCorrectOption(0)
+        setOptionInputFields([
+          { option_no: 1, option_value: "",isRequired:true,check:false },
+          { option_no: 2, option_value: "",isRequired:true,check:false },
+          { option_no: 3, option_value: "",isRequired:true,check:false },
+          //{ option_no: 4, option_value: "",isRequired:true,check:false },
+        ])
+        setSpinnerShow(false)
+        setQuestionCheck(false)
+        setDescriptionCheck(false)
+        setCorrectOptionCheck(false)
+        setSuccessResponse({ message: "Saved Successfully" || null, code: 200 || null, isFound: true })
       }).catch((error) => {
         setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
-      })
-    }    
+      })   
   }
 
   // let handleReset = (e) => {
@@ -376,10 +372,70 @@ function AddEditLearningQuiz() {
                 <div style={{color:"red",fontSize:"1rem", display:errorResponse.isFound?"flex":"none", justifyContent:"center"}}>
                   <div><h5>{ errorResponse.message}</h5></div>
                 </div>
-                <div style={{color:"green",fontSize:"1rem", display:successResponse.isFound?"flex":"none", justifyContent:"center"}}>
+                {/* <div style={{color:"green",fontSize:"1rem", display:successResponse.isFound?"flex":"none", justifyContent:"center"}}>
                   <div><h5>{ successResponse.message}</h5></div>
-                  </div>
-                  <CForm action="" method="post" onSubmit={handleSubmit}>
+                </div> */}
+                 <CToaster
+                    position="top-right"
+                  key='toaster'
+                  style={{top:"80px"}}
+                >
+                  <CToast
+                    color="success"
+                    key='toast'
+                    show={successResponse.isFound}
+                    autohide="5000"
+                  >
+                    <CToastHeader style={{backgroundColor:"#008080",color:"#fff"}} >Success</CToastHeader>
+                  <CToastBody>
+                      <strong>{successResponse.message}</strong>
+                  </CToastBody>
+                  </CToast>
+                </CToaster>
+                <CForm action="" method="post" onSubmit={handleSubmit}>
+                  <div style={{display:"flex", justifyContent:"space-between"}}>
+                  <CFormGroup style={{width:"45%"}}>
+                    
+                      <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
+                    <CSelect
+                        onChange={(e) => {
+                          setPhaseCheck(false)
+                          setPhase(e.target.value)
+                        }}
+                      value={phase}
+                      id="phase"
+                        name="phase"
+                        custom
+                      //required
+                    > <option value="0" defaultValue>Select Phase</option>
+                      {phases.map((phase) => {
+                        return <option key={phase.id} value={phase.id}> {phase.name}</option>
+                    })}
+                      </CSelect>
+                    <div style={{color:"red",marginLeft:"0.1rem", display:phaseCheck?"":"none"}}>Phase is required</div>  
+                  </CFormGroup>
+                  
+                  <CFormGroup style={{width:"45%"}}>
+                    
+                      <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase_day">Phase Day:</CLabel>
+                    <CSelect
+                        onChange={(e) => {
+                          setPhaseDayCheck(false)
+                          setPhaseDay(e.target.value)
+                        }}
+                      value={phaseDay}
+                      id="phase_day"
+                        name="phase_day"
+                        custom
+                      //required
+                    > <option value="0" defaultValue>Select Day</option>
+                      {phaseDaysList.map((day) => {
+                        return <option key={day} value={day}> {day}</option>
+                    })}
+                      </CSelect>
+                      <div style={{color:"red",marginLeft:"0.1rem", display:phaseDayCheck?"":"none"}}>Phase day is required</div>
+                    </CFormGroup>
+                    </div>
                   <CFormGroup >                    
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="question">Question:</CLabel>
                     <CInput
@@ -468,62 +524,20 @@ function AddEditLearningQuiz() {
                     <div style={{color:"red",marginLeft:"0.1rem", display:descriptionCheck?"":"none"}}>Description is required</div>
                     
                   </CFormGroup>
-                  <div style={{display:"flex", justifyContent:"space-between"}}>
-                  <CFormGroup style={{width:"45%"}}>
-                    
-                      <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
-                    <CSelect
-                        onChange={(e) => {
-                          setPhaseCheck(false)
-                          setPhase(e.target.value)
-                        }}
-                      value={phase}
-                      id="phase"
-                        name="phase"
-                        custom
-                      //required
-                    > <option value="0" defaultValue>Select Phase</option>
-                      {phases.map((phase) => {
-                        return <option key={phase.id} value={phase.id}> {phase.name}</option>
-                    })}
-                      </CSelect>
-                    <div style={{color:"red",marginLeft:"0.1rem", display:phaseCheck?"":"none"}}>Phase is required</div>  
-                  </CFormGroup>
                   
-                  <CFormGroup style={{width:"45%"}}>
-                    
-                      <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase_day">Phase Day:</CLabel>
-                    <CSelect
-                        onChange={(e) => {
-                          setPhaseDayCheck(false)
-                          setPhaseDay(e.target.value)
-                        }}
-                      value={phaseDay}
-                      id="phase_day"
-                        name="phase_day"
-                        custom
-                      //required
-                    > <option value="0" defaultValue>Select Day</option>
-                      {phaseDaysList.map((day) => {
-                        return <option key={day} value={day}> {day}</option>
-                    })}
-                      </CSelect>
-                      <div style={{color:"red",marginLeft:"0.1rem", display:phaseDayCheck?"":"none"}}>Phase day is required</div>
-                    </CFormGroup>
-                    </div>
                   
                   <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
                     <CButton
                       disabled={spinnerShow}
                       style={{ width: "5rem", marginRight:"3rem",backgroundColor: "#008080", color: "#fff" }}
                       type="submit"
-                    >Save <CSpinner style={{ color: "#fff", marginLeft: "1rem", display: spinnerShow ? "" : "none" }} size="sm" /></CButton>
+                    >{spinnerShow?<CSpinner style={{ color: "#fff"}} size="sm" />:"Save"}</CButton>
                     
                     <CButton      
                       disabled={spinnerShow}
                       style={{ width: "13rem",marginLeft:"3rem", marginRight: "3rem", backgroundColor: "#008080", color: "#fff", display: params.id ? "none":"", }}
                       onClick={handleAddAnotherQuestion}
-                    >Add Another Question <CSpinner style={{ color: "#fff", marginLeft: "1rem", display: spinnerShow ? "" : "none" }} size="sm" /></CButton>
+                    > {spinnerShow?<CSpinner style={{ color: "#fff"}} size="sm" />:"Add Another Question"}</CButton>
                     
                     <CButton style={{width:"5rem",marginLeft:"3rem"}} color="danger" onClick={(e)=>history.goBack()} >Cancel</CButton>
                   </CFormGroup>

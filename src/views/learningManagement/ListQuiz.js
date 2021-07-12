@@ -52,9 +52,9 @@ function ListLearningQuiz() {
         { key: 's_no',label:"S.No." },
         { key: 'question', labellable: "Learning Content" },
         { key: 'description',label:"Description" },
-        { key: 'phase_day',label:"Phase Day" },
-        { key: 'phase_id', label: "Phase" },
-        { key: 'status', label: "Status" },
+        { key: 'phase_day',label:"Phase Day",_style: { minWidth: "7rem" } },
+        { key: 'phase_id', label: "Phase",_style: { minWidth: "7rem" } },
+        { key: 'status', label: "Status",_style: { minWidth: "7rem" } },
         { key: 'action',label:"Action",_style: { minWidth: "7rem" } },
     ]
 
