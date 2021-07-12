@@ -69,7 +69,10 @@ export default function ChangePassword() {
   });
 
   return (
-    <div className="c-app c-default-layout flex-row align-items-center">
+    <div
+      className="c-app c-default-layout flex-row align-items-center"
+      style={{ marginTop: "-45px" }}
+    >
       <CContainer>
         <CModal
           show={modal}

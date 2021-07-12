@@ -48,6 +48,7 @@ export default function EditUser(props) {
   const [tokenId, setTokenId] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const [tokenError, setTokenError] = useState(false);
 
   const initialValues = {
     name: userDetails.name ? userDetails.name : "",
@@ -95,12 +96,15 @@ export default function EditUser(props) {
 
   const handleUpgradeSubscription = async () => {
     try {
-      const res = await upgradeAppAccess(tokenId, params.id);
-      if (res) {
-        setSuccessMsg("Subscription upgraded successfully");
-        setUpgradeModal(!upgradeModal);
-        setRefresh(!refresh);
-      }
+      if (tokenId) {
+        const res = await upgradeAppAccess(tokenId, params.id);
+        if (res) {
+          setSuccessMsg("Subscription upgraded successfully");
+          setUpgradeModal(!upgradeModal);
+          setRefresh(!refresh);
+          setTokenError(null);
+        }
+      } else setTokenError("Token Id is required");
     } catch (error) {}
   };
 
@@ -208,6 +212,11 @@ export default function EditUser(props) {
                   }}
                 />
               </CCol>
+              {tokenError ? (
+                <div className="email-validate" style={{ marginLeft: "1rem" }}>
+                  {tokenError}
+                </div>
+              ) : null}
             </CFormGroup>
           </CModalBody>
           <CModalFooter>
@@ -423,6 +432,7 @@ export default function EditUser(props) {
                     cursor: "pointer",
                     paddingBottom: "10px",
                   }}
+                  onClick={() => setTokenError(false)}
                 >
                   <CLink onClick={() => setUpgradeModal(!upgradeModal)}>
                     <u>
