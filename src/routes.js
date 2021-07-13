@@ -82,6 +82,18 @@ const ViewFoodLogCategory = React.lazy(() =>
   import("./views/foodLogCategory/ViewFoodLogCategory")
 );
 
+const ListOnboardingQuiz = React.lazy(() =>
+  import("./views/onboardingQuizManagement/ListOnboardingQuiz")
+);
+
+const AddEditOnbordingQuiz = React.lazy(() =>
+  import('./views/onboardingQuizManagement/AddEditOnboardingQuiz')
+);
+
+const ViewOnboardingQuiz = React.lazy(() =>
+  import("./views/onboardingQuizManagement/ViewOnboardingQuiz")
+);
+
 const routes = [
   { path: "/", exact: true, name: "Users", component: User },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
@@ -261,6 +273,34 @@ const routes = [
     exact: true,
     name: "Edit Food Log Category",
     component: AddEditFoodLogCategory,
+  },
+
+    {
+    path: `/listOnboardingQuiz`,
+    exact: true,
+    name: "List Onboarding Quiz",
+    component: ListOnboardingQuiz,
+  },
+    
+  {
+    path: `/viewOnboardingQuiz/:id`,
+    exact: true,
+    name: "View Onboarding Quiz",
+    component: ViewOnboardingQuiz,
+  },
+    
+  {
+    path: `/addOnboardingQuiz`,
+    exact: true,
+    name: "Add Onboarding Quiz",
+    component: AddEditOnbordingQuiz,
+  },
+
+  {
+    path: `/editOnboardingQuiz/:id`,
+    exact: true,
+    name: "Edit Onboarding Quiz",
+    component: AddEditOnbordingQuiz,
   },
 
   { component: Page404 },

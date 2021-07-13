@@ -27,7 +27,7 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Learning Management",
+    name: "Today's Learning",
     to: "/listLearning/content",
     icon: <CIcon content={freeSet.cilBook} customClasses="c-sidebar-nav-icon" />,
   },
@@ -36,6 +36,12 @@ const _nav = [
     name: "Food Log Category",
     to: "/listFoodLogCategory",
     icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Onboarding Quiz",
+    to: "/listOnboardingQuiz",
+    icon: <CIcon content={freeSet.cilPuzzle} customClasses="c-sidebar-nav-icon" />,
   },
 ];
 

@@ -53,6 +53,13 @@ const apiConstant = {
   getFoodLogCategory: "/api/v1/admin/getFoodType",
   addFoodLogCategory: "/api/v1/admin/addFoodType",
   editFoodLogCategory: "/api/v1/admin/editFoodType",
+
+  //onboarding quiz management API's
+  listOnboardingQuiz: "/api/v1/admin/listOnboardingQuiz",
+  deleteOnboardingQuiz: "/api/v1/admin/deleteOnboardingQuiz",
+  getOnboardingQuiz: "/api/v1/admin/getOnboardingQuiz",
+  editOnboardingQuiz: "api/v1/admin/editOnboardingQuiz",
+  addOnboardingQuiz:"api/v1/admin/addOnboardingQuiz"
 };
 
 export default apiConstant;

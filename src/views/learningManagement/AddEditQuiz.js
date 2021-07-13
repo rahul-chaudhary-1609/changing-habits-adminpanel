@@ -113,19 +113,19 @@ function AddEditLearningQuiz() {
         setPhase(response.quizDetails.phase_id)
         setPhaseDay(response.quizDetails.phase_day)
         let currentOptionInputFields = [
-          { option_no: 1, option_value:response.quizDetails.option_1 ,isRequired:true },
-          { option_no: 2, option_value: response.quizDetails.option_2,isRequired:true },
-          { option_no: 3, option_value: response.quizDetails.option_3,isRequired:true },
+          { option_no: 1, option_value:response.quizDetails.option_1 ,isRequired:true,check:false },
+          { option_no: 2, option_value: response.quizDetails.option_2,isRequired:true,check:false },
+          { option_no: 3, option_value: response.quizDetails.option_3,isRequired:true,check:false },
           //{ option_no: 4, option_value: response.quizDetails.option_4, isRequired: true },
         ];
         if (response.quizDetails.option_4) {
-          currentOptionInputFields.push({ option_no: 4, option_value:response.quizDetails.option_4 ,isRequired:false })
+          currentOptionInputFields.push({ option_no: 4, option_value:response.quizDetails.option_4 ,isRequired:false,check:false })
         }
         if (response.quizDetails.option_5) {
-          currentOptionInputFields.push({ option_no: 5, option_value:response.quizDetails.option_5 ,isRequired:false })
+          currentOptionInputFields.push({ option_no: 5, option_value:response.quizDetails.option_5 ,isRequired:false,check:false })
         }
         if (response.quizDetails.option_6) {
-          currentOptionInputFields.push({ option_no: 6, option_value:response.quizDetails.option_6 ,isRequired:false })
+          currentOptionInputFields.push({ option_no: 6, option_value:response.quizDetails.option_6 ,isRequired:false,check:false })
         }        
         setOptionInputFields(currentOptionInputFields)
         setCorrectOption(response.quizDetails.correct_option)
@@ -167,7 +167,7 @@ function AddEditLearningQuiz() {
   let handleAddOptionField = () => {
     if (optionInputFields.length < 6) {
       let currentOptionInputFields = [...optionInputFields];
-      currentOptionInputFields.push({ option_no: currentOptionInputFields.length + 1, option_value: "", isRequired: false })
+      currentOptionInputFields.push({ option_no: currentOptionInputFields.length + 1, option_value: "", isRequired: false,check:false })
       setOptionInputFields(currentOptionInputFields)
     } else {
       setErrorResponse({ message: "Maximum 6 options are allowed", code: null, isFound: true })
@@ -211,12 +211,14 @@ function AddEditLearningQuiz() {
       result=false
     }
 
-    optionInputFields.forEach((optionInputField) => {
+    let currentOptionInputFields = [...optionInputFields]
+    for (let optionInputField of currentOptionInputFields) {
       if (!optionInputField.option_value || optionInputField.option_value.trim() == "") {
         optionInputField.check = true;
         result=false
       }
-    })
+    }
+    setOptionInputFields(currentOptionInputFields);
     
 
     return result

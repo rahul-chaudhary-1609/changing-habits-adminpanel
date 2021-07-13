@@ -23,7 +23,7 @@ import CIcon from "@coreui/icons-react";
 import { FaFilter} from 'react-icons/fa';
 
 import { listFoodLogCategory,listPhases,toggleFoodLogCategoryStatus } from "../../data/foodLogCategory"
-import StatusModal from "../../utils/components/modal";
+import { StatusModal } from "../../utils/components/modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 

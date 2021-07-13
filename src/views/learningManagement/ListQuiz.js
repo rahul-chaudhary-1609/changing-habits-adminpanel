@@ -22,7 +22,7 @@ import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
 import { listLearningQuiz,toggleLearningQuizStatus } from "../../data/learningContentManagement"
-import StatusModal from "src/utils/components/modal";
+import {StatusModal} from "src/utils/components/modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 

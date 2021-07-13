@@ -11,17 +11,22 @@ import {
     CInputGroupText,
     CInput,
     CCol,
-    CPagination
+    CPagination,
+    CContainer,
+    CRow,
+    CCard,
+    CCardHeader,
+    CCardBody
 } from "@coreui/react"
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
-import { listLearningContent,toggleLearningContentStatus } from "../../data/learningContentManagement"
-import{ StatusModal} from "src/utils/components/modal";
+import { listOnboardingQuiz,deleteOnboardingQuiz } from "../../data/onboardingQuizManagement"
+import {DeleteModal} from "src/utils/components/modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 
-function ListLearningContent() {
+function ListOnboardingQuiz() {
     let history = useHistory();
 
     let [data, setData] = useState([])
@@ -45,11 +50,7 @@ function ListLearningContent() {
 
     const fields = [
         { key: 's_no',label:"S.No." },
-        { key: 'title', label: "Title" },
-        { key: 'description',label:"Description" },
-        { key: 'phase_day',label:"Phase Day",_style: { minWidth: "7rem" } },
-        { key: 'phase_id', label: "Phase",_style: { minWidth: "7rem" } },
-        { key: 'status', label: "Status",_style: { minWidth: "7rem" } },
+        { key: 'question', lable: "Question" },
         { key: 'action',label:"Action",_style: { minWidth: "7rem" } },
     ]
 
@@ -58,23 +59,21 @@ function ListLearningContent() {
         setToggleData(item);
     }
 
-    let toggleStatus = async (item) => {
+    let deleteQuestion =(item) => {
         setModal(!modal)
-        try {
             let req = {
                 pathParams: {
                     id: item.id,
                 },
                 data:{}
-            }
-            let response = await toggleLearningContentStatus(req);
-            setStatus(!status)
-            setErrorResponse({ message: null, code: null, isFound: false })
-
-            } catch (error) {
-                setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
         }
-        
+        deleteOnboardingQuiz(req).then((response) => {
+                setStatus(!status)
+                setErrorResponse({ message: null, code: null, isFound: false })
+            }).catch((error)=> {
+                setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+        })
+
     }
 
     let formatData = (rows) => {
@@ -98,7 +97,7 @@ function ListLearningContent() {
                     }
                 }
                 setLoading(true)
-                let response = await listLearningContent(req);
+                let response = await listOnboardingQuiz(req);
                 let updatedData = formatData(response.rows);
                 setData([...updatedData])
                 setDataCount(response.count)
@@ -123,17 +122,32 @@ function ListLearningContent() {
 
 
     return (
-        <>
-            <StatusModal
+        <CContainer>
+            <DeleteModal
                 toggleModal={toggleModal}
                 modal={modal}
                 toggleData={toggleData}
-                toggleStatus={toggleStatus}
+                deleteQuestion={deleteQuestion}
                 setStatus={setStatus}
                 status={status}
-                info={"learning content"}
+                info={"question"}
             />
-                           
+            <CRow>
+                <CCol sm="12">
+                    <CCard>
+                        <CCardHeader>
+                            {/* <div style={{display:"flex", justifyContent:"space-between"}}> */}
+                                <h2>Onboarding Quiz Management</h2>
+                                <CButton
+                                    style={{ width: "5rem",float:"right",backgroundColor:"#008080",color:"#fff"}}
+                                    onClick={()=> history.push('/addOnboardingQuiz')}
+                                >
+                                    <strong>Add</strong>
+                                </CButton>
+                            {/* </div> */}
+                                            
+                        </CCardHeader>
+                        <CCardBody>   
                 <CDataTable
                     items={data}
                     fields={fields}
@@ -150,7 +164,7 @@ function ListLearningContent() {
                                         <CIcon name={'cilSearch'} />
                                     </CInputGroupText>
                                 </CInputGroupPrepend>
-                                <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by title"
+                                <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by question"
                                     value={searchValue}
                                     onChange={(e) => { setSearchValue(e.target.value) }}
                                 />
@@ -186,62 +200,37 @@ function ListLearningContent() {
                             return (
                                 <td>
                                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
-                                        <CTooltip content={"Edit Content"} placement={"top-start"}>
+                                        <CTooltip content={"Edit Question"} placement={"top-start"}>
                                             <CIcon style={{ color: "black", cursor: "pointer" }}
                                                 size="lg"
                                                 name={"cilPencil"}
-                                                onClick={()=>history.push(`/editLearningContent/${item.id}`)}
+                                                onClick={()=>history.push(`/editOnboardingQuiz/${item.id}`)}
                                             />
                                         </CTooltip>
-                                        <CTooltip content={`View Content`} placement={"top-start"}>
+                                        <CTooltip content={`View Question`} placement={"top-start"}>
                                             <FontAwesomeIcon
                                                 color="green"
                                                 size="lg"
                                                 style={{ cursor: "pointer" }}
                                                 onClick={() =>
                                                 history.push({
-                                                    pathname: `/viewLearningContent/${item.id}`,
+                                                    pathname: `/viewOnboardingQuiz/${item.id}`,
                                                 })
                                                 }
                                                 icon={faEye}
                                             />
                                         </CTooltip>
-                                        <CSwitch
-                                            onChange={() => toggleModal(item)}
-                                            size="sm"
-                                            variant={"3d"}
-                                            color={"success"}
-                                            checked={item.status == 1 ? true : false}
-                                        />
+                                        <CTooltip content={`Delete Question`} placement={"top-start"}>
+                                            <CIcon style={{ color: "red", cursor: "pointer" }}
+                                                size="lg"
+                                                name={"cilTrash"}
+                                                onClick={()=>toggleModal(item)}
+                                            />
+                                        </CTooltip>
                                     </div>
                                 </td>
                             )
                         },
-                        phase_id: (item, index) => {
-                            switch (item.phase_id) {
-                                case 1:
-                                    return (<td>Kickstart</td>)
-                                case 2:
-                                    return (<td>Phase 1</td>)
-                                case 3:
-                                    return (<td>Phase 2</td>)
-                                case 4:
-                                    return (<td>Phase 3</td>)
-                                case 5:
-                                    return (<td>Phase 4</td>)
-                                case 6:
-                                    return (<td>Phase 4 EVA</td>)
-                                default:
-                                    return (<td>Phase 4 EVA</td>)
-                            }  
-                        },                                    
-                        status: (item, index) => {
-                            return (
-                                <td>
-                                    {item.status == 1 ? <CBadge color="success">Active</CBadge> : <CBadge color="danger">Blocked</CBadge>}
-                                </td>
-                            )
-                        }
                     }}
                 ></CDataTable>
                 <CPagination
@@ -253,14 +242,19 @@ function ListLearningContent() {
                         setPage({ ...page, number: i })
                     }}
             />
-        </>
+      </CCardBody>
+                    </CCard>
+                </CCol>
+            </CRow>
+        </CContainer>
+        
   )
     
       
     
 }
 
-export default ListLearningContent;
+export default ListOnboardingQuiz;
 
 
   

@@ -87,9 +87,9 @@ let [question,setQuestion ] = useState("");
         }        
         setOptionInputFields(currentOptionInputFields)
         let answer = currentOptionInputFields.find((optionInputField) => optionInputField.option_no == response.quizDetails.correct_option)
-          console.log(answer)
+          
           if (answer) {
-            console.log(answer)
+            
             setCorrectOption(answer.option_value)
           }
           setSpinnerShow(false)
