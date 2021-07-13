@@ -31,9 +31,16 @@ function MediaView(props) {
                             height: "125px",
                             width: "100%",
                         }}
-                        controlsList="nodownload novolume nofullscreen" controls>
+                        controlsList="nodownload" controls>
                             <source src={props.mediaInput.source}/>
-                        </video>:null}
+                            </video> : props.mediaInput.type == "audio" ?
+                        <audio
+                        style={{
+                            width: "180px",
+                        }}
+                        controlsList="nodownload" controls>
+                            <source src={props.mediaInput.source}/>
+                            </audio> :null}
                 </div>
         </div>
     )
