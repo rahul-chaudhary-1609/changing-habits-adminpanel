@@ -43,6 +43,13 @@ const _nav = [
     to: "/listOnboardingQuiz",
     icon: <CIcon content={freeSet.cilPuzzle} customClasses="c-sidebar-nav-icon" />,
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Knowledge Center",
+    to: "/listKnowledgeBlog",
+    icon: <CIcon content={freeSet.cilStorage} customClasses="c-sidebar-nav-icon" />,
+  },
+  
 ];
 
 export default _nav;

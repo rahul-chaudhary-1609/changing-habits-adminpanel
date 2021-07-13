@@ -59,7 +59,14 @@ const apiConstant = {
   deleteOnboardingQuiz: "/api/v1/admin/deleteOnboardingQuiz",
   getOnboardingQuiz: "/api/v1/admin/getOnboardingQuiz",
   editOnboardingQuiz: "api/v1/admin/editOnboardingQuiz",
-  addOnboardingQuiz:"api/v1/admin/addOnboardingQuiz"
+  addOnboardingQuiz: "api/v1/admin/addOnboardingQuiz",
+  
+  //knowledge center management API's
+  listBlog: "/api/v1/admin/listBlog",
+  deleteBlog: "/api/v1/admin/deleteBlog",
+  getBlog: "/api/v1/admin/getBlog",
+  editBlog: "api/v1/admin/editBlog",
+  addBlog: "api/v1/admin/addBlog",
 };
 
 export default apiConstant;

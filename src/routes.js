@@ -94,6 +94,18 @@ const ViewOnboardingQuiz = React.lazy(() =>
   import("./views/onboardingQuizManagement/ViewOnboardingQuiz")
 );
 
+const ListKnowledgeBlog = React.lazy(() =>
+  import("./views/knowledgeCenterManagement/ListKnowledgeBlog")
+);
+
+const AddEditKnowledgeBlog = React.lazy(() =>
+  import('./views/knowledgeCenterManagement/addEditKnowledgeBlog')
+);
+
+const ViewKnowledgeBlog = React.lazy(() =>
+  import('./views/knowledgeCenterManagement/ViewKnowledgeBlog')
+);
+
 const routes = [
   { path: "/", exact: true, name: "Users", component: User },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
@@ -275,7 +287,7 @@ const routes = [
     component: AddEditFoodLogCategory,
   },
 
-    {
+  {
     path: `/listOnboardingQuiz`,
     exact: true,
     name: "List Onboarding Quiz",
@@ -302,6 +314,33 @@ const routes = [
     name: "Edit Onboarding Quiz",
     component: AddEditOnbordingQuiz,
   },
+
+  {
+    path: `/listKnowledgeBlog`,
+    exact: true,
+    name: "List Knowledge Blog",
+    component: ListKnowledgeBlog,
+  },
+  {
+    path: `/viewKnowledgeBlog/:id`,
+    exact: true,
+    name: "View Knowledge Blog",
+    component: ViewKnowledgeBlog,
+  },
+   {
+    path: `/addKnowledgeBlog`,
+    exact: true,
+    name: "Add Knowledge Blog",
+    component: AddEditKnowledgeBlog,
+  },
+
+  {
+    path: `/editKnowledgeBlog/:id`,
+    exact: true,
+    name: "Edit Knowledge Blog",
+    component: AddEditKnowledgeBlog,
+  },
+
 
   { component: Page404 },
 ];

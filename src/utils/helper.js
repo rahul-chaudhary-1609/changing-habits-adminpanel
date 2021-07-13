@@ -37,3 +37,10 @@ export const header = (roleId = 1, contentType, accept) => {
   };
 };
 
+export const getFormatedDateTime = (dateTime) => {
+  let dateArray = new Date(dateTime).toString().split(" ");
+  let timeArray = new Date(dateTime).toLocaleTimeString().split(" ");
+  let amPM = timeArray[1];
+  let hoursMinutes=`${timeArray[0].split(":")[0]}:${timeArray[0].split(":")[1]}`;
+  return `${dateArray[0]} ${dateArray[1]}, ${dateArray[2]} ${dateArray[3]} ${hoursMinutes} ${amPM}`
+}
