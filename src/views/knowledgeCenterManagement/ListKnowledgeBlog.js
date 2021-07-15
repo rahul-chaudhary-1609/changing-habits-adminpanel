@@ -54,7 +54,7 @@ function ListKnowledgeBlog() {
         { key: 's_no',label:"S.No.",_style: {width: "5rem" } },
         { key: 'title', lable: "Title" },
         { key:'media',label:"Image/Audio/Video",_style: {width: "12rem" }},
-        { key: 'createdAt', lable: "Posted Date",_style: {width: "12rem" } },
+        { key: 'posted_date', lable: "Posted Date",_style: {width: "12rem" } },
         { key: 'action',label:"Action",_style: { width: "8rem" } },
     ]
 
@@ -85,6 +85,7 @@ function ListKnowledgeBlog() {
         return rows.map((row) => {
             return {
                 s_no: ++s_no,
+                posted_date:row.createdAt,
                 ...row
             }
         });
@@ -235,8 +236,8 @@ function ListKnowledgeBlog() {
                                 </td>
                             )
                         },
-                        createdAt: (item, index) => {
-                            return (<td>{ getFormatedDateTime(item.createdAt)}</td>)
+                        posted_date: (item, index) => {
+                            return (<td>{ getFormatedDateTime(item.posted_date)}</td>)
                         },
                         media: (item, index) => {
                             let mediaInput={

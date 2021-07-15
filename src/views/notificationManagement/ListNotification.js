@@ -44,7 +44,7 @@ function ListNotification() {
         { key: 's_no',label:"S.No.",_style: {width: "5rem" } },
         { key: 'title', lable: "Title" },
         { key: 'description', lable: "Description" },
-        { key: 'createdAt', lable: "Sent Date",_style: {width: "12rem" } },
+        { key: 'sent_date', lable: "Sent Date",_style: {width: "12rem" } },
         { key: 'sent_to',label:"Sent To",_style: { width: "15rem" } },
     ]
 
@@ -54,6 +54,7 @@ function ListNotification() {
         return rows.map((row) => {
             return {
                 s_no: ++s_no,
+                sent_date:row.createdAt,
                 ...row
             }
         });
@@ -160,8 +161,8 @@ function ListNotification() {
                         </CCol>
                     }
                     scopedSlots={{
-                        createdAt: (item, index) => {
-                            return (<td>{ getFormatedDateTime(item.createdAt)}</td>)
+                        sent_date: (item, index) => {
+                            return (<td>{ getFormatedDateTime(item.sent_date)}</td>)
                         },
                         sent_to: (item, index) => {
                             return (<td><span style={{fontWeight:"500"}}>{ item.type==0?"All Users":"Individual User: "}</span>{ item.type==0?null:`${item.sent_to}`}</td>)
