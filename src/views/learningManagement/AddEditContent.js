@@ -25,6 +25,7 @@ import { upload } from "../../data/upload";
 import MediaView from "src/utils/components/mediaView";
 import {getPhaseDays,getLearningContent,addLearningContent,editLearningContent} from "../../data/learningContentManagement"
 import { faLaptopHouse } from "@fortawesome/free-solid-svg-icons";
+import { checkLeapYear } from "../../utils/helper";
 
 function AddEditLearningContent(props) {
   let history = useHistory();
@@ -143,7 +144,8 @@ function AddEditLearningContent(props) {
       getPhaseDays(req).then((response) => {
         setSpinnerShow(false)
         let newPhaseDaysList = []
-        for (let i = 1; i <= response.phaseDays; i++) {
+        let limit = response.phaseDays ? response.phaseDays : checkLeapYear(new Date().getFullYear()) ? 366 : 365;
+        for (let i = 1; i <= limit;  i++) {
           newPhaseDaysList.push(i)
         }
         setPhaseDaysList([...newPhaseDaysList]);
@@ -359,7 +361,8 @@ function AddEditLearningContent(props) {
                         id="media"
                         name="media"
                         placeholder="Upload"
-                        onChange={handleUpload}                        
+                          onChange={handleUpload}
+                        disabled={spinnerShow}  
                       />
                       <label style={{ color: "red", marginLeft: "1rem",marginTop:"1rem" ,display: mediaInput.isError ? "block" : "none" }}>{ mediaInput.errorMessage}</label>
                     </div>

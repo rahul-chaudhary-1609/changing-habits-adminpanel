@@ -59,7 +59,7 @@ function AddEditKnowledgeBlog(props) {
     type: "image",
     source: null,
     isError: false,
-    errorMessage:"Image/Video/Audio is Required",
+    errorMessage:"Image/Audio/Video is Required",
   })
 
   let phases = [
@@ -98,7 +98,7 @@ function AddEditKnowledgeBlog(props) {
   },[title,description,mediaInput,phase,externalLink,phychologicalContentTypeCheck,nutritionContentTypeCheck.protocolContentTypeCheck])
     
   let handleUpload = (e) => {
-    console.log(e.target.files[0])
+    
     setMediaInput({...mediaInput,type:"image",isError:false,source:"https://changinghabits-dev-backend.s3.amazonaws.com/changinghabits/learning_content/loading-buffering_1625498388794.gif"})
     if (e.target.files[0]) {
       let fileType = e.target.files[0].type.split("/")[0];
@@ -129,7 +129,7 @@ function AddEditKnowledgeBlog(props) {
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     } else {
-      setMediaInput({...mediaInput,type:null, source:null, isError: true, errorMessage: "Image/Video/Audio is Required" });
+      setMediaInput({...mediaInput,type:null, source:null, isError: true, errorMessage: "Image/Audio/Video is Required" });
     }
   }
 
@@ -231,7 +231,7 @@ function AddEditKnowledgeBlog(props) {
         data
       }
 
-      console.log("data",data)
+ 
 
       editBlog(req).then((response) => {
         setSpinnerShow(false)
@@ -305,7 +305,7 @@ function AddEditKnowledgeBlog(props) {
                     <div style={{color:"red",marginLeft:"0.1rem", display:titleCheck?"":"none"}}>Title is required</div>
                       </CFormGroup>
                    <CFormGroup style={{display:"flex", alignItems:"center"}}>
-                    <CLabel style={{marginRight:"2rem",fontWeight:"600",fontSize:"1rem"}} htmlFor="media">Upload Image/Video/Audio:</CLabel>
+                    <CLabel style={{marginRight:"2rem",fontWeight:"600",fontSize:"1rem"}} htmlFor="media">Upload Image/Audio/Video:</CLabel>
                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
                     
                       <MediaView mediaInput={mediaInput} />
@@ -316,7 +316,8 @@ function AddEditKnowledgeBlog(props) {
                         id="media"
                         name="media"
                         placeholder="Upload"
-                        onChange={handleUpload}                        
+                          onChange={handleUpload}
+                        disabled={spinnerShow}  
                       />
                       <label style={{ color: "red", marginLeft: "1rem",marginTop:"1rem" ,display: mediaInput.isError ? "block" : "none" }}>{ mediaInput.errorMessage}</label>
                     </div>

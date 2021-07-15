@@ -24,7 +24,8 @@ import {
   CToastBody
 } from "@coreui/react"
 import { FaPlus,FaMinus } from 'react-icons/fa';
-import {getPhaseDays,getLearningQuiz,addLearningQuiz,editLearningQuiz} from "../../data/learningContentManagement"
+import { getPhaseDays, getLearningQuiz, addLearningQuiz, editLearningQuiz } from "../../data/learningContentManagement"
+import { checkLeapYear } from "../../utils/helper";
 
 function AddEditLearningQuiz() {
   let history = useHistory();
@@ -150,7 +151,8 @@ function AddEditLearningQuiz() {
       getPhaseDays(req).then((response) => {
         setSpinnerShow(false)
         let newPhaseDaysList = []
-        for (let i = 1; i <= response.phaseDays; i++) {
+        let limit = response.phaseDays ? response.phaseDays : checkLeapYear(new Date().getFullYear()) ? 366 : 365;
+        for (let i = 1; i <= limit; i++) {
           newPhaseDaysList.push(i)
         }
         setPhaseDaysList([...newPhaseDaysList]);
@@ -388,7 +390,7 @@ function AddEditLearningQuiz() {
                     show={successResponse.isFound}
                     autohide="5000"
                   >
-                    <CToastHeader style={{backgroundColor:"#008080",color:"#fff"}} >Success</CToastHeader>
+                    {/* <CToastHeader style={{backgroundColor:"#008080",color:"#fff"}} ></CToastHeader> */}
                   <CToastBody>
                       <strong>{successResponse.message}</strong>
                   </CToastBody>

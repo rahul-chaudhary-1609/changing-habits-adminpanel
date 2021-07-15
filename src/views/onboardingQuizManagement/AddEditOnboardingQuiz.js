@@ -299,7 +299,7 @@ function AddEditOnboardingQuiz() {
                     show={successResponse.isFound}
                     autohide="5000"
                   >
-                    <CToastHeader style={{backgroundColor:"#008080",color:"#fff"}} >Success</CToastHeader>
+                    {/* <CToastHeader style={{backgroundColor:"#008080",color:"#fff"}} ></CToastHeader> */}
                   <CToastBody>
                       <strong>{successResponse.message}</strong>
                   </CToastBody>

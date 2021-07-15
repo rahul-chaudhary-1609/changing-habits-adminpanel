@@ -67,6 +67,11 @@ const apiConstant = {
   getBlog: "/api/v1/admin/getBlog",
   editBlog: "api/v1/admin/editBlog",
   addBlog: "api/v1/admin/addBlog",
+
+  //notification management API's
+  listNotification: "/api/v1/admin/listNotification",
+  sendNotification: "/api/v1/admin/sendNotification",
+  listUser: "/api/v1/admin/listActiveUsers",
 };
 
 export default apiConstant;

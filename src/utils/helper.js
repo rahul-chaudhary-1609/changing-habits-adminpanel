@@ -42,5 +42,14 @@ export const getFormatedDateTime = (dateTime) => {
   let timeArray = new Date(dateTime).toLocaleTimeString().split(" ");
   let amPM = timeArray[1];
   let hoursMinutes=`${timeArray[0].split(":")[0]}:${timeArray[0].split(":")[1]}`;
-  return `${dateArray[0]} ${dateArray[1]}, ${dateArray[2]} ${dateArray[3]} ${hoursMinutes} ${amPM}`
+  return `${dateArray[0]} ${dateArray[1]} ${dateArray[2]}, ${dateArray[3]} ${hoursMinutes} ${amPM}`
+}
+
+export const checkLeapYear=(year)=> {
+
+    if ((0 == year % 4) && (0 != year % 100) || (0 == year % 400)) {
+        return true
+    } else {
+        return false
+    }
 }

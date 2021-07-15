@@ -106,6 +106,14 @@ const ViewKnowledgeBlog = React.lazy(() =>
   import('./views/knowledgeCenterManagement/ViewKnowledgeBlog')
 );
 
+const ListNotification = React.lazy(() =>
+  import("./views/notificationManagement/ListNotification")
+);
+
+const SendNotification = React.lazy(() =>
+  import("./views/notificationManagement/SendNotification")
+);
+
 const routes = [
   { path: "/", exact: true, name: "Users", component: User },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
@@ -341,6 +349,19 @@ const routes = [
     component: AddEditKnowledgeBlog,
   },
 
+   {
+    path: `/listNotification`,
+    exact: true,
+    name: "List Notification",
+    component: ListNotification,
+  },
+   
+  {
+    path: `/sendNotification`,
+    exact: true,
+    name: "Send Notification",
+    component: SendNotification,
+  },
 
   { component: Page404 },
 ];

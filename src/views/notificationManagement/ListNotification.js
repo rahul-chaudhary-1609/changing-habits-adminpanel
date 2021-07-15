@@ -2,9 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import {
     CDataTable,
-    CBadge,
-    CTooltip,
-    CSwitch,
     CButton,
     CInputGroup,
     CInputGroupPrepend,
@@ -21,14 +18,10 @@ import {
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
-import { listBlog,deleteBlog } from "../../data/knowledgeCenterManagement"
-import {DeleteModal} from "src/utils/components/modal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { listNotification } from "../../data/notificationManagement"
 import { getFormatedDateTime } from "../../utils/helper";
-import MediaView from "src/utils/components/mediaView";
 
-function ListKnowledgeBlog() {
+function ListNotification() {
     let history = useHistory();
 
     let [data, setData] = useState([])
@@ -45,40 +38,16 @@ function ListKnowledgeBlog() {
         code: null,
         isFound: false,
     });
-    let [status, setStatus] = useState(true);
-    let [modal, setModal] = useState(false);
-    let [toggleData, setToggleData] = useState(null);
 
 
     const fields = [
         { key: 's_no',label:"S.No.",_style: {width: "5rem" } },
         { key: 'title', lable: "Title" },
-        { key:'media',label:"Image/Audio/Video",_style: {width: "12rem" }},
-        { key: 'createdAt', lable: "Posted Date",_style: {width: "12rem" } },
-        { key: 'action',label:"Action",_style: { width: "8rem" } },
+        { key: 'description', lable: "Description" },
+        { key: 'createdAt', lable: "Sent Date",_style: {width: "12rem" } },
+        { key: 'sent_to',label:"Sent To",_style: { width: "15rem" } },
     ]
 
-    let toggleModal = (item) => {
-        setModal(!modal);
-        setToggleData(item);
-    }
-
-    let deleteQuestion =(item) => {
-        setModal(!modal)
-            let req = {
-                pathParams: {
-                    id: item.id,
-                },
-                data:{}
-        }
-        deleteBlog(req).then((response) => {
-                setStatus(!status)
-                setErrorResponse({ message: null, code: null, isFound: false })
-            }).catch((error)=> {
-                setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
-        })
-
-    }
 
     let formatData = (rows) => {
         let s_no = (page.number - 1) * page.size;
@@ -101,7 +70,7 @@ function ListKnowledgeBlog() {
                     }
                 }
                 setLoading(true)
-                let response = await listBlog(req);
+                let response = await listNotification(req);
                 let updatedData = formatData(response.rows);
                 setData([...updatedData])
                 setDataCount(response.count)
@@ -122,31 +91,22 @@ function ListKnowledgeBlog() {
         getData();
         
         
-    },[page.number,searchKey,status])
+    },[page.number,searchKey])
 
 
     return (
         <CContainer>
-            <DeleteModal
-                toggleModal={toggleModal}
-                modal={modal}
-                toggleData={toggleData}
-                deleteQuestion={deleteQuestion}
-                setStatus={setStatus}
-                status={status}
-                info={"blog"}
-            />
             <CRow>
                 <CCol sm="12">
                     <CCard>
                         <CCardHeader>
                             {/* <div style={{display:"flex", justifyContent:"space-between"}}> */}
-                                <h2>Knowledge Blog Management</h2>
+                                <h2>Notification Management</h2>
                                 <CButton
                                     style={{ width: "5rem",float:"right",backgroundColor:"#008080",color:"#fff"}}
-                                    onClick={()=> history.push('/addKnowledgeBlog')}
+                                    onClick={()=> history.push('/sendNotification')}
                                 >
-                                    <strong>Add</strong>
+                                    <strong>Send</strong>
                                 </CButton>
                             {/* </div> */}
                                             
@@ -200,52 +160,11 @@ function ListKnowledgeBlog() {
                         </CCol>
                     }
                     scopedSlots={{
-                        action: (item, index) => {
-                            return (
-                                <td>
-                                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
-                                        <CTooltip content={"Edit Question"} placement={"top-start"}>
-                                            <CIcon style={{ color: "black", cursor: "pointer" }}
-                                                size="lg"
-                                                name={"cilPencil"}
-                                                onClick={()=>history.push(`/editKnowledgeBlog/${item.id}`)}
-                                            />
-                                        </CTooltip>
-                                        <CTooltip content={`View Question`} placement={"top-start"}>
-                                            <FontAwesomeIcon
-                                                color="green"
-                                                size="lg"
-                                                style={{ cursor: "pointer" }}
-                                                onClick={() =>
-                                                history.push({
-                                                    pathname: `/viewKnowledgeBlog/${item.id}`,
-                                                })
-                                                }
-                                                icon={faEye}
-                                            />
-                                        </CTooltip>
-                                        <CTooltip content={`Delete Question`} placement={"top-start"}>
-                                            <CIcon style={{ color: "red", cursor: "pointer" }}
-                                                size="lg"
-                                                name={"cilTrash"}
-                                                onClick={()=>toggleModal(item)}
-                                            />
-                                        </CTooltip>
-                                    </div>
-                                </td>
-                            )
-                        },
                         createdAt: (item, index) => {
                             return (<td>{ getFormatedDateTime(item.createdAt)}</td>)
                         },
-                        media: (item, index) => {
-                            let mediaInput={
-                                    type: item.image_url?"image":item.video_url?"video":"audio",
-                                    source: item.image_url || item.video_url || item.audio_url || null,
-                                    isError: false,
-                                    errorMessage:"Image/Video/Audio is Required",
-                                }
-                            return (<td><MediaView mediaInput={mediaInput} /></td>)
+                        sent_to: (item, index) => {
+                            return (<td><span style={{fontWeight:"500"}}>{ item.type==0?"All Users":"Individual User: "}</span>{ item.type==0?null:`${item.sent_to}`}</td>)
                         }
                     }}
                 ></CDataTable>
@@ -270,7 +189,7 @@ function ListKnowledgeBlog() {
     
 }
 
-export default ListKnowledgeBlog;
+export default ListNotification;
 
 
   

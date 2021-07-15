@@ -49,6 +49,12 @@ const _nav = [
     to: "/listKnowledgeBlog",
     icon: <CIcon content={freeSet.cilStorage} customClasses="c-sidebar-nav-icon" />,
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Notification Management",
+    to: "/listNotification",
+    icon: <CIcon content={freeSet.cilBell} customClasses="c-sidebar-nav-icon" />,
+  },
   
 ];
 
