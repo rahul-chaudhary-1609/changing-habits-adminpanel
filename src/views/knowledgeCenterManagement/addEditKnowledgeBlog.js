@@ -434,7 +434,7 @@ function AddEditKnowledgeBlog(props) {
                       type="text"
                       id="external_link"
                       name="external_link"
-                      placeholder="Enter external link"
+                      placeholder="Enter external link (eg: https://www.google.com)"
                       //required
                     />
                     <div style={{color:"red",marginLeft:"0.1rem", display:externalLinkCheck?"":"none"}}>External link is required</div>
