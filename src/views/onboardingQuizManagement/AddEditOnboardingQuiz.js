@@ -50,13 +50,13 @@ function AddEditOnboardingQuiz() {
 
   let [optionInputFields, setOptionInputFields] = useState(
     [
-      { option_no: 1, option_value: "",isRequired:true,check:false },
-      { option_no: 2, option_value: "",isRequired:true,check:false },
-      { option_no: 3, option_value: "",isRequired:true,check:false },
+      { option_no: 1, option_value: "",isRequired:false,check:false },
+      { option_no: 2, option_value: "",isRequired:false,check:false },
+      //{ option_no: 3, option_value: "",isRequired:false,check:false },
       //{ option_no: 4, option_value: "",isRequired:true,check:false },
     ]
   )
-
+ let [optionInputFieldsCheck, setOptionInputFieldsCheck] = useState(false);
 
 
   let [spinnerShow,setSpinnerShow]=useState(false)
@@ -80,11 +80,14 @@ function AddEditOnboardingQuiz() {
         setQuestion(response.onboardingQuizDetails.question)
         setDescription(response.onboardingQuizDetails.description)
         let currentOptionInputFields = [
-          { option_no: 1, option_value:response.onboardingQuizDetails.option_1 ,isRequired:true,check:false },
-          { option_no: 2, option_value: response.onboardingQuizDetails.option_2,isRequired:true,check:false },
-          { option_no: 3, option_value: response.onboardingQuizDetails.option_3,isRequired:true,check:false },
+          { option_no: 1, option_value:response.onboardingQuizDetails.option_1 ,isRequired:false,check:false },
+          { option_no: 2, option_value: response.onboardingQuizDetails.option_2,isRequired:false,check:false },
+          //{ option_no: 3, option_value: response.onboardingQuizDetails.option_3,isRequired:false,check:false },
           //{ option_no: 4, option_value: response.quizDetails.option_4, isRequired: true },
         ];
+        if (response.onboardingQuizDetails.option_3) {
+          currentOptionInputFields.push({ option_no: 3, option_value:response.onboardingQuizDetails.option_3 ,isRequired:false,check:false })
+        }
         if (response.onboardingQuizDetails.option_4) {
           currentOptionInputFields.push({ option_no: 4, option_value:response.onboardingQuizDetails.option_4 ,isRequired:false,check:false })
         }
@@ -109,6 +112,9 @@ function AddEditOnboardingQuiz() {
 
 
   let handleAddOptionField = () => {
+    if (optionInputFields.length >= 1) {
+      setOptionInputFieldsCheck(false);
+    }
     if (optionInputFields.length < 6) {
       let currentOptionInputFields = [...optionInputFields];
       currentOptionInputFields.push({ option_no: currentOptionInputFields.length + 1, option_value: "", isRequired: false,check:false })
@@ -119,6 +125,9 @@ function AddEditOnboardingQuiz() {
   }
 
   let handleRemoveOptionField = (index) => {
+      if (optionInputFields.length < 3) {
+        setOptionInputFieldsCheck(true);
+      }
       let currentOptionInputFields = [...optionInputFields];
       currentOptionInputFields.splice(index, 1);
       setOptionInputFields(currentOptionInputFields)
@@ -157,6 +166,10 @@ function AddEditOnboardingQuiz() {
     }
     setOptionInputFields(currentOptionInputFields);
     
+    if (optionInputFields.length<2) {
+      setOptionInputFieldsCheck(true)
+      result=false
+    }
 
     return result
   }
@@ -253,9 +266,9 @@ function AddEditOnboardingQuiz() {
         setDescription("")
         setCorrectOption(0)
         setOptionInputFields([
-          { option_no: 1, option_value: "",isRequired:true,check:false },
-          { option_no: 2, option_value: "",isRequired:true,check:false },
-          { option_no: 3, option_value: "",isRequired:true,check:false },
+          { option_no: 1, option_value: "",isRequired:false,check:false },
+          { option_no: 2, option_value: "",isRequired:false,check:false },
+          //{ option_no: 3, option_value: "",isRequired:false,check:false },
           //{ option_no: 4, option_value: "",isRequired:true,check:false },
         ])
         setSpinnerShow(false)
@@ -346,6 +359,7 @@ function AddEditOnboardingQuiz() {
                       </>
                       )
                     })}
+                    <div style={{ color: "red", marginLeft: "0.1rem", display: optionInputFieldsCheck ? "" : "none" }}>Atleast two options are required</div>
                     <CBadge
                       style={{ marginTop: "0.5rem", cursor: "pointer",display:optionInputFields.length<6?"":"none" }}
                       color="secondary"

@@ -41,11 +41,11 @@ function ListNotification() {
 
 
     const fields = [
-        { key: 's_no',label:"S.No.",_style: {width: "5rem" } },
-        { key: 'title', lable: "Title" },
-        { key: 'description', lable: "Description" },
-        { key: 'sent_date', lable: "Sent Date",_style: {width: "12rem" } },
-        { key: 'sent_to',label:"Sent To",_style: { width: "15rem" } },
+        { key: 's_no',label:"S.No.",_style: {width: "4%" } },
+        { key: 'title', lable: "Title",_style: {width: "40%" } },
+        //{ key: 'description', lable: "Description" },
+        { key: 'sent_date', lable: "Sent Date",_style: {width: "20%" } },
+        { key: 'sent_to',label:"Sent To",_style: { width: "36%" } },
     ]
 
 
@@ -134,7 +134,7 @@ function ListNotification() {
                                     onChange={(e) => { setSearchValue(e.target.value) }}
                                 />
                                 <CButton style={{ marginLeft: "1rem", backgroundColor:"#008080",color:"#fff"}}
-                                    onClick={() => { setSearchKey(searchValue != "" ? searchValue : null) }}
+                                    onClick={() => { setSearchKey(searchValue.trim() != "" ? searchValue.trim() : null) }}
                                 >
                                     Search
                                 </CButton>

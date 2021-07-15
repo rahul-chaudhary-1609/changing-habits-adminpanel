@@ -44,13 +44,12 @@ function ListLearningContent() {
 
 
     const fields = [
-        { key: 's_no',label:"S.No." },
-        { key: 'title', label: "Title" },
-        { key: 'description',label:"Description" },
-        { key: 'phase_day',label:"Phase Day",_style: { minWidth: "7rem" } },
-        { key: 'phase_id', label: "Phase",_style: { minWidth: "7rem" } },
-        { key: 'status', label: "Status",_style: { minWidth: "7rem" } },
-        { key: 'action',label:"Action",_style: { minWidth: "7rem" } },
+        { key: 's_no',label:"S.No.",_style: { width: "4%" } },
+        { key: 'title', label: "Title",_style: { width: "46%" } },
+        { key: 'phase_day',label:"Phase Day",_style: { width: "10%" }},
+        { key: 'phase_id', label: "Phase",_style: { width: "12%" }},
+        { key: 'status', label: "Status",_style: { width: "8%" } },
+        { key: 'action',label:"Action",_style: { width: "20%" } },
     ]
 
     let toggleModal = (item) => {
@@ -155,7 +154,7 @@ function ListLearningContent() {
                                     onChange={(e) => { setSearchValue(e.target.value) }}
                                 />
                                 <CButton style={{ marginLeft: "1rem", backgroundColor:"#008080",color:"#fff"}}
-                                    onClick={() => { setSearchKey(searchValue != "" ? searchValue : null) }}
+                                    onClick={() => { setSearchKey(searchValue.trim() != "" ? searchValue.trim() : null) }}
                                 >
                                     Search
                                 </CButton>
