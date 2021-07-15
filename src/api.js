@@ -300,7 +300,8 @@ export const ViewUserDetails = (user_id) => {
   });
 };
 
-export const GetUserList = (page, search, accountType) => {
+export const GetUserList = (page, search, data) => {
+  debugger;
   let searchKey;
   if (search) {
     searchKey = `&searchKey=${search}`;
@@ -308,15 +309,25 @@ export const GetUserList = (page, search, accountType) => {
     searchKey = "";
   }
   let status;
-  if (accountType == 0 || accountType == 1) {
-    status = `&status=${accountType}`;
+  if (data && (data.accountType == 0 || data.accountType == 1)) {
+    status = `&status=${data.accountType}`;
   } else {
     status = "";
   }
+
+  let subscription_status;
+  if (data && (data.usersType == 0 || data.usersType == 1)) {
+    subscription_status = `&subscription_status=${data.usersType}`;
+  } else {
+    subscription_status = "";
+  }
+
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
-        apiConstant.GetUserList.concat(`${page}${searchKey}${status}`),
+        apiConstant.GetUserList.concat(
+          `${page}${searchKey}${status}${subscription_status}`
+        ),
         {
           headers: header(),
         }

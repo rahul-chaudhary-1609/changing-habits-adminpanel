@@ -58,6 +58,21 @@ var account_type = [
   },
 ];
 
+var users_type = [
+  {
+    label: "All Users",
+    value: null,
+  },
+  {
+    label: "Free Users",
+    value: 0,
+  },
+  {
+    label: "Paid Users",
+    value: 1,
+  },
+];
+
 const fields = [
   { key: "currentId", label: "Id", _style: { fontFamily: "Poppins" } },
   { key: "name", label: "Username", _style: { fontFamily: "Poppins" } },
@@ -88,6 +103,7 @@ const fields = [
 const Users = () => {
   const [loading, setLoading] = useState(false);
   const [accountType, setAccountType] = useState(null);
+  const [usersType, setUsersType] = useState(null);
 
   const history = useHistory();
 
@@ -180,13 +196,14 @@ const Users = () => {
       try {
         setLoading(true);
         setData([]);
-        const data = accountType
-          ? await GetUserList(
-              currentPage,
-              currentPageSearch,
-              Number(accountType)
-            )
-          : await GetUserList(currentPage, currentPageSearch);
+
+        let dropdown = {};
+        dropdown.accountType = accountType ? Number(accountType) : null;
+        dropdown.usersType = usersType ? Number(usersType) : null;
+        const data =
+          accountType || usersType
+            ? await GetUserList(currentPage, currentPageSearch, dropdown)
+            : await GetUserList(currentPage, currentPageSearch);
         setLoading(false);
         data.rows.map((item) => {
           item._classes = "catTableItem";
@@ -208,7 +225,7 @@ const Users = () => {
     getData();
 
     currentPage !== page && setPage(currentPage);
-  }, [currentPage, currentPageSearch, refresh, page, accountType]);
+  }, [currentPage, currentPageSearch, refresh, page, accountType, usersType]);
 
   return (
     <CRow>
@@ -336,7 +353,7 @@ const Users = () => {
                       Reset
                     </CButton>
                   </CInputGroup>
-                  <CInputGroup style={{ width: "30%" }}>
+                  <CInputGroup style={{ width: "30%", marginRight: "10px" }}>
                     <CInputGroupText
                       style={{
                         borderRadius: "2px",
@@ -357,6 +374,32 @@ const Users = () => {
                       id="status"
                     >
                       {account_type.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </CSelect>
+                  </CInputGroup>
+                  <CInputGroup style={{ width: "30%" }}>
+                    <CInputGroupText
+                      style={{
+                        borderRadius: "2px",
+                        backgroundColor: "#008080",
+                        color: "#fff",
+                      }}
+                    >
+                      <FaFilter />
+                    </CInputGroupText>
+                    <CSelect
+                      onChange={(e) => {
+                        setUsersType(e.target.value);
+                      }}
+                      custom
+                      value={usersType}
+                      name="subscription_status"
+                      id="subscription_status"
+                    >
+                      {users_type.map((item) => (
                         <option key={item.value} value={item.value}>
                           {item.label}
                         </option>
