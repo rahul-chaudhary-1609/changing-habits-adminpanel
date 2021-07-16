@@ -33,10 +33,25 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Food Log Category",
+    name: "Category",
     to: "/listFoodLogCategory",
-    icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
+    //icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
   },
+
+  {
+    _tag: "CSidebarNavItem",
+    name: "Suggestion",
+    to: "/listFoodLogSuggestion",
+    //icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
+  },
+  
+  {
+    _tag: "CSidebarNavItem",
+    name: "User Progress Management",
+    to: "/listUserProgress",
+    icon: <CIcon content={freeSet.cilListHighPriority} customClasses="c-sidebar-nav-icon" />,
+  },
+
   {
     _tag: "CSidebarNavItem",
     name: "Onboarding Quiz",
@@ -55,6 +70,7 @@ const _nav = [
     to: "/listNotification",
     icon: <CIcon content={freeSet.cilBell} customClasses="c-sidebar-nav-icon" />,
   },
+
   
 ];
 

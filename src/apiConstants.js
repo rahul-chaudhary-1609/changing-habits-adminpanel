@@ -72,6 +72,13 @@ const apiConstant = {
   listNotification: "/api/v1/admin/listNotification",
   sendNotification: "/api/v1/admin/sendNotification",
   listUser: "/api/v1/admin/listActiveUsers",
+
+  //food log suggestion API's
+  listFoodLogSuggestion: "/api/v1/admin/listFoodContent",
+  toggleFoodLogSuggestionStatus: "/api/v1/admin/toggleFoodContentStatus",
+  getFoodLogSuggestion: "/api/v1/admin/getFoodContent",
+  addFoodLogSuggestion: "/api/v1/admin/addFoodContent",
+  editFoodLogSuggestion: "/api/v1/admin/editFoodContent",
 };
 
 export default apiConstant;

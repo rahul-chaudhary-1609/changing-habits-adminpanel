@@ -15,6 +15,8 @@ import { setSideBar } from "../actions/index";
 import changingHabitsLogo from "../assets/icons/logo tflp – 1.png";
 import biglogo from "../assets/icons/logo tflp – 1.png";
 import navigation from "./_nav";
+import CIcon from "@coreui/icons-react";
+import { freeSet } from "@coreui/icons";
 
 const TheSidebar = () => {
   const dispatch = useDispatch();
@@ -38,7 +40,31 @@ const TheSidebar = () => {
       </CSidebarBrand>
       <CSidebarNav>
         <CCreateElement
-          items={navigation}
+          items={navigation.slice(0,4)}
+          components={{
+            CSidebarNavDivider,
+            CSidebarNavDropdown,
+            CSidebarNavItem,
+            CSidebarNavTitle,
+          }}
+        />
+        <CSidebarNavDropdown
+          name="Food Log Management"
+          icon={<CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />}
+
+        >
+         <CCreateElement
+          items={navigation.slice(4,6)}
+          components={{
+            CSidebarNavDivider,
+            CSidebarNavDropdown,
+            CSidebarNavItem,
+            CSidebarNavTitle,
+          }}
+        />
+        </CSidebarNavDropdown>
+        <CCreateElement
+          items={navigation.slice(6)}
           components={{
             CSidebarNavDivider,
             CSidebarNavDropdown,

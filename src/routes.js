@@ -71,15 +71,15 @@ const ViewLearningQuiz = React.lazy(() =>
 );
 
 const ListFoodLogCategory = React.lazy(() =>
-  import("./views/foodLogCategory/ListFoodLogCategory")
+  import("./views/foodLogManagement/ListCategory")
 );
 
 const AddEditFoodLogCategory = React.lazy(() =>
-  import("./views/foodLogCategory/AddEditFoodLogCategory")
+  import("./views/foodLogManagement/AddEditCategory")
 );
 
 const ViewFoodLogCategory = React.lazy(() =>
-  import("./views/foodLogCategory/ViewFoodLogCategory")
+  import("./views/foodLogManagement/ViewCategory")
 );
 
 const ListOnboardingQuiz = React.lazy(() =>
@@ -112,6 +112,22 @@ const ListNotification = React.lazy(() =>
 
 const SendNotification = React.lazy(() =>
   import("./views/notificationManagement/SendNotification")
+);
+
+const ListUserProgress = React.lazy(() =>
+  import("./views/UserProgressManagement/ListUserProgress")
+);
+
+const ListFoodLogSuggestion = React.lazy(() =>
+  import("./views/foodLogManagement/ListSuggetion")
+);
+
+const AddEditFoodLogSuggestion = React.lazy(() =>
+  import("./views/foodLogManagement/AddEditSuggestion")
+)
+
+const ViewFoodLogSuggestion = React.lazy(() =>
+  import("./views/foodLogManagement/ViewSuggestion")
 );
 
 const routes = [
@@ -361,6 +377,42 @@ const routes = [
     exact: true,
     name: "Send Notification",
     component: SendNotification,
+  },
+
+  {
+    path: `/listUserProgress`,
+    exact: true,
+    name: "List User Progress",
+    component: ListUserProgress,
+  },
+
+
+  {
+    path: `/listFoodLogSuggestion`,
+    exact: true,
+    name: "List Food Log Suggestion",
+    component: ListFoodLogSuggestion,
+  },
+
+  {
+    path: `/viewFoodLogSuggestion/:id`,
+    exact: true,
+    name: "View Food Log Suggestion",
+    component: ViewFoodLogSuggestion,
+  },
+
+  {
+    path: `/editFoodLogSuggestion/:id`,
+    exact: true,
+    name: "Edit Food Log Category",
+    component: AddEditFoodLogSuggestion,
+  },
+
+  {
+    path: `/addFoodLogSuggestion`,
+    exact: true,
+    name: "Add Food Log Suggestion",
+    component: AddEditFoodLogSuggestion,
   },
 
   { component: Page404 },

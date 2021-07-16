@@ -13,12 +13,12 @@ import {
    
 } from "@coreui/react"
 import CIcon from "@coreui/icons-react";
-import { listPhases, getFoodLogCategory } from "../../data/foodLogCategory"
+import { listPhases, getFoodLogCategory } from "../../data/foodLogManagement"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 
-function ViewFoodLogCategory(props) {
+function ViewFoodLogSuggestion(props) {
  let history = useHistory();
   let params = useParams();
 
@@ -74,7 +74,7 @@ let [categoryName,setCategoryName ] = useState("");
               <CCardHeader>
                 <div style={{display:"flex", justifyContent:"space-between"}}>
                   <h2>
-                    View Food Log Category
+                    View Food Log Suggestion
                     <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
                   
                   <CButton
@@ -125,4 +125,4 @@ let [categoryName,setCategoryName ] = useState("");
   
 }
 
-export default ViewFoodLogCategory
+export default ViewFoodLogSuggestion

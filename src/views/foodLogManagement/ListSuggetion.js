@@ -22,12 +22,12 @@ import {
 import CIcon from "@coreui/icons-react";
 import { FaFilter} from 'react-icons/fa';
 
-import { listFoodLogCategory,listPhases,toggleFoodLogCategoryStatus } from "../../data/foodLogCategory"
+import { listFoodLogSuggestion,listPhases,toggleFoodLogSuggestionStatus } from "../../data/foodLogManagement"
 import { StatusModal } from "../../utils/components/modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 
-function ListFoodLogCategory() {
+function ListFoodLogSuggestion() {
     let history = useHistory();
 
     let [data, setData] = useState([])
@@ -52,9 +52,10 @@ function ListFoodLogCategory() {
 
 
     const fields = [
-        { key: 's_no',label:"S.No.",_style: { width: "4%" } },
-        { key: 'food_type', lable: "Category",_style: { width: "60%" } },
-        { key: 'phase_id', label: "Phase",_style: { width: "8%" } },
+        { key: 's_no', label: "S.No.", _style: { width: "4%" } },
+        { key: 'food_name', lable: "Food",_style: { width: "30%" } },
+        { key: 'food_type', lable: "Category",_style: { width: "30%" } },
+        { key: 'week_selected', label: "Weeek",_style: { width: "8%" } },
         { key: 'status', label: "Status",_style: { width: "8%" } },
         { key: 'action',label:"Action",_style: { width: "20%" } },
     ]
@@ -73,7 +74,7 @@ function ListFoodLogCategory() {
                 },
                 data:{}
             }
-            let response = await toggleFoodLogCategoryStatus(req);
+            let response = await toggleFoodLogSuggestionStatus(req);
             setStatus(!status)
             setErrorResponse({ message: null, code: null, isFound: false })
 
@@ -115,7 +116,7 @@ function ListFoodLogCategory() {
                     req.queryParams.phase_id=phase
                 }
                 setLoading(true)
-                let response = await listFoodLogCategory(req);
+                let response = await listFoodLogSuggestion(req);
                 let updatedData = formatData(response.rows);
                 setData([...updatedData])
                 setDataCount(response.count)
@@ -155,10 +156,10 @@ function ListFoodLogCategory() {
                     <CCard>
                         <CCardHeader>
                             {/* <div style={{display:"flex", justifyContent:"space-between"}}> */}
-                                <h2>Food Log Category</h2>
+                                <h2>Food Log Suggestion</h2>
                                 <CButton
                                     style={{ width: "5rem",float:"right",backgroundColor:"#008080",color:"#fff"}}
-                                    onClick={()=> history.push('/addFoodLogCategory')}
+                                    onClick={()=> history.push('/addFoodLogSuggestion')}
                                 >
                                     <strong>Add</strong>
                                 </CButton>
@@ -182,7 +183,7 @@ function ListFoodLogCategory() {
                                         <CIcon name={'cilSearch'} />
                                     </CInputGroupText>
                                 </CInputGroupPrepend>
-                                <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by category"
+                                <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by food"
                                     value={searchValue}
                                     onChange={(e) => { setSearchValue(e.target.value) }}
                                 />
@@ -241,21 +242,21 @@ function ListFoodLogCategory() {
                             return (
                                 <td>
                                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
-                                        <CTooltip content={"Edit Food Log Category"} placement={"top-start"}>
+                                        <CTooltip content={"Edit Food Log Suggestion"} placement={"top-start"}>
                                             <CIcon style={{ color: "black", cursor: "pointer" }}
                                                 size="lg"
                                                 name={"cilPencil"}
-                                                onClick={()=>history.push(`/editFoodLogCategory/${item.id}`)}
+                                                onClick={()=>history.push(`/editFoodLogSuggestion/${item.id}`)}
                                             />
                                         </CTooltip>
-                                        <CTooltip content={`View Food Log Category`} placement={"top-start"}>
+                                        <CTooltip content={`View Food Log Suggestion`} placement={"top-start"}>
                                             <FontAwesomeIcon
                                                 color="green"
                                                 size="lg"
                                                 style={{ cursor: "pointer" }}
                                                 onClick={() =>
                                                 history.push({
-                                                    pathname: `/viewFoodLogCategory/${item.id}`,
+                                                    pathname: `/viewFoodLogSuggestion/${item.id}`,
                                                 })
                                                 }
                                                 icon={faEye}
@@ -318,4 +319,4 @@ function ListFoodLogCategory() {
     )
 }
 
-export default ListFoodLogCategory
+export default ListFoodLogSuggestion

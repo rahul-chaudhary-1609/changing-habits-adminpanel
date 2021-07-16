@@ -151,3 +151,129 @@ export const addFoodLogCategory = (req = {}) => {
     })
 
 }
+
+export const listFoodLogSuggestion = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let config = {
+                queryParams: req.queryParams
+            }
+            let response = await api.get(
+                apiConstant.listFoodLogSuggestion,
+                getHeader(config)
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+            
+        }
+        
+    })
+}
+
+export const toggleFoodLogSuggestionStatus = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await api.put(
+                `${apiConstant.toggleFoodLogSuggestionStatus}/${req.pathParams.id}`,
+                JSON.stringify(req.data),
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+        }
+        
+    })
+
+}
+
+export const getFoodLogSuggestion = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await api.get(
+                `${apiConstant.getFoodLogSuggestion}/${req.pathParams.id}`,
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+        }
+        
+    })
+
+}
+
+export const editFoodLogSuggestion = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await api.put(
+                `${apiConstant.editFoodLogSuggestion}/${req.pathParams.id}`,
+                JSON.stringify(req.data),
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+        }
+        
+    })
+
+}
+
+export const addFoodLogSuggestion = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await api.post(
+                `${apiConstant.addFoodLogSuggestion}`,
+                JSON.stringify(req.data),
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+        }
+        
+    })
+
+}

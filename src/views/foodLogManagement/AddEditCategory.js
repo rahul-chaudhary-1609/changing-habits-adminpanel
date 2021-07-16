@@ -15,7 +15,7 @@ import {
   CSelect,
   CSpinner
 } from "@coreui/react"
-import {listPhases,getFoodLogCategory,addFoodLogCategory,editFoodLogCategory} from "../../data/foodLogCategory"
+import {listPhases,getFoodLogCategory,addFoodLogCategory,editFoodLogCategory} from "../../data/foodLogManagement"
 
 
 function AddEditFoodLogCategory() {
