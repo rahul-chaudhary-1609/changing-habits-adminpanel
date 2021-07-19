@@ -33,6 +33,8 @@ import {
 import { useHistory, useParams } from "react-router-dom";
 import { UserValidation } from "../../reusable/validations/loginValidations";
 import DefaultUser from "../../assets/svgs/defaultUser";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 export default function EditUser(props) {
   const history = useHistory();
@@ -49,6 +51,7 @@ export default function EditUser(props) {
   const [successMsg, setSuccessMsg] = useState(null);
   const [refresh, setRefresh] = useState(false);
   const [tokenError, setTokenError] = useState(false);
+  const [code, setCode] = useState("+1");
 
   const initialValues = {
     name: userDetails.name ? userDetails.name : "",
@@ -123,6 +126,12 @@ export default function EditUser(props) {
       bodyFormData.name = values.name;
 
       if (params.id) {
+        if (values.email != userDetails.email) {
+          bodyFormData.email = values.email;
+        }
+        if (values.phone_no != userDetails.phone_no) {
+          bodyFormData.phone_no = values.phone_no;
+        }
         setLoading(true);
         const response = await EditUserDetails(bodyFormData, Number(params.id));
         setLoading(false);
@@ -132,7 +141,7 @@ export default function EditUser(props) {
         }
       } else {
         bodyFormData.email = values.email;
-        bodyFormData.country_code = values.country_code;
+        bodyFormData.country_code = code;
         bodyFormData.phone_no = values.phone_no;
         bodyFormData.subscription_status = subscriptionStatus;
         if (values.subscription_token_id) {
@@ -319,7 +328,6 @@ export default function EditUser(props) {
                     <CInput
                       type="text"
                       id="email"
-                      disabled="true"
                       name="email"
                       onBlur={formik.handleBlur}
                       value={formik.values.email}
@@ -343,7 +351,6 @@ export default function EditUser(props) {
                       type="text"
                       id="phone_no"
                       name="phone_no"
-                      disabled="true"
                       onBlur={formik.handleBlur}
                       value={formik.values.phone_no}
                       onChange={formik.handleChange}
@@ -549,15 +556,17 @@ export default function EditUser(props) {
                     </CLabel>
                   </CCol>
                   <CCol md="3">
-                    <CInput
-                      type="text"
+                    <PhoneInput
+                      defaultCountry="US"
                       id="country_code"
                       name="country_code"
-                      placeholder="code"
-                      onBlur={formik.handleBlur}
-                      value={formik.values.country_code}
-                      onChange={formik.handleChange}
-                      style={{ marginBottom: "5px" }}
+                      international
+                      value={code}
+                      onChange={setCode}
+                      inputProps={{
+                        name: "phone_no",
+                        autoFocus: true,
+                      }}
                     />
                     {formik.touched.country_code &&
                     formik.errors.country_code ? (

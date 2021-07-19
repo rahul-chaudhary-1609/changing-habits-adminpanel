@@ -50,8 +50,9 @@ const FAQS = () => {
     setStatusOpened(updatedStatus);
   };
 
-  const toggleEnable = (id) => {
-    setUserId(id);
+  const toggleEnable = (data) => {
+    setUserId(data.id);
+    setActive(data.status);
     setEnableModal(!enableModal);
   };
 
@@ -315,7 +316,7 @@ const FAQS = () => {
                                   />
                                 </CTooltip>
                                 <CSwitch
-                                  onChange={() => toggleEnable(ques.id)}
+                                  onChange={() => toggleEnable(ques)}
                                   size="sm"
                                   style={{ marginLeft: "10px" }}
                                   variant={"3d"}
