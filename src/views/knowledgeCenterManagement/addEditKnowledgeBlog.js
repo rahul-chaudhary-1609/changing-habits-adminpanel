@@ -503,7 +503,7 @@ function AddEditKnowledgeBlog(props) {
                       disabled={spinnerShow}
                       style={{ width: "5rem", marginRight:"3rem", backgroundColor: "#008080", color: "#fff" }}
                       type="submit"
-                    >{spinnerShow?<CSpinner style={{ color: "#fff"}} size="sm" />:"Save"}</CButton>
+                    >{spinnerShow?<CSpinner style={{ color: "#fff"}} size="sm" />:"Publish"}</CButton>
                     <CButton style={{width:"5rem",marginLeft:"3rem",}} color="danger" onClick={(e)=>history.goBack()} >Cancel</CButton>
                   </CFormGroup>
                   

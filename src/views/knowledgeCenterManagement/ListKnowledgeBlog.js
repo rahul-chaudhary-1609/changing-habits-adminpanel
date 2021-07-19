@@ -205,14 +205,14 @@ function ListKnowledgeBlog() {
                             return (
                                 <td>
                                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
-                                        <CTooltip content={"Edit Question"} placement={"top-start"}>
+                                        <CTooltip content={"Edit Blog"} placement={"top-start"}>
                                             <CIcon style={{ color: "black", cursor: "pointer" }}
                                                 size="lg"
                                                 name={"cilPencil"}
                                                 onClick={()=>history.push(`/editKnowledgeBlog/${item.id}`)}
                                             />
                                         </CTooltip>
-                                        <CTooltip content={`View Question`} placement={"top-start"}>
+                                        <CTooltip content={`View Blog`} placement={"top-start"}>
                                             <FontAwesomeIcon
                                                 color="green"
                                                 size="lg"
@@ -225,7 +225,7 @@ function ListKnowledgeBlog() {
                                                 icon={faEye}
                                             />
                                         </CTooltip>
-                                        <CTooltip content={`Delete Question`} placement={"top-start"}>
+                                        <CTooltip content={`Delete Blog`} placement={"top-start"}>
                                             <CIcon style={{ color: "red", cursor: "pointer" }}
                                                 size="lg"
                                                 name={"cilTrash"}

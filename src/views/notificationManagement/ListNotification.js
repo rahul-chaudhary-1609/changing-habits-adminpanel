@@ -107,7 +107,7 @@ function ListNotification() {
                                     style={{ width: "5rem",float:"right",backgroundColor:"#008080",color:"#fff"}}
                                     onClick={()=> history.push('/sendNotification')}
                                 >
-                                    <strong>Send</strong>
+                                    <strong>Add</strong>
                                 </CButton>
                             {/* </div> */}
                                             

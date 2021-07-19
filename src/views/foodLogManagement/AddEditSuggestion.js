@@ -13,19 +13,33 @@ import {
     CInput,
   CButton,
   CSelect,
-  CSpinner
+  CSpinner,
+  CInputGroup,
+  CInputGroupAppend,
+  CBadge
 } from "@coreui/react"
-import {listPhases,getFoodLogCategory,addFoodLogCategory,editFoodLogCategory} from "../../data/foodLogManagement"
-
+import {listPhases,getFoodTypeByPhaseId,getFoodLogSuggestion,addFoodLogSuggestion,editFoodLogSuggestion} from "../../data/foodLogManagement"
+import { FaPlus,FaMinus } from 'react-icons/fa';
 
 function AddEditFoodLogSuggestion() {
   let history = useHistory();
   let params = useParams();
 
-  let [categoryName, setCategoryName] = useState("");
-  let [categoryNameCheck,setCategoryNameCheck ] = useState(false);
   let [phase, setPhase] = useState(0);
-  let [phaseCheck,setPhaseCheck] = useState(false);
+  let [phaseCheck, setPhaseCheck] = useState(false);
+  let [category, setCategory] = useState(2);
+  let [categoryCheck, setCategoryCheck] = useState(false);
+  let [week, setWeek] = useState(0);
+  let [weekCheck, setWeekCheck] = useState(false);
+  let [foodName, setFoodName] = useState("");
+  let [foodNameCheck, setFoodNameCheck] = useState(false);
+  let [quantityInputFields, setQuantityInputFields] = useState(
+    [
+      { quantity_no: 1, quantity_value: "",check:false },
+    ]
+  )
+  let [quantityInputFieldsCheck, setQuantityInputFieldsCheck] = useState(false);
+
   let [errorResponse, setErrorResponse] = useState({
         message: null,
         code: null,
@@ -38,19 +52,26 @@ function AddEditFoodLogSuggestion() {
         isFound: true,
   });
 
-  let [phases, setPhases] = useState([])
+  let [phaseList, setPhaseList] = useState([])
+  let [categoryList, setCategoryList] = useState([])
+  let [weekList, setWeekList] = useState([
+    { id: 1, name: "Week 1", },
+    { id: 2, name: "Week 2" },
+    { id: 3, name: "Week 3" },
+    { id: 4, name: "Week 4" },
+  ])
   let [spinnerShow,setSpinnerShow]=useState(false)
   //let spinnerShow = false;
 
   useEffect(() => {
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
-  },[categoryName,phase,phases])
+  },[phase,phaseList,categoryList,weekList,category,week,foodName,quantityInputFields])
 
   useEffect(() => {
     setSpinnerShow(true)
     listPhases().then((response) => {
-      setPhases(response.phasesList)
+      setPhaseList(response.phasesList)
       setSpinnerShow(false)
     }).catch((error) => {
           setSpinnerShow(false)
@@ -64,10 +85,16 @@ function AddEditFoodLogSuggestion() {
         },
       }
       setSpinnerShow(true)
-      getFoodLogCategory(req).then((response) => {
+      getFoodLogSuggestion(req).then((response) => {
         setErrorResponse({ message: null, code: null, isFound: false })
-        setCategoryName(response.foodType.food_type)
-        setPhase(response.foodType.phase_id)
+        setPhase(response.foodContent.phase_id)
+        setCategory(response.foodContent.foodtype_id)
+        setWeek(response.foodContent.week_selected)
+        setFoodName(response.foodContent.food_name)
+        let currentQuantityInputFields= response.foodContent.food_quantity.map((quantity,index) => {
+          return { quantity_no: ++index, quantity_value: quantity, check: false };
+        })
+        setQuantityInputFields([...currentQuantityInputFields]);
         setSpinnerShow(false)
         
       }).catch((error) => {
@@ -77,14 +104,85 @@ function AddEditFoodLogSuggestion() {
     }
   }, [])
 
+    useEffect(() => {
+    if (phase > 0) {
+      let req = {
+        pathParams: {
+          id: phase,
+        },
+      }
+      setSpinnerShow(true)
+      getFoodTypeByPhaseId(req).then((response) => {
+        setSpinnerShow(false)
+        setCategoryList(response.foodTypeList)
+        setErrorResponse({ message: null, code: null, isFound: false })
+      }).catch((error) => {
+        setSpinnerShow(false)
+        setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+      })
+    }else {
+      setCategoryList([]);
+    }
+  }, [phase])
+
+  let handleAddQuantityField = () => {
+    if (quantityInputFields.length >= 0) {
+      setQuantityInputFieldsCheck(false);
+    }
+
+    let currentQuantityInputFields = [...quantityInputFields];
+    currentQuantityInputFields.push({ quantity_no: currentQuantityInputFields.length + 1, quantity_value: "",check:false })
+    setQuantityInputFields(currentQuantityInputFields)
+  }
+
+  let handleRemoveQuantityField = (index) => {
+    if (quantityInputFields.length < 2) {
+      setQuantityInputFieldsCheck(true);
+    }
+    let currentQuantityInputFields = [...quantityInputFields];
+    currentQuantityInputFields.splice(index, 1);
+    setQuantityInputFields(currentQuantityInputFields)
+  }
+
+  let handleChangeQuantityFieldValue = (index, e) => {
+    let currentQuantityInputFields = [...quantityInputFields];
+    currentQuantityInputFields[index].quantity_value = e.target.value;
+    currentQuantityInputFields[index].check = false;
+    setQuantityInputFields(currentQuantityInputFields)
+  }
+
   let validateField = () => {
     let result = true;
-    if (!categoryName || categoryName.trim() == "") {
-      setCategoryNameCheck(true)
+    if (!foodName || foodName.trim() == "") {
+      setFoodNameCheck(true)
       result=false
     }
     if (!phase || phase == 0) {
       setPhaseCheck(true)
+      result=false
+    }
+
+    if (!category || category == 0) {
+      setCategoryCheck(true)
+      result=false
+    }
+
+    if (!week || week == 0) {
+      setWeekCheck(true)
+      result=false
+    }
+
+    let currentQuantityInputFields = [...quantityInputFields]
+    for (let quantityInputField of currentQuantityInputFields) {
+      if (!quantityInputField.quantity_value || quantityInputField.quantity_value.trim() == "") {
+        quantityInputField.check = true;
+        result=false
+      }
+    }
+    setQuantityInputFields(currentQuantityInputFields);
+    
+    if (quantityInputFields.length<1) {
+      setQuantityInputFieldsCheck(true)
       result=false
     }
 
@@ -104,8 +202,8 @@ function AddEditFoodLogSuggestion() {
 
     
     let data = {
-      food_type: categoryName,
-      phase_id: phase
+      food_name: foodName,
+      food_quantity: quantityInputFields.map(quantityInputField=>quantityInputField.quantity_value),
     }
     
     if (params.id) {
@@ -117,25 +215,29 @@ function AddEditFoodLogSuggestion() {
         data
       }
 
-      editFoodLogCategory(req).then((response) => {
+      editFoodLogSuggestion(req).then((response) => {
         setSpinnerShow(false)
         setErrorResponse({ message: null, code: null, isFound: false })
         setSuccessResponse({ message: "Updated Successfully" || null, code: 200 || null, isFound: true })
-        history.push('/listFoodLogCategory')
+        history.push('/listFoodLogSuggestion')
       }).catch((error) => {
         setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     } else {
 
+      data.phase_id = phase;
+      data.foodtype_id = category;
+      data.week_selected = week;
+        
       let req = {
         data
       }
-      addFoodLogCategory(req).then((response) => {
+      addFoodLogSuggestion(req).then((response) => {
         setSpinnerShow(false)
         setErrorResponse({ message: null, code: null, isFound: false })
         setSuccessResponse({ message: "Saved Successfully" || null, code: 200 || null, isFound: true })
-        history.push('/listFoodLogCategory')
+        history.push('/listFoodLogSuggestion')
       }).catch((error) => {
         setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
@@ -143,14 +245,6 @@ function AddEditFoodLogSuggestion() {
     }    
   }
 
-  let handleReset = (e) => {
-    e.preventDefault();
-    setSpinnerShow(false)
-    setCategoryName("")
-    setPhase(1)
-    setPhaseCheck(false)
-    setCategoryNameCheck(false)
-  }
 
     return (
     <CContainer fluid>
@@ -177,8 +271,9 @@ function AddEditFoodLogSuggestion() {
                 <div style={{color:"green",fontSize:"1rem", display:successResponse.isFound?"flex":"none", justifyContent:"center"}}>
                   <div><h5>{ successResponse.message}</h5></div>
                   </div>
-                  <CForm action="" method="post" onSubmit={handleSubmit}>
-                      <CFormGroup>
+                <CForm action="" method="post" onSubmit={handleSubmit}>
+                  <div style={{display:"flex", justifyContent:"space-between"}}>
+                      <CFormGroup style={{width:"30%"}}>
           
                           <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
                           <CSelect
@@ -193,28 +288,101 @@ function AddEditFoodLogSuggestion() {
                           required
                           
                           > <option value="0" defaultValue>Select Phase</option>
-                          {phases.map((phase) => {
+                          {phaseList.map((phase) => {
                               return <option key={phase.id} value={phase.id}> {phase.phase_name}</option>
                           })}
                     </CSelect>
                     <div style={{color:"red",marginLeft:"0.1rem", display:phaseCheck?"":"none"}}>Phase is required</div>
+                    </CFormGroup>
+                    <CFormGroup  style={{width:"30%"}}>
+          
+                          <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="category">Category:</CLabel>
+                          <CSelect
+                      onChange={(e) => {
+                        setCategoryCheck(false)
+                        setCategory(e.target.value)
+                      }}
+                          value={category}
+                          id="category"
+                          name="category"
+                          custom
+                          required
+                          
+                          > <option value="0" defaultValue>Select Category</option>
+                          {categoryList.map((category) => {
+                              return <option key={category.id} value={category.id}> {category.food_type}</option>
+                          })}
+                    </CSelect>
+                    <div style={{color:"red",marginLeft:"0.1rem", display:categoryCheck?"":"none"}}>Category is required</div>
+                    </CFormGroup>
+                    <CFormGroup  style={{width:"30%"}}>
+          
+                          <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="week">Week:</CLabel>
+                          <CSelect
+                      onChange={(e) => {
+                        setWeekCheck(false)
+                        setWeek(e.target.value)
+                      }}
+                          value={week}
+                          id="week"
+                          name="week"
+                          custom
+                          required
+                          
+                          > <option value="0" defaultValue>Select Week</option>
+                          {weekList.map((week) => {
+                              return <option key={week.id} value={week.id}> {week.name}</option>
+                          })}
+                    </CSelect>
+                    <div style={{color:"red",marginLeft:"0.1rem", display:weekCheck?"":"none"}}>Week is required</div>
                       </CFormGroup>
-                                
+                                </div>
                   <CFormGroup >                    
-                      <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="category_name">Category Name:</CLabel>
+                      <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="food_name">Food Name:</CLabel>
                     <CInput
                       onChange={(e) => {
-                        setCategoryNameCheck(false)
-                        setCategoryName(e.target.value)
+                        setFoodNameCheck(false)
+                        setFoodName(e.target.value)
                       }}
-                      value={categoryName}
+                      value={foodName}
                       type="text"
                       id="category_name"
                       name="category_name"
                       placeholder="Enter Category Name"
                       //required
                     />
-                    <div style={{color:"red",marginLeft:"0.1rem", display:categoryNameCheck?"":"none"}}>Category name is required</div>
+                    <div style={{color:"red",marginLeft:"0.1rem", display:foodNameCheck?"":"none"}}>Food name is required</div>
+                  </CFormGroup>
+
+                  <CFormGroup>
+                    <CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="quantity">Quantity:</CLabel>
+                    {quantityInputFields.map((quantityInputField, index) => {
+                      return (<>
+                      <CInputGroup style={{display:"flex",alignItems:"center",marginTop:quantityInputField.quantity_no>1?"0.5rem":"none"}}>
+                         <CInput
+                              onChange={(e) => handleChangeQuantityFieldValue(index,e)}
+                              value={quantityInputField.quantity_value}
+                              type="quantityInputField"
+                              id={`quantity${quantityInputField.quantity_no}`}
+                              name={`quantity${quantityInputField.quantity_no}`}
+                              placeholder={`Enter quantity ${quantityInputField.quantity_no}`}
+                              //required
+                          />                          
+                          <CInputGroupAppend style={{display:quantityInputFields.length>1?"":"none"}}>                              
+                                <CBadge style={{marginLeft:"0.5rem", cursor:"pointer"}} color="danger" onClick={()=>handleRemoveQuantityField(index)}><FaMinus/></CBadge>
+                          </CInputGroupAppend>
+                        </CInputGroup>
+                        <div style={{ color: "red", marginLeft: "0.1rem", display: quantityInputField.check ? "" : "none" }}>Quantity { quantityInputField.quantity_no} is required</div>
+                      </>
+                      )
+                    })}
+                    <div style={{ color: "red", marginLeft: "0.1rem", display: quantityInputFieldsCheck ? "" : "none" }}>Atleast two quantity are required</div>
+                    <CBadge
+                      style={{ marginTop: "0.5rem", cursor: "pointer",display:quantityInputFields.length<6?"":"none" }}
+                      color="secondary"
+                      onClick={handleAddQuantityField}
+                    ><FaPlus /></CBadge>
+                          
                   </CFormGroup>
 
                   

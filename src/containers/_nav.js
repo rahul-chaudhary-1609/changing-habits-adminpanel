@@ -33,17 +33,17 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Category",
+    name: "Food Log Category",
     to: "/listFoodLogCategory",
-    //icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
+    icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
   },
 
-  {
-    _tag: "CSidebarNavItem",
-    name: "Suggestion",
-    to: "/listFoodLogSuggestion",
-    //icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
-  },
+  // {
+  //   _tag: "CSidebarNavItem",
+  //   name: "Food Log Suggestion",
+  //   to: "/listFoodLogSuggestion",
+  //   icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
+  // },
   
   {
     _tag: "CSidebarNavItem",

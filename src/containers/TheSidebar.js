@@ -40,31 +40,7 @@ const TheSidebar = () => {
       </CSidebarBrand>
       <CSidebarNav>
         <CCreateElement
-          items={navigation.slice(0,4)}
-          components={{
-            CSidebarNavDivider,
-            CSidebarNavDropdown,
-            CSidebarNavItem,
-            CSidebarNavTitle,
-          }}
-        />
-        <CSidebarNavDropdown
-          name="Food Log Management"
-          icon={<CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />}
-
-        >
-         <CCreateElement
-          items={navigation.slice(4,6)}
-          components={{
-            CSidebarNavDivider,
-            CSidebarNavDropdown,
-            CSidebarNavItem,
-            CSidebarNavTitle,
-          }}
-        />
-        </CSidebarNavDropdown>
-        <CCreateElement
-          items={navigation.slice(6)}
+          items={navigation}
           components={{
             CSidebarNavDivider,
             CSidebarNavDropdown,

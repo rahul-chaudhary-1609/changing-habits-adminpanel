@@ -53,8 +53,9 @@ function ListFoodLogSuggestion() {
 
     const fields = [
         { key: 's_no', label: "S.No.", _style: { width: "4%" } },
-        { key: 'food_name', lable: "Food",_style: { width: "30%" } },
-        { key: 'food_type', lable: "Category",_style: { width: "30%" } },
+        { key: 'food_name', lable: "Food",_style: { width: "26%" } },
+        { key: 'food_type', lable: "Category", _style: { width: "26%" } },
+        { key: 'phase_id', label: "Phase",_style: { width: "8%" } },
         { key: 'week_selected', label: "Weeek",_style: { width: "8%" } },
         { key: 'status', label: "Status",_style: { width: "8%" } },
         { key: 'action',label:"Action",_style: { width: "20%" } },
@@ -297,6 +298,9 @@ function ListFoodLogSuggestion() {
                                     {item.status == 1 ? <CBadge color="success">Active</CBadge> : <CBadge color="danger">Blocked</CBadge>}
                                 </td>
                             )
+                        },
+                        week_selected: (item, index) => {
+                            return (<td>{ `Week ${item.week_selected}`}</td>)
                         }
                     }}
                 ></CDataTable>
