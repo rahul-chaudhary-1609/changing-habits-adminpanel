@@ -52,11 +52,11 @@ function ListFoodLogCategory() {
 
 
     const fields = [
-        { key: 's_no',label:"S.No." },
-        { key: 'food_type', lable: "Category" },
-        { key: 'phase_id', label: "Phase" },
-        { key: 'status', label: "Status" },
-        { key: 'action',label:"Action",_style: { minWidth: "7rem" } },
+        { key: 's_no',label:"S.No.",_style: { width: "4%" } },
+        { key: 'food_type', lable: "Category",_style: { width: "60%" } },
+        { key: 'phase_id', label: "Phase",_style: { width: "8%" } },
+        { key: 'status', label: "Status",_style: { width: "8%" } },
+        { key: 'action',label:"Action",_style: { width: "20%" } },
     ]
 
     let toggleModal = (item) => {
@@ -187,7 +187,7 @@ function ListFoodLogCategory() {
                                     onChange={(e) => { setSearchValue(e.target.value) }}
                                 />
                                 <CButton style={{ marginLeft: "1rem",backgroundColor:"#008080",color:"#fff" }}
-                                    onClick={() => { setSearchKey(searchValue != "" ? searchValue : null) }}
+                                    onClick={() => { setSearchKey(searchValue.trim() != "" ? searchValue.trim() : null) }}
                                 >
                                     Search
                                 </CButton>

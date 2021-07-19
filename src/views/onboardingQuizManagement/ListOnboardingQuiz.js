@@ -49,9 +49,9 @@ function ListOnboardingQuiz() {
 
 
     const fields = [
-        { key: 's_no',label:"S.No." },
-        { key: 'question', lable: "Question" },
-        { key: 'action',label:"Action",_style: { minWidth: "7rem" } },
+        { key: 's_no',label:"S.No.",_style: { width: "4%" } },
+        { key: 'question', lable: "Question",_style: { width: "76%" } },
+        { key: 'action',label:"Action",_style: { width: "20%" } },
     ]
 
     let toggleModal = (item) => {
@@ -169,7 +169,7 @@ function ListOnboardingQuiz() {
                                     onChange={(e) => { setSearchValue(e.target.value) }}
                                 />
                                 <CButton style={{ marginLeft: "1rem", backgroundColor:"#008080",color:"#fff"}}
-                                    onClick={() => { setSearchKey(searchValue != "" ? searchValue : null) }}
+                                    onClick={() => { setSearchKey(searchValue.trim() != "" ? searchValue.trim() : null) }}
                                 >
                                     Search
                                 </CButton>

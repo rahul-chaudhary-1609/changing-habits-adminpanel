@@ -51,11 +51,11 @@ function ListKnowledgeBlog() {
 
 
     const fields = [
-        { key: 's_no',label:"S.No.",_style: {width: "5rem" } },
-        { key: 'title', lable: "Title" },
-        { key:'media',label:"Image/Audio/Video",_style: {width: "12rem" }},
-        { key: 'posted_date', lable: "Posted Date",_style: {width: "12rem" } },
-        { key: 'action',label:"Action",_style: { width: "8rem" } },
+        { key: 's_no',label:"S.No.",_style: {width: "4%" } },
+        { key: 'title', lable: "Title",_style: {width: "36%" } },
+        { key:'media',label:"Image/Audio/Video",_style: {width: "20%" }},
+        { key: 'posted_date', lable: "Posted Date",_style: {width: "20%" } },
+        { key: 'action',label:"Action",_style: { width: "20%" } },
     ]
 
     let toggleModal = (item) => {
@@ -174,7 +174,7 @@ function ListKnowledgeBlog() {
                                     onChange={(e) => { setSearchValue(e.target.value) }}
                                 />
                                 <CButton style={{ marginLeft: "1rem", backgroundColor:"#008080",color:"#fff"}}
-                                    onClick={() => { setSearchKey(searchValue != "" ? searchValue : null) }}
+                                    onClick={() => { setSearchKey(searchValue.trim() != "" ? searchValue.trim() : null) }}
                                 >
                                     Search
                                 </CButton>
