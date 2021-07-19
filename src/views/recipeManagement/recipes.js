@@ -60,6 +60,11 @@ const fields = [
     _style: { fontFamily: "Poppins" },
   },
   {
+    key: "phase",
+    label: "Phase",
+    _style: { fontFamily: "Poppins" },
+  },
+  {
     key: "created_at",
     label: "Posted Date",
     _style: { fontFamily: "Poppins" },
@@ -107,6 +112,7 @@ const Recipes = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [recipeType, setRecipeType] = useState(null);
   const [recipeStatus, setRecipeStatus] = useState(null);
+  const [phaseId, setPhaseId] = useState(null);
   let currentId = page && page * 10 - 10;
 
   var recipe_status = [
@@ -142,6 +148,53 @@ const Recipes = () => {
       value: 2,
     },
   ];
+
+  var phase_id = [
+    {
+      label: "All Phases",
+      value: null,
+    },
+    {
+      label: "kisckstart",
+      value: 1,
+    },
+    {
+      label: "phase 1",
+      value: 2,
+    },
+    {
+      label: "phase 2",
+      value: 3,
+    },
+    {
+      label: "phase 3",
+      value: 4,
+    },
+    {
+      label: "phase 4",
+      value: 5,
+    },
+    {
+      label: "phase 4 eva",
+      value: 6,
+    },
+  ];
+  const phaseShow = (phase) => {
+    switch (phase) {
+      case 1:
+        return "kisckstart";
+      case 2:
+        return "phase 1";
+      case 3:
+        return "phase 2";
+      case 4:
+        return "phase 3";
+      case 5:
+        return "phase 4";
+      default:
+        return "phase 4 eva";
+    }
+  };
 
   const pageChange = (newPage) => {
     let newPage1 = newPage;
@@ -212,8 +265,9 @@ const Recipes = () => {
         let dropdown = {};
         dropdown.recipeType = recipeType ? Number(recipeType) : null;
         dropdown.recipeStatus = recipeStatus ? Number(recipeStatus) : null;
+        dropdown.phaseId = phaseId ? Number(phaseId) : null;
         const data =
-          recipeType || recipeStatus
+          phaseId || recipeType || recipeStatus
             ? await GetRecipeList(currentPage, currentPageSearch, dropdown)
             : await GetRecipeList(currentPage, currentPageSearch);
         setLoading(false);
@@ -237,7 +291,15 @@ const Recipes = () => {
     getData();
 
     currentPage !== page && setPage(currentPage);
-  }, [currentPage, currentPageSearch, refresh, page, recipeStatus, recipeType]);
+  }, [
+    currentPage,
+    currentPageSearch,
+    refresh,
+    page,
+    recipeStatus,
+    recipeType,
+    phaseId,
+  ]);
 
   return (
     <CRow>
@@ -295,100 +357,131 @@ const Recipes = () => {
               }
               clickableRows
               overTableSlot={
-                <CCol style={{ marginBottom: "1rem", display: "flex" }}>
-                  <CInputGroup>
-                    <CInputGroupPrepend>
-                      <CInputGroupText
-                        style={{ backgroundColor: "teal", color: "white" }}
-                      >
-                        <CIcon content={freeSet.cilSearch} />
-                      </CInputGroupText>
-                    </CInputGroupPrepend>
-                    <CInput
-                      style={{ maxWidth: "15rem" }}
-                      value={onsearchCHange}
-                      onChange={handleSearchChange}
-                      id="input1-group1"
-                      name="input1-group1"
-                      placeholder="Search by Recipe Title"
-                    />
+                <>
+                  <CCol style={{ marginBottom: "1rem", display: "flex" }}>
+                    <CInputGroup>
+                      <CInputGroupPrepend>
+                        <CInputGroupText
+                          style={{ backgroundColor: "teal", color: "white" }}
+                        >
+                          <CIcon content={freeSet.cilSearch} />
+                        </CInputGroupText>
+                      </CInputGroupPrepend>
+                      <CInput
+                        style={{ maxWidth: "15rem" }}
+                        value={onsearchCHange}
+                        onChange={handleSearchChange}
+                        id="input1-group1"
+                        name="input1-group1"
+                        placeholder="Search by Recipe Title"
+                      />
 
-                    <CButton
-                      onClick={handleSearch}
-                      style={{
-                        marginLeft: "1rem",
-                        backgroundColor: "teal",
-                        color: "white",
-                      }}
-                    >
-                      Search
-                    </CButton>
-                    <CButton
-                      onClick={() => {
-                        handleReset();
-                      }}
-                      style={{
-                        marginLeft: "1rem",
-                        backgroundColor: "teal",
-                        color: "white",
-                      }}
-                    >
-                      Reset
-                    </CButton>
-                  </CInputGroup>
-                  <CInputGroup style={{ width: "36%", marginRight: "10px" }}>
-                    <CInputGroupText
-                      style={{
-                        borderRadius: "2px",
-                        backgroundColor: "#008080",
-                        color: "#fff",
-                      }}
-                    >
-                      <FaFilter />
-                    </CInputGroupText>
-                    <CSelect
-                      onChange={(e) => {
-                        setRecipeStatus(e.target.value);
-                      }}
-                      custom
-                      value={recipeStatus}
-                      name="status"
-                      id="status"
-                    >
-                      {recipe_status.map((item) => (
-                        <option key={item.value} value={item.value}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </CSelect>
-                  </CInputGroup>
-                  <CInputGroup style={{ width: "34%" }}>
-                    <CInputGroupText
-                      style={{
-                        borderRadius: "2px",
-                        backgroundColor: "#008080",
-                        color: "#fff",
-                      }}
-                    >
-                      <FaFilter />
-                    </CInputGroupText>
-                    <CSelect
-                      onChange={(e) => {
-                        setRecipeType(e.target.value);
-                      }}
-                      custom
-                      value={recipeType}
-                      name="recipe_type"
-                      id="recipe_type"
-                    >
-                      {recipe_type.map((item) => (
-                        <option key={item.value} value={item.value}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </CSelect>
-                  </CInputGroup>
-                </CCol>
+                      <CButton
+                        onClick={handleSearch}
+                        style={{
+                          marginLeft: "1rem",
+                          backgroundColor: "teal",
+                          color: "white",
+                        }}
+                      >
+                        Search
+                      </CButton>
+                      <CButton
+                        onClick={() => {
+                          handleReset();
+                        }}
+                        style={{
+                          marginLeft: "1rem",
+                          backgroundColor: "teal",
+                          color: "white",
+                        }}
+                      >
+                        Reset
+                      </CButton>
+                    </CInputGroup>
+                  </CCol>
+                  <CCol style={{ marginBottom: "1rem", display: "flex" }}>
+                    <CInputGroup style={{ width: "34%", marginRight: "10px" }}>
+                      <CInputGroupText
+                        style={{
+                          borderRadius: "2px",
+                          backgroundColor: "#008080",
+                          color: "#fff",
+                        }}
+                      >
+                        <FaFilter />
+                      </CInputGroupText>
+                      <CSelect
+                        onChange={(e) => {
+                          setRecipeStatus(e.target.value);
+                        }}
+                        custom
+                        value={recipeStatus}
+                        name="status"
+                        id="status"
+                      >
+                        {recipe_status.map((item) => (
+                          <option key={item.value} value={item.value}>
+                            {item.label}
+                          </option>
+                        ))}
+                      </CSelect>
+                    </CInputGroup>
+                    <CInputGroup style={{ width: "34%", marginRight: "10px" }}>
+                      <CInputGroupText
+                        style={{
+                          borderRadius: "2px",
+                          backgroundColor: "#008080",
+                          color: "#fff",
+                        }}
+                      >
+                        <FaFilter />
+                      </CInputGroupText>
+                      <CSelect
+                        onChange={(e) => {
+                          setRecipeType(e.target.value);
+                        }}
+                        custom
+                        value={recipeType}
+                        name="recipe_type"
+                        id="recipe_type"
+                      >
+                        {recipe_type.map((item) => (
+                          <option key={item.value} value={item.value}>
+                            {item.label}
+                          </option>
+                        ))}
+                      </CSelect>
+                    </CInputGroup>
+
+                    <CInputGroup style={{ width: "34%" }}>
+                      <CInputGroupText
+                        style={{
+                          borderRadius: "2px",
+                          backgroundColor: "#008080",
+                          color: "#fff",
+                        }}
+                      >
+                        <FaFilter />
+                      </CInputGroupText>
+                      <CSelect
+                        onChange={(e) => {
+                          setPhaseId(e.target.value);
+                        }}
+                        custom
+                        value={phaseId}
+                        name="phase_id"
+                        id="phase_id"
+                      >
+                        {phase_id.map((item) => (
+                          <option key={item.value} value={item.value}>
+                            {item.label}
+                          </option>
+                        ))}
+                      </CSelect>
+                    </CInputGroup>
+                  </CCol>
+                </>
               }
               underTableSlot={
                 <div style={{ marginBottom: "1rem" }}>
@@ -447,6 +540,8 @@ const Recipes = () => {
                     )}
                   </td>
                 ),
+
+                phase: (item) => <td>{phaseShow(item.phase_id)}</td>,
                 show_details: (item) => {
                   return (
                     <td>

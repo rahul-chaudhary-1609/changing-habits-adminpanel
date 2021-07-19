@@ -301,7 +301,6 @@ export const ViewUserDetails = (user_id) => {
 };
 
 export const GetUserList = (page, search, data) => {
-  debugger;
   let searchKey;
   if (search) {
     searchKey = `&searchKey=${search}`;
@@ -434,11 +433,16 @@ export const GetRecipeList = (page, search, data) => {
     status = `&status=${data.recipeStatus}`;
   } else status = "";
 
+  let phase_id;
+  if (data && data.phaseId) {
+    phase_id = `&phase_id=${data.phaseId}`;
+  } else phase_id = "";
+
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
         apiConstant.GetRecipesList.concat(
-          `${page}${searchKey}${type}${status}`
+          `${page}${searchKey}${type}${status}${phase_id}`
         ),
         {
           headers: header(),

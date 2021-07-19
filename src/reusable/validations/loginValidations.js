@@ -140,7 +140,6 @@ export const UserValidation = (subscriptionStatus) => {
       .matches(phoneRegExp, "Phone Number is not valid")
       .required("Phone Number is required")
       .max(10, "Phone Number cannot exceed 10 characters"),
-    country_code: yup.string().required("Please enter Country Code e.g. +91"),
     subscription_token_id: subscriptionStatus
       ? yup.string().required("Token Id is required")
       : "",
