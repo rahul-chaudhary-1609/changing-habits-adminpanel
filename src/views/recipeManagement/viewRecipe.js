@@ -72,6 +72,7 @@ export default function ViewRecipe() {
             data.reject_reason = rejectReason;
           }
           await ToggleRecipeStatus(params.id, data);
+          setRejectReason("");
           setRefresh(!refresh);
           history.push(`/recipeManagement`);
         } catch (error) {
@@ -132,6 +133,7 @@ export default function ViewRecipe() {
                       type="text"
                       id="reject_reason"
                       name="reject_reason"
+                      value={rejectReason}
                       onChange={(e) => {
                         setRejectReason(e.target.value);
                       }}

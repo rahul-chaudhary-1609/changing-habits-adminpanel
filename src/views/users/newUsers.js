@@ -167,6 +167,7 @@ const Users = () => {
             data.block_reason = blockReason;
           }
           await ChangeUserStatus(userId, data);
+          setBlockReason("");
           setRefresh(!refresh);
         } catch (error) {
           console.log(error);
@@ -271,6 +272,7 @@ const Users = () => {
                     type="text"
                     id="block_reason"
                     name="block_reason"
+                    value={blockReason}
                     onChange={(e) => {
                       setBlockReason(e.target.value);
                     }}
