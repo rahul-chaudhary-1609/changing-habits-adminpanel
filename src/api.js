@@ -589,11 +589,15 @@ export const getFaqById = (faq_id) => {
   });
 };
 
-export const getFaqs = (page) => {
+export const getFaqs = (page, searchword) => {
+  let searchKey = "";
+  if (searchword) {
+    searchKey = `&searchKey=${searchword}`;
+  } else searchKey = "";
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
-        apiConstant.GetFaqs.concat(`?page=${page}&page_size=10`),
+        apiConstant.GetFaqs.concat(`?page=${page}${searchKey}`),
         {
           headers: header(),
         }
