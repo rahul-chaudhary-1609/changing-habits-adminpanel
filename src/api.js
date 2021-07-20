@@ -344,14 +344,12 @@ export const GetUserList = (page, search, data) => {
   });
 };
 
-export const ChangeUserStatus = (id, status) => {
+export const ChangeUserStatus = (id, data) => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.put(
         `${apiConstant.ChangeUserStatus}/${id}`,
-        {
-          status: status,
-        },
+        data,
         {
           headers: header(),
         }
@@ -724,14 +722,12 @@ export const ToggleFaqStatus = (faq_id) => {
   });
 };
 
-export const ToggleRecipeStatus = (recipe_id, status) => {
+export const ToggleRecipeStatus = (recipe_id, data) => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.put(
         `${apiConstant.ToggleRecipeStatus}/${recipe_id}`,
-        {
-          status: status,
-        },
+        data,
         {
           headers: header(),
         }

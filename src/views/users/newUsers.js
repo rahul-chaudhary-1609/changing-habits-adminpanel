@@ -22,6 +22,8 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CSelect,
+  CFormGroup,
+  CLabel,
 } from "@coreui/react";
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
@@ -30,7 +32,7 @@ import { FaFilter } from "react-icons/fa";
 
 import { GetUserList, ChangeUserStatus } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 const getBadge = (status) => {
   switch (status) {
@@ -130,6 +132,8 @@ const Users = () => {
   const [enableModal, setEnableModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [blockReason, setBlockReason] = useState("");
+  const [blockMsgError, setBlockMsgError] = useState(null);
   let currentId = page && page * 10 - 10;
 
   const pageChange = (newPage) => {
@@ -145,21 +149,25 @@ const Users = () => {
     setUserId(id);
     setActive(status);
     setEnableModal(!enableModal);
+    setBlockMsgError(null);
   };
 
   const handleEnable = async () => {
-    try {
-      setEnableModal(!enableModal);
-      let pass;
-      if (active) {
-        pass = 0;
-      } else {
-        pass = 1;
+    if (active && blockReason == "") {
+      setBlockMsgError("Reason is required");
+    } else {
+      try {
+        setEnableModal(!enableModal);
+        let data = {};
+        data.status = active ? 0 : 1;
+        if (blockReason) {
+          data.block_reason = blockReason;
+        }
+        await ChangeUserStatus(userId, data);
+        setRefresh(!refresh);
+      } catch (error) {
+        console.log(error);
       }
-      await ChangeUserStatus(userId, pass);
-      setRefresh(!refresh);
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -245,6 +253,39 @@ const Users = () => {
           {active
             ? "Are you sure you want to Block the User?"
             : "Are you sure you want to Unblock the User?"}
+
+          {active ? (
+            <div style={{ paddingTop: "5px" }}>
+              <CFormGroup row>
+                <CCol md="2">
+                  <CLabel htmlFor="hf-categorytype">
+                    <h6>Reason:</h6>
+                  </CLabel>
+                </CCol>
+                <CCol xs="12" md="10">
+                  <CInput
+                    type="text"
+                    id="block_reason"
+                    name="block_reason"
+                    onChange={(e) => {
+                      setBlockReason(e.target.value);
+                    }}
+                    placeholder="Provide here the reason of blocking the user"
+                  />
+                </CCol>
+                {blockMsgError ? (
+                  <div
+                    className="email-validate"
+                    style={{ marginLeft: "6.2rem" }}
+                  >
+                    {blockMsgError}
+                  </div>
+                ) : null}
+              </CFormGroup>
+            </div>
+          ) : (
+            ""
+          )}
         </CModalBody>
         <CModalFooter style={{ height: "4rem" }}>
           <CButton
@@ -431,13 +472,22 @@ const Users = () => {
                         Active
                       </CBadge>
                     ) : (
-                      <CBadge
-                        style={{ width: "4rem", height: "1.1rem" }}
-                        shape="pill"
-                        color={getBadge("Banned")}
-                      >
-                        Blocked
-                      </CBadge>
+                      <>
+                        <CBadge
+                          style={{ width: "4rem", height: "1.1rem" }}
+                          shape="pill"
+                          color={getBadge("Banned")}
+                        >
+                          Blocked
+                        </CBadge>
+                        <FontAwesomeIcon
+                          color="white"
+                          size="sm"
+                          title={item.block_reason}
+                          style={{ cursor: "pointer", color: "black" }}
+                          icon={faInfoCircle}
+                        />
+                      </>
                     )}
                   </td>
                 ),

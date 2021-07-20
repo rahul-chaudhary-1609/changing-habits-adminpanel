@@ -26,10 +26,10 @@ import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import moment from "moment";
 import { FaFilter } from "react-icons/fa";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle, faEye } from "@fortawesome/free-solid-svg-icons";
 
 import { GetRecipeList, ChangeUserStatus, DeleteRecipe } from "../../api";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 const getBadge = (status) => {
   switch (status) {
@@ -155,7 +155,7 @@ const Recipes = () => {
       value: null,
     },
     {
-      label: "kisckstart",
+      label: "kickstart",
       value: 1,
     },
     {
@@ -530,13 +530,22 @@ const Recipes = () => {
                         Approved
                       </CBadge>
                     ) : (
-                      <CBadge
-                        style={{ width: "4rem", height: "1.1rem" }}
-                        shape="pill"
-                        color={getBadge("Banned")}
-                      >
-                        Rejected
-                      </CBadge>
+                      <>
+                        <CBadge
+                          style={{ width: "4rem", height: "1.1rem" }}
+                          shape="pill"
+                          color={getBadge("Banned")}
+                        >
+                          Rejected
+                        </CBadge>
+                        <FontAwesomeIcon
+                          color="white"
+                          size="sm"
+                          title={item.reject_reason}
+                          style={{ cursor: "pointer", color: "black" }}
+                          icon={faInfoCircle}
+                        />
+                      </>
                     )}
                   </td>
                 ),

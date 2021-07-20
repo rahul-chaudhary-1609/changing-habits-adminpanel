@@ -50,7 +50,7 @@ export default function EditUser(props) {
   const [tokenId, setTokenId] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
   const [refresh, setRefresh] = useState(false);
-  const [tokenError, setTokenError] = useState(false);
+  const [tokenError, setTokenError] = useState(null);
   const [code, setCode] = useState("+1");
 
   const initialValues = {
@@ -131,6 +131,9 @@ export default function EditUser(props) {
         }
         if (values.phone_no != userDetails.phone_no) {
           bodyFormData.phone_no = values.phone_no;
+        }
+        if (code != userDetails.country_code) {
+          bodyFormData.country_code = code;
         }
         setLoading(true);
         const response = await EditUserDetails(bodyFormData, Number(params.id));
@@ -346,7 +349,20 @@ export default function EditUser(props) {
                       <h6>Mobile Number</h6>
                     </CLabel>
                   </CCol>
-                  <CCol xs="12" md="9">
+                  <CCol md="4">
+                    <PhoneInput
+                      id="country_code"
+                      name="country_code"
+                      international
+                      value={userDetails.country_code}
+                      onChange={setCode}
+                      inputProps={{
+                        name: "phone_no",
+                        autoFocus: true,
+                      }}
+                    />
+                  </CCol>
+                  <CCol md="5">
                     <CInput
                       type="text"
                       id="phone_no"
@@ -439,7 +455,7 @@ export default function EditUser(props) {
                     cursor: "pointer",
                     paddingBottom: "10px",
                   }}
-                  onClick={() => setTokenError(false)}
+                  onClick={() => setTokenError(null)}
                 >
                   <CLink onClick={() => setUpgradeModal(!upgradeModal)}>
                     <u>
