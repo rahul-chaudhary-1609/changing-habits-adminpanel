@@ -156,17 +156,21 @@ const Users = () => {
     if (active && blockReason == "") {
       setBlockMsgError("Reason is required");
     } else {
-      try {
-        setEnableModal(!enableModal);
-        let data = {};
-        data.status = active ? 0 : 1;
-        if (blockReason) {
-          data.block_reason = blockReason;
+      if (blockReason.length > 250) {
+        setBlockMsgError("Reason cannot exceed 250 characters");
+      } else {
+        try {
+          setEnableModal(!enableModal);
+          let data = {};
+          data.status = active ? 0 : 1;
+          if (blockReason) {
+            data.block_reason = blockReason;
+          }
+          await ChangeUserStatus(userId, data);
+          setRefresh(!refresh);
+        } catch (error) {
+          console.log(error);
         }
-        await ChangeUserStatus(userId, data);
-        setRefresh(!refresh);
-      } catch (error) {
-        console.log(error);
       }
     }
   };
@@ -480,13 +484,20 @@ const Users = () => {
                         >
                           Blocked
                         </CBadge>
-                        <FontAwesomeIcon
-                          color="white"
-                          size="sm"
-                          title={item.block_reason}
-                          style={{ cursor: "pointer", color: "black" }}
-                          icon={faInfoCircle}
-                        />
+                        <div>
+                          <CTooltip
+                            content={item.block_reason}
+                            placement={"top-start"}
+                            boundaries={"scrollParent"}
+                          >
+                            <FontAwesomeIcon
+                              color="white"
+                              size="sm"
+                              style={{ cursor: "pointer", color: "black" }}
+                              icon={faInfoCircle}
+                            />
+                          </CTooltip>
+                        </div>
                       </>
                     )}
                   </td>

@@ -212,22 +212,6 @@ const Recipes = () => {
     setDeleteModal(!deleteModal);
   };
 
-  const handleEnable = async () => {
-    try {
-      setEnableModal(!enableModal);
-      let pass;
-      if (active) {
-        pass = 0;
-      } else {
-        pass = 1;
-      }
-      await ChangeUserStatus(userId, pass);
-      setRefresh(!refresh);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleDelete = async () => {
     try {
       setDeleteModal(!deleteModal);
@@ -538,13 +522,20 @@ const Recipes = () => {
                         >
                           Rejected
                         </CBadge>
-                        <FontAwesomeIcon
-                          color="white"
-                          size="sm"
-                          title={item.reject_reason}
-                          style={{ cursor: "pointer", color: "black" }}
-                          icon={faInfoCircle}
-                        />
+                        <div>
+                          <CTooltip
+                            content={item.reject_reason}
+                            placement={"top-start"}
+                            boundaries={"scrollParent"}
+                          >
+                            <FontAwesomeIcon
+                              color="white"
+                              size="sm"
+                              style={{ cursor: "pointer", color: "black" }}
+                              icon={faInfoCircle}
+                            />
+                          </CTooltip>
+                        </div>
                       </>
                     )}
                   </td>

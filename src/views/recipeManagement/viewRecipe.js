@@ -61,17 +61,22 @@ export default function ViewRecipe() {
     if (action == "reject" && rejectReason == "") {
       setRejectedMsgError("Reason is required");
     } else {
-      try {
-        setEnableModal(!enableModal);
-        let data = {};
-        data.status = action == "reject" ? 2 : 1;
-        if (rejectReason) {
-          data.reject_reason = rejectReason;
+      if (rejectReason.length > 250) {
+        setRejectedMsgError("Reason cannot exceed 250 characters");
+      } else {
+        try {
+          setEnableModal(!enableModal);
+          let data = {};
+          data.status = action == "reject" ? 2 : 1;
+          if (rejectReason) {
+            data.reject_reason = rejectReason;
+          }
+          await ToggleRecipeStatus(params.id, data);
+          setRefresh(!refresh);
+          history.push(`/recipeManagement`);
+        } catch (error) {
+          console.log(error);
         }
-        await ToggleRecipeStatus(params.id, data);
-        setRefresh(!refresh);
-      } catch (error) {
-        console.log(error);
       }
     }
   };
