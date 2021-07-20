@@ -117,8 +117,6 @@ function AddEditLearningQuiz() {
         let currentOptionInputFields = [
           { option_no: 1, option_value:response.quizDetails.option_1 ,isRequired:false,check:false },
           { option_no: 2, option_value: response.quizDetails.option_2,isRequired:false,check:false },
-          //{ option_no: 3, option_value: response.quizDetails.option_3,isRequired:false,check:false },
-          //{ option_no: 4, option_value: response.quizDetails.option_4, isRequired: true },
         ];
         if (response.quizDetails.option_3) {
           currentOptionInputFields.push({ option_no: 3, option_value:response.quizDetails.option_3 ,isRequired:false,check:false })
@@ -174,13 +172,15 @@ function AddEditLearningQuiz() {
     if (optionInputFields.length >= 1) {
       setOptionInputFieldsCheck(false);
     }
-    if (optionInputFields.length < 6) {
-      let currentOptionInputFields = [...optionInputFields];
-      currentOptionInputFields.push({ option_no: currentOptionInputFields.length + 1, option_value: "", isRequired: false,check:false })
-      setOptionInputFields(currentOptionInputFields)
-    } else {
-      setErrorResponse({ message: "Maximum 6 options are allowed", code: null, isFound: true })
-    }
+    
+    let currentOptionInputFields = [...optionInputFields];
+    currentOptionInputFields.push({ option_no: currentOptionInputFields.length + 1, option_value: "", isRequired: false,check:false })
+    currentOptionInputFields=currentOptionInputFields.map((currentOptionInputField, key) => {
+      return {...currentOptionInputField,option_no:++key}
+    })
+    setOptionInputFields(currentOptionInputFields)
+    setCorrectOption(0)
+    
   }
 
   let handleRemoveOptionField = (index) => {
@@ -189,7 +189,11 @@ function AddEditLearningQuiz() {
     }
     let currentOptionInputFields = [...optionInputFields];
     currentOptionInputFields.splice(index, 1);
+    currentOptionInputFields=currentOptionInputFields.map((currentOptionInputField, key) => {
+        return {...currentOptionInputField,option_no:++key}
+    })
     setOptionInputFields(currentOptionInputFields)
+    setCorrectOption(0)
   }
 
   let handleChangeOptionFieldValue = (index, e) => {
@@ -260,7 +264,9 @@ function AddEditLearningQuiz() {
     }
 
     optionInputFields.forEach((optionInputField) => {
-      data[`option_${optionInputField.option_no}`]=optionInputField.option_value
+      if (optionInputField.option_value && optionInputField.option_value.trim() != "") {
+        data[`option_${optionInputField.option_no}`] = optionInputField.option_value
+      }
     })
     
     
@@ -316,7 +322,9 @@ function AddEditLearningQuiz() {
     }
 
     optionInputFields.forEach((optionInputField) => {
-      data[`option_${optionInputField.option_no}`]=optionInputField.option_value
+      if (optionInputField.option_value && optionInputField.option_value.trim() != "") {
+        data[`option_${optionInputField.option_no}`] = optionInputField.option_value
+      }
     })
     
       let req = {
@@ -331,8 +339,6 @@ function AddEditLearningQuiz() {
         setOptionInputFields([
           { option_no: 1, option_value: "",isRequired:false,check:false },
           { option_no: 2, option_value: "",isRequired:false,check:false },
-          //{ option_no: 3, option_value: "",isRequired:false,check:false },
-          //{ option_no: 4, option_value: "",isRequired:true,check:false },
         ])
         setSpinnerShow(false)
         setQuestionCheck(false)
@@ -345,28 +351,7 @@ function AddEditLearningQuiz() {
       })   
   }
 
-  // let handleReset = (e) => {
-  //   e.preventDefault();
-  //   setQuestion("")
-  //   setDescription("")
-  //   setPhase(1)
-  //   setPhaseDay(1)
-  //   setPhaseDaysList([])
-  //   setCorrectOption(1)
-  //   setOptionInputFields([
-  //     { option_no: 1, option_value: "",isRequired:true,check:false },
-  //     { option_no: 2, option_value: "",isRequired:true,check:false },
-  //     { option_no: 3, option_value: "",isRequired:true,check:false },
-  //     { option_no: 4, option_value: "",isRequired:true,check:false },
-  //   ])
-  //   setSpinnerShow(false)
-  //   setQuestionCheck(false)
-  //   setDescriptionCheck(false)
-  //   setPhaseCheck(false)
-  //   setPhaseDayCheck(false)
-  //   setCorrectOptionCheck(false)
-    
-  // }
+
 
     return (
     <CContainer fluid>
@@ -417,6 +402,7 @@ function AddEditLearningQuiz() {
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
                     <CSelect
                         onChange={(e) => {
+                          setPhaseDay(0)
                           setPhaseCheck(false)
                           setPhase(e.target.value)
                         }}

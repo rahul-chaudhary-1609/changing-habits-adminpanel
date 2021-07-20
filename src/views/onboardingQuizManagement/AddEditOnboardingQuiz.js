@@ -115,13 +115,15 @@ function AddEditOnboardingQuiz() {
     if (optionInputFields.length >= 1) {
       setOptionInputFieldsCheck(false);
     }
-    if (optionInputFields.length < 6) {
-      let currentOptionInputFields = [...optionInputFields];
-      currentOptionInputFields.push({ option_no: currentOptionInputFields.length + 1, option_value: "", isRequired: false,check:false })
-      setOptionInputFields(currentOptionInputFields)
-    } else {
-      setErrorResponse({ message: "Maximum 6 options are allowed", code: null, isFound: true })
-    }
+    
+    let currentOptionInputFields = [...optionInputFields];
+    currentOptionInputFields.push({ option_no: currentOptionInputFields.length + 1, option_value: "", isRequired: false,check:false })
+    currentOptionInputFields=currentOptionInputFields.map((currentOptionInputField, key) => {
+      return {...currentOptionInputField,option_no:++key}
+    })
+    setOptionInputFields(currentOptionInputFields)
+    setCorrectOption(0)
+    
   }
 
   let handleRemoveOptionField = (index) => {
@@ -130,7 +132,11 @@ function AddEditOnboardingQuiz() {
       }
       let currentOptionInputFields = [...optionInputFields];
       currentOptionInputFields.splice(index, 1);
-      setOptionInputFields(currentOptionInputFields)
+      currentOptionInputFields=currentOptionInputFields.map((currentOptionInputField, key) => {
+        return {...currentOptionInputField,option_no:++key}
+      })
+    setOptionInputFields(currentOptionInputFields)
+    setCorrectOption(0)
   }
 
   let handleChangeOptionFieldValue = (index, e) => {
@@ -199,7 +205,9 @@ function AddEditOnboardingQuiz() {
     // }
 
     optionInputFields.forEach((optionInputField) => {
-      data[`option_${optionInputField.option_no}`]=optionInputField.option_value
+      if (optionInputField.option_value && optionInputField.option_value.trim() != "") {
+        data[`option_${optionInputField.option_no}`] = optionInputField.option_value
+      }
     })
     
     
@@ -253,7 +261,9 @@ function AddEditOnboardingQuiz() {
     }
 
     optionInputFields.forEach((optionInputField) => {
-      data[`option_${optionInputField.option_no}`]=optionInputField.option_value
+      if (optionInputField.option_value && optionInputField.option_value.trim() != "") {
+        data[`option_${optionInputField.option_no}`] = optionInputField.option_value
+      }
     })
     
       let req = {
@@ -268,8 +278,6 @@ function AddEditOnboardingQuiz() {
         setOptionInputFields([
           { option_no: 1, option_value: "",isRequired:false,check:false },
           { option_no: 2, option_value: "",isRequired:false,check:false },
-          //{ option_no: 3, option_value: "",isRequired:false,check:false },
-          //{ option_no: 4, option_value: "",isRequired:true,check:false },
         ])
         setSpinnerShow(false)
         setQuestionCheck(false)
