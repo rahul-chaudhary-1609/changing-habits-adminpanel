@@ -394,6 +394,7 @@ function AddEditLearningContent(props) {
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
                     <CSelect
                         onChange={(e) => {
+                          setPhaseDay(0)
                           setPhaseCheck(false)
                           setPhase(e.target.value)
                         }}

@@ -39,8 +39,6 @@ let [question,setQuestion ] = useState("");
     [
       { option_no: 1, option_value: "",isRequired:true },
       { option_no: 2, option_value: "",isRequired:true },
-      { option_no: 3, option_value: "",isRequired:true },
-      { option_no: 4, option_value: "",isRequired:true },
     ]
   )
 
@@ -65,9 +63,13 @@ let [question,setQuestion ] = useState("");
         let currentOptionInputFields = [
           { option_no: 1, option_value:response.onboardingQuizDetails.option_1 ,isRequired:true },
           { option_no: 2, option_value: response.onboardingQuizDetails.option_2,isRequired:true },
-          { option_no: 3, option_value: response.onboardingQuizDetails.option_3,isRequired:true },
-          { option_no: 4, option_value: response.onboardingQuizDetails.option_4,isRequired:true },
         ];
+        if (response.onboardingQuizDetails.option_3) {
+          currentOptionInputFields.push({ option_no: 3, option_value:response.onboardingQuizDetails.option_3 ,isRequired:false })
+        }
+        if (response.onboardingQuizDetails.option_4) {
+          currentOptionInputFields.push({ option_no: 4, option_value:response.onboardingQuizDetails.option_4 ,isRequired:false })
+        }
         if (response.onboardingQuizDetails.option_5) {
           currentOptionInputFields.push({ option_no: 5, option_value:response.onboardingQuizDetails.option_5 ,isRequired:false })
         }

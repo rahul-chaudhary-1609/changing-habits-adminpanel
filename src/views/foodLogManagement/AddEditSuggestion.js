@@ -27,7 +27,7 @@ function AddEditFoodLogSuggestion() {
 
   let [phase, setPhase] = useState(0);
   let [phaseCheck, setPhaseCheck] = useState(false);
-  let [category, setCategory] = useState(2);
+  let [category, setCategory] = useState(0);
   let [categoryCheck, setCategoryCheck] = useState(false);
   let [week, setWeek] = useState(0);
   let [weekCheck, setWeekCheck] = useState(false);
@@ -202,6 +202,9 @@ function AddEditFoodLogSuggestion() {
 
     
     let data = {
+      phase_id: phase,
+      foodtype_id : category,
+      week_selected : week,
       food_name: foodName,
       food_quantity: quantityInputFields.map(quantityInputField=>quantityInputField.quantity_value),
     }
@@ -225,10 +228,6 @@ function AddEditFoodLogSuggestion() {
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     } else {
-
-      data.phase_id = phase;
-      data.foodtype_id = category;
-      data.week_selected = week;
         
       let req = {
         data
@@ -277,7 +276,8 @@ function AddEditFoodLogSuggestion() {
           
                           <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
                           <CSelect
-                      onChange={(e) => {
+                        onChange={(e) => {
+                        setCategory(0)
                         setPhaseCheck(false)
                         setPhase(e.target.value)
                       }}
@@ -378,7 +378,7 @@ function AddEditFoodLogSuggestion() {
                     })}
                     <div style={{ color: "red", marginLeft: "0.1rem", display: quantityInputFieldsCheck ? "" : "none" }}>Atleast two quantity are required</div>
                     <CBadge
-                      style={{ marginTop: "0.5rem", cursor: "pointer",display:quantityInputFields.length<6?"":"none" }}
+                      style={{ marginTop: "0.5rem", cursor: "pointer" }}
                       color="secondary"
                       onClick={handleAddQuantityField}
                     ><FaPlus /></CBadge>
