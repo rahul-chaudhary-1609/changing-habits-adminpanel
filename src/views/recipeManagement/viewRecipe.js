@@ -260,7 +260,7 @@ export default function ViewRecipe() {
                           </h6>
                         </CLabel>
                       </CCol>
-                      <CCol xs="4" md="9">
+                      <CCol xs="4" md="9" style={{ whiteSpace: "pre-line" }}>
                         {show.recipe_ingredients}
                       </CCol>
                     </CFormGroup>
@@ -275,7 +275,7 @@ export default function ViewRecipe() {
                           </h6>
                         </CLabel>
                       </CCol>
-                      <CCol xs="4" md="9">
+                      <CCol xs="4" md="9" style={{ whiteSpace: "pre-line" }}>
                         {show.recipe_methods}
                       </CCol>
                     </CFormGroup>
