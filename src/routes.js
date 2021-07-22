@@ -130,6 +130,15 @@ const ViewFoodLogSuggestion = React.lazy(() =>
   import("./views/foodLogManagement/ViewSuggestion")
 );
 
+const ListWeightGainReason = React.lazy(() =>
+  import("./views/weightGainReasonManagement/ListWeightGainReason")
+);
+
+const AddEditWeightGainReason = React.lazy(() =>
+  import("./views/weightGainReasonManagement/AddEditWeightGainReason")
+);
+
+
 const routes = [
   { path: "/", exact: true, name: "Users", component: User },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
@@ -413,6 +422,34 @@ const routes = [
     exact: true,
     name: "Add Food Log Suggestion",
     component: AddEditFoodLogSuggestion,
+  },
+
+  {
+    path: `/listWeightGainReason`,
+    exact: true,
+    name: "List Weight Gain Reason",
+    component: ListWeightGainReason,
+  },
+
+  {
+    path: `/viewWeightGainReason/:id`,
+    exact: true,
+    name: "View Weight Gain Reason",
+    component: ViewFoodLogSuggestion,
+  },
+
+  {
+    path: `/editWeightGainReason/:id`,
+    exact: true,
+    name: "Edit Weight Gain Reason",
+    component: AddEditWeightGainReason,
+  },
+
+  {
+    path: `/addWeightGainReason`,
+    exact: true,
+    name: "Add Weight Gain Reason",
+    component: AddEditWeightGainReason,
   },
 
   { component: Page404 },

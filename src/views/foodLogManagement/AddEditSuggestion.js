@@ -131,7 +131,10 @@ function AddEditFoodLogSuggestion() {
     }
 
     let currentQuantityInputFields = [...quantityInputFields];
-    currentQuantityInputFields.push({ quantity_no: currentQuantityInputFields.length + 1, quantity_value: "",check:false })
+    currentQuantityInputFields.push({ quantity_no: currentQuantityInputFields.length + 1, quantity_value: "", check: false })
+    currentQuantityInputFields=currentQuantityInputFields.map((currentQuantityInputField, key) => {
+      return {...currentQuantityInputField,quantity_no:++key}
+    })
     setQuantityInputFields(currentQuantityInputFields)
   }
 
@@ -141,6 +144,9 @@ function AddEditFoodLogSuggestion() {
     }
     let currentQuantityInputFields = [...quantityInputFields];
     currentQuantityInputFields.splice(index, 1);
+    currentQuantityInputFields=currentQuantityInputFields.map((currentQuantityInputField, key) => {
+      return {...currentQuantityInputField,quantity_no:++key}
+    })
     setQuantityInputFields(currentQuantityInputFields)
   }
 
@@ -348,7 +354,7 @@ function AddEditFoodLogSuggestion() {
                       type="text"
                       id="category_name"
                       name="category_name"
-                      placeholder="Enter Category Name"
+                      placeholder="Enter Food Name"
                       //required
                     />
                     <div style={{color:"red",marginLeft:"0.1rem", display:foodNameCheck?"":"none"}}>Food name is required</div>

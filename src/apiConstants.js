@@ -79,7 +79,14 @@ const apiConstant = {
   getFoodLogSuggestion: "/api/v1/admin/getFoodContent",
   addFoodLogSuggestion: "/api/v1/admin/addFoodContent",
   editFoodLogSuggestion: "/api/v1/admin/editFoodContent",
-  getFoodTypeByPhaseId:"/api/v1/admin/getFoodTypeByPhase",
+  getFoodTypeByPhaseId: "/api/v1/admin/getFoodTypeByPhase",
+  
+  //weight gain reason management API's
+  listReason: "/api/v1/admin/listReason",
+  deleteReason: "/api/v1/admin/deleteReason",
+  getReason: "/api/v1/admin/getReason",
+  editReason: "api/v1/admin/editReason",
+  addReason: "api/v1/admin/addReason",
 };
 
 export default apiConstant;

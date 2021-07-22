@@ -38,12 +38,12 @@ const _nav = [
     icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
   },
 
-  // {
-  //   _tag: "CSidebarNavItem",
-  //   name: "Food Log Suggestion",
-  //   to: "/listFoodLogSuggestion",
-  //   icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
-  // },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Food Log Suggestion",
+    to: "/listFoodLogSuggestion",
+    icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
+  },
   
   {
     _tag: "CSidebarNavItem",
@@ -69,6 +69,13 @@ const _nav = [
     name: "Notification Management",
     to: "/listNotification",
     icon: <CIcon content={freeSet.cilBell} customClasses="c-sidebar-nav-icon" />,
+  },
+
+  {
+    _tag: "CSidebarNavItem",
+    name: "Weight Gain Reason Management",
+    to: "/listWeightGainReason",
+    icon: <CIcon content={freeSet.cilWeightlifitng} customClasses="c-sidebar-nav-icon" />,
   },
 
   
