@@ -138,6 +138,10 @@ const AddEditWeightGainReason = React.lazy(() =>
   import("./views/weightGainReasonManagement/AddEditWeightGainReason")
 );
 
+const ViewWeightGainReason = React.lazy(() =>
+  import("./views/weightGainReasonManagement/ViewWeightGainReason")
+);
+
 
 const routes = [
   { path: "/", exact: true, name: "Users", component: User },
@@ -435,7 +439,7 @@ const routes = [
     path: `/viewWeightGainReason/:id`,
     exact: true,
     name: "View Weight Gain Reason",
-    component: ViewFoodLogSuggestion,
+    component: ViewWeightGainReason,
   },
 
   {

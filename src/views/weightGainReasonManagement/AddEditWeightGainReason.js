@@ -18,7 +18,7 @@ import {
   CInputGroupAppend,
   CBadge
 } from "@coreui/react"
-import { listPhases, getFoodTypeByPhaseId, getFoodLogSuggestion, addFoodLogSuggestion, editFoodLogSuggestion } from "../../data/foodLogManagement"
+import { listPhases } from "../../data/foodLogManagement"
 import {getReason,addReason,editReason} from "../../data/weightGainReasonManagement"
 import { FaPlus,FaMinus } from 'react-icons/fa';
 
@@ -99,7 +99,7 @@ function AddEditWeightGainReason() {
         setColorCode(response.reasonDetails.color_code)
         setWeightFrom(response.reasonDetails.weight_from)
         setWeightTo(response.reasonDetails.weight_to)
-        let currentReasonInputFields= response.reasonDetails.reason.split().map((reason,index) => {
+        let currentReasonInputFields= response.reasonDetails.reason.map((reason,index) => {
           return { reason_no: ++index, reason_value: reason, check: false };
         })
         setReasonInputFields([...currentReasonInputFields]);
@@ -215,12 +215,11 @@ function AddEditWeightGainReason() {
       color_code : colorCode,
       weight_from: weightFrom,
       weight_to: weightTo,
-      reason_name: reasonInputFields.map(reasonInputField=>reasonInputField.reason_value),
     }
     
     if (params.id) {
 
-        data.reason_name=reasonInputFields[0].reason_value;
+      data.reason = reasonInputFields.map(reasonInputField => reasonInputField.reason_value);
       let req = {
         pathParams: {
           id: params.id,
@@ -238,6 +237,9 @@ function AddEditWeightGainReason() {
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     } else {
+
+      
+      data.reason_name= reasonInputFields.map(reasonInputField=>reasonInputField.reason_value)
         
       let req = {
         data
@@ -300,7 +302,7 @@ function AddEditWeightGainReason() {
                                         })}
                                         <div style={{ color: "red", marginLeft: "0.1rem", display: reasonInputFieldsCheck ? "" : "none" }}>Atleast two reason are required</div>
                                         <CBadge
-                                        style={{ marginTop: "0.5rem", cursor: "pointer",display:params.id?"none":"" }}
+                                        style={{ marginTop: "0.5rem", cursor: "pointer", }}
                                         color="secondary"
                                         onClick={handleAddReasonField}
                                         ><FaPlus /></CBadge>

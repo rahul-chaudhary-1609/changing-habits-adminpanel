@@ -51,10 +51,10 @@ function ListWeightGainReason() {
 
 
     const fields = [
-        { key: 's_no',label:"S.No.",_style: {width: "4%" } },
-        { key: 'reason', lable: "Reason",_style: {width: "36%" } },
-        { key:'phase',label:"Phase",_style: {width: "20%" }},
+        { key: 's_no', label: "S.No.", _style: { width: "4%" } },
         { key: 'weight_gain', lable: "Weight Gain",_style: {width: "20%" } },
+        { key: 'reason', lable: "Reason",_style: {width: "36%" } },
+        { key:'phase_id',label:"Phase",_style: {width: "20%" }},
         { key: 'action',label:"Action",_style: { width: "20%" } },
     ]
 
@@ -201,6 +201,16 @@ function ListWeightGainReason() {
                         </CCol>
                     }
                     scopedSlots={{
+                        reason: (item, index) => {
+                            return (
+                                <td> {item.reason.map((ele, index) => {
+                      
+                                    return (<div>{ `${++index}.   ${ele}`}</div>)
+                                    })}
+                                    
+                                </td>
+                            )
+                        },
                         action: (item, index) => {
                             return (
                                 <td>
@@ -236,18 +246,24 @@ function ListWeightGainReason() {
                                 </td>
                             )
                         },
-                        posted_date: (item, index) => {
-                            return (<td>{ getFormatedDateTime(item.posted_date)}</td>)
-                        },
-                        media: (item, index) => {
-                            let mediaInput={
-                                    type: item.image_url?"image":item.video_url?"video":"audio",
-                                    source: item.image_url || item.video_url || item.audio_url || null,
-                                    isError: false,
-                                    errorMessage:"Image/Video/Audio is Required",
-                                }
-                            return (<td><MediaView mediaInput={mediaInput} /></td>)
-                        }
+                        phase_id: (item, index) => {
+                            switch (item.phase_id) {
+                                case 1:
+                                    return (<td>Kickstart</td>)
+                                case 2:
+                                    return (<td>Phase 1</td>)
+                                case 3:
+                                    return (<td>Phase 2</td>)
+                                case 4:
+                                    return (<td>Phase 3</td>)
+                                case 5:
+                                    return (<td>Phase 4</td>)
+                                case 6:
+                                    return (<td>Phase 4 EVA</td>)
+                                default:
+                                    return (<td>Phase 4 EVA</td>)
+                            }  
+                        },      
                     }}
                 ></CDataTable>
                 <CPagination

@@ -35,7 +35,7 @@ const _nav = [
     _tag: "CSidebarNavItem",
     name: "Food Log Category",
     to: "/listFoodLogCategory",
-    icon: <CIcon content={freeSet.cilFastfood} customClasses="c-sidebar-nav-icon" />,
+    icon: <CIcon content={freeSet.cilOpentype} customClasses="c-sidebar-nav-icon" />,
   },
 
   {
@@ -73,7 +73,7 @@ const _nav = [
 
   {
     _tag: "CSidebarNavItem",
-    name: "Weight Gain Reason Management",
+    name: "Weight Gain Reason",
     to: "/listWeightGainReason",
     icon: <CIcon content={freeSet.cilWeightlifitng} customClasses="c-sidebar-nav-icon" />,
   },
