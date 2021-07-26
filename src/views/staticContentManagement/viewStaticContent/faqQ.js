@@ -16,6 +16,10 @@ import {
   CModalTitle,
   CSwitch,
   CTooltip,
+  CInputGroup,
+  CInputGroupPrepend,
+  CInputGroupText,
+  CInput,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -42,6 +46,7 @@ const FAQS = () => {
   const [active, setActive] = useState(null);
   const [activePage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
+  const [onsearchCHange, setOnSearchChange] = useState("");
 
   const handleCollapse = (e, id) => {
     let updatedStatus = { ...statusOpened };
@@ -73,7 +78,7 @@ const FAQS = () => {
   const handleQuestions = async () => {
     if (refresh) setRefresh(!refresh);
 
-    const data = await getFaqs(activePage ? activePage : 1);
+    const data = await getFaqs(activePage ? activePage : 1, onsearchCHange);
     if (data.status == 200) {
       setError(null);
       let rows = data.faqsData.rows;
@@ -100,6 +105,24 @@ const FAQS = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleSearch = async () => {
+    setRefresh(!refresh);
+    onsearchCHange &&
+      history.push(
+        `/viewStaticContent/${id}/faqs?search=${onsearchCHange}&page=${
+          activePage ? activePage : 1
+        }`
+      );
+  };
+
+  const handleReset = () => {
+    setOnSearchChange("");
+    setRefresh(!refresh);
+    history.push(
+      `/viewStaticContent/${id}/faqs?page=${activePage ? activePage : 1}`
+    );
   };
 
   return (
@@ -205,6 +228,56 @@ const FAQS = () => {
           </div>
         </div>
         <div className="flex ">
+          <div
+            style={{
+              paddingLeft: "87px",
+              marginBottom: "-23px",
+              paddingTop: "15px",
+            }}
+          >
+            <CInputGroup>
+              <CInputGroupPrepend>
+                <CInputGroupText
+                  style={{ backgroundColor: "teal", color: "white" }}
+                >
+                  <CIcon content={freeSet.cilSearch} />
+                </CInputGroupText>
+              </CInputGroupPrepend>
+              <CInput
+                style={{ maxWidth: "15rem" }}
+                value={onsearchCHange}
+                onChange={(e) => {
+                  setOnSearchChange(e.target.value);
+                }}
+                id="input1-group1"
+                name="input1-group1"
+                placeholder="Search by Question"
+              />
+
+              <CButton
+                onClick={handleSearch}
+                style={{
+                  marginLeft: "1rem",
+                  backgroundColor: "teal",
+                  color: "white",
+                }}
+              >
+                Search
+              </CButton>
+              <CButton
+                onClick={() => {
+                  handleReset();
+                }}
+                style={{
+                  marginLeft: "1rem",
+                  backgroundColor: "teal",
+                  color: "white",
+                }}
+              >
+                Reset
+              </CButton>
+            </CInputGroup>
+          </div>
           {qus && (
             <div
               style={{
@@ -330,6 +403,21 @@ const FAQS = () => {
                       </>
                     );
                   })
+                )}
+                {qus.length < 1 ? (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "20px",
+                      textAlign: "center",
+                      width: "100%",
+                      marginTop: "12px",
+                    }}
+                  >
+                    No Items Found
+                  </p>
+                ) : (
+                  ""
                 )}
                 <br /> (showing{" "}
                 {qus.length < 1

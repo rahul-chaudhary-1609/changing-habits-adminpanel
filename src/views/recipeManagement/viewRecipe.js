@@ -13,6 +13,7 @@ import {
   CModalFooter,
   CModalBody,
   CModalTitle,
+  CInput,
 } from "@coreui/react";
 
 import { GetRecipeDetail, ToggleRecipeStatus } from "../../api";
@@ -46,7 +47,10 @@ export default function ViewRecipe() {
   const [loading, setLoading] = useState(false);
   const [enableModal, setEnableModal] = useState(false);
   const [status, setStatus] = useState(null);
+  const [action, setAction] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
+  const [rejectedMsgError, setRejectedMsgError] = useState(null);
 
   const toggleStatus = (status) => {
     setStatus(status);
@@ -54,18 +58,27 @@ export default function ViewRecipe() {
   };
 
   const handleEnable = async () => {
-    try {
-      setEnableModal(!enableModal);
-      let pass;
-      if (status) {
-        pass = 2;
+    if (action == "reject" && rejectReason == "") {
+      setRejectedMsgError("Reason is required");
+    } else {
+      if (rejectReason.length > 250) {
+        setRejectedMsgError("Reason cannot exceed 250 characters");
       } else {
-        pass = 1;
+        try {
+          setEnableModal(!enableModal);
+          let data = {};
+          data.status = action == "reject" ? 2 : 1;
+          if (rejectReason) {
+            data.reject_reason = rejectReason;
+          }
+          await ToggleRecipeStatus(params.id, data);
+          setRejectReason("");
+          setRefresh(!refresh);
+          history.push(`/recipeManagement`);
+        } catch (error) {
+          console.log(error);
+        }
       }
-      await ToggleRecipeStatus(params.id, pass);
-      setRefresh(!refresh);
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -92,26 +105,63 @@ export default function ViewRecipe() {
         <CModal
           show={enableModal}
           centered={true}
-          color="warning"
           onClose={setEnableModal}
           backdrop={true}
           style={{ fontFamily: "Poppins" }}
         >
-          <CModalHeader style={{ height: "3rem" }}>
+          <CModalHeader
+            style={{ height: "3rem", backgroundColor: "teal", color: "white" }}
+          >
             <CModalTitle>
-              {status ? "Reject Recipe?" : "Approve Recipe?"}
+              {action == "reject" ? "Reject Recipe?" : "Approve Recipe?"}
             </CModalTitle>
           </CModalHeader>
           <CModalBody>
-            {status
+            {action == "reject"
               ? "Are you sure you want to reject the recipe?"
               : "Are you sure you want to approve the recipe?"}
+            {action == "reject" ? (
+              <div style={{ paddingTop: "5px" }}>
+                <CFormGroup row>
+                  <CCol md="2">
+                    <CLabel htmlFor="hf-categorytype">
+                      <h6>Reason:</h6>
+                    </CLabel>
+                  </CCol>
+                  <CCol xs="12" md="10">
+                    <CInput
+                      type="text"
+                      id="reject_reason"
+                      name="reject_reason"
+                      value={rejectReason}
+                      onChange={(e) => {
+                        setRejectReason(e.target.value);
+                      }}
+                      placeholder="Provide here the reason of recipe rejection"
+                    />
+                  </CCol>
+                  {rejectedMsgError ? (
+                    <div
+                      className="email-validate"
+                      style={{ marginLeft: "1rem" }}
+                    >
+                      {rejectedMsgError}
+                    </div>
+                  ) : null}
+                </CFormGroup>
+              </div>
+            ) : (
+              ""
+            )}
           </CModalBody>
           <CModalFooter style={{ height: "4rem" }}>
-            <CButton color="success" onClick={handleEnable}>
+            <CButton
+              onClick={handleEnable}
+              style={{ backgroundColor: "teal", color: "white" }}
+            >
               Yes
             </CButton>{" "}
-            <CButton color="secondary" onClick={() => setEnableModal(false)}>
+            <CButton color="danger" onClick={() => setEnableModal(false)}>
               Cancel
             </CButton>
           </CModalFooter>
@@ -217,7 +267,7 @@ export default function ViewRecipe() {
                           </h6>
                         </CLabel>
                       </CCol>
-                      <CCol xs="4" md="9">
+                      <CCol xs="4" md="9" style={{ whiteSpace: "pre-line" }}>
                         {show.recipe_ingredients}
                       </CCol>
                     </CFormGroup>
@@ -232,7 +282,7 @@ export default function ViewRecipe() {
                           </h6>
                         </CLabel>
                       </CCol>
-                      <CCol xs="4" md="9">
+                      <CCol xs="4" md="9" style={{ whiteSpace: "pre-line" }}>
                         {show.recipe_methods}
                       </CCol>
                     </CFormGroup>
@@ -307,6 +357,7 @@ export default function ViewRecipe() {
                               style={{ width: "77px" }}
                               onClick={() => {
                                 toggleStatus(show.status);
+                                setAction("reject");
                               }}
                             >
                               Reject
@@ -327,6 +378,7 @@ export default function ViewRecipe() {
                               }}
                               onClick={() => {
                                 toggleStatus(show.status);
+                                setAction("approve");
                               }}
                             >
                               Approve
