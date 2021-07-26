@@ -165,7 +165,8 @@ function AddEditWeightGainReason() {
       result=false
     }
       
-    if (weightTo <= weightFrom) {
+    if (weightTo && !isNaN(weightTo) && weightFrom && !isNaN(weightFrom) && (parseFloat(weightTo) <= parseFloat(weightFrom))) {
+      console.log(weightFrom,weightTo,weightTo <= weightFrom)
         setWeightRangeCheck(true)
         result=false
     }      
@@ -201,6 +202,8 @@ function AddEditWeightGainReason() {
 
 
   let handleSubmit = (e) => {
+    console.log(weightFrom, weightTo, weightTo <= weightFrom)
+    console.log(weightRangeCheck)
     e.preventDefault();
     if (!validateField()) {
       return
@@ -215,11 +218,11 @@ function AddEditWeightGainReason() {
       color_code : colorCode,
       weight_from: weightFrom,
       weight_to: weightTo,
+      reason: reasonInputFields.map(reasonInputField=>reasonInputField.reason_value)
     }
     
     if (params.id) {
 
-      data.reason = reasonInputFields.map(reasonInputField => reasonInputField.reason_value);
       let req = {
         pathParams: {
           id: params.id,
@@ -238,8 +241,6 @@ function AddEditWeightGainReason() {
       })
     } else {
 
-      
-      data.reason_name= reasonInputFields.map(reasonInputField=>reasonInputField.reason_value)
         
       let req = {
         data
@@ -317,7 +318,8 @@ function AddEditWeightGainReason() {
                                             <div style={{ width: "45%" }}>
                                                 <CInput
                                                     onChange={(e) => {
-                                                        setWeightFromCheck(false)
+                                                    setWeightFromCheck(false)
+                                                    setWeightRangeCheck(false)
                                                         setWeightFrom(e.target.value)
                                                     }}
                                                     value={weightFrom}
@@ -336,6 +338,7 @@ function AddEditWeightGainReason() {
                                                 <CInput
                                                     onChange={(e) => {
                                                         setWeightToCheck(false)
+                                                        setWeightRangeCheck(false)
                                                         setWeightTo(e.target.value)
                                                     }}
                                                     value={weightTo}

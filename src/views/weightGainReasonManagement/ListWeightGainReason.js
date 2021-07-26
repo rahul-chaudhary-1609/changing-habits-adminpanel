@@ -53,8 +53,8 @@ function ListWeightGainReason() {
     const fields = [
         { key: 's_no', label: "S.No.", _style: { width: "4%" } },
         { key: 'weight_gain', lable: "Weight Gain",_style: {width: "20%" } },
-        { key: 'reason', lable: "Reason",_style: {width: "36%" } },
-        { key:'phase_id',label:"Phase",_style: {width: "20%" }},
+        { key: 'reason', lable: "Reason",_style: {width: "40%" } },
+        { key:'phase_id',label:"Phase",_style: {width: "16%" }},
         { key: 'action',label:"Action",_style: { width: "20%" } },
     ]
 
@@ -135,7 +135,7 @@ function ListWeightGainReason() {
                 deleteQuestion={deleteQuestion}
                 setStatus={setStatus}
                 status={status}
-                info={"blog"}
+                info={"reason"}
             />
             <CRow>
                 <CCol sm="12">
@@ -169,7 +169,7 @@ function ListWeightGainReason() {
                                         <CIcon name={'cilSearch'} />
                                     </CInputGroupText>
                                 </CInputGroupPrepend>
-                                <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by reason"
+                                <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by weight"
                                     value={searchValue}
                                     onChange={(e) => { setSearchValue(e.target.value) }}
                                 />

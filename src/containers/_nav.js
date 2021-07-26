@@ -35,7 +35,7 @@ const _nav = [
     _tag: "CSidebarNavItem",
     name: "Food Log Category",
     to: "/listFoodLogCategory",
-    icon: <CIcon content={freeSet.cilOpentype} customClasses="c-sidebar-nav-icon" />,
+    icon: <CIcon content={freeSet.cilLibrary} customClasses="c-sidebar-nav-icon" />,
   },
 
   {

@@ -150,7 +150,7 @@ function ListFoodLogSuggestion() {
                 toggleStatus={toggleStatus}
                 setStatus={setStatus}
                 status={status}
-                info={"food log category"}
+                info={"food log suggestion"}
             />
             <CRow>
                 <CCol sm="12">
