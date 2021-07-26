@@ -19,7 +19,9 @@ import {
   CBadge
 } from "@coreui/react"
 import {listPhases,getFoodTypeByPhaseId,getFoodLogSuggestion,addFoodLogSuggestion,editFoodLogSuggestion} from "../../data/foodLogManagement"
-import { FaPlus,FaMinus } from 'react-icons/fa';
+import { FaPlus, FaMinus } from 'react-icons/fa';
+import { getPhaseDays } from "../../data/learningContentManagement"
+import { checkLeapYear } from "../../utils/helper";
 
 function AddEditFoodLogSuggestion() {
   let history = useHistory();
@@ -30,7 +32,7 @@ function AddEditFoodLogSuggestion() {
   let [category, setCategory] = useState(0);
   let [categoryCheck, setCategoryCheck] = useState(false);
   let [week, setWeek] = useState(0);
-  let [weekCheck, setWeekCheck] = useState(false);
+  //let [weekCheck, setWeekCheck] = useState(false);
   let [foodName, setFoodName] = useState("");
   let [foodNameCheck, setFoodNameCheck] = useState(false);
   let [quantityInputFields, setQuantityInputFields] = useState(
@@ -55,10 +57,10 @@ function AddEditFoodLogSuggestion() {
   let [phaseList, setPhaseList] = useState([])
   let [categoryList, setCategoryList] = useState([])
   let [weekList, setWeekList] = useState([
-    { id: 1, name: "Week 1", },
-    { id: 2, name: "Week 2" },
-    { id: 3, name: "Week 3" },
-    { id: 4, name: "Week 4" },
+    // { id: 1, name: "Week 1", },
+    // { id: 2, name: "Week 2" },
+    // { id: 3, name: "Week 3" },
+    // { id: 4, name: "Week 4" },
   ])
   let [spinnerShow,setSpinnerShow]=useState(false)
   //let spinnerShow = false;
@@ -120,6 +122,20 @@ function AddEditFoodLogSuggestion() {
         setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
+      setSpinnerShow(true)
+      getPhaseDays(req).then((response) => {
+        setSpinnerShow(false)
+        let newWeekList = []
+        let limit = response.phaseDays ? response.phaseDays : checkLeapYear(new Date().getFullYear()) ? 366 : 365;
+        for (let i = 1; i <= Math.ceil(limit/7); i++) {
+          newWeekList.push({ id: i, name: `Week ${i}`, })
+        }
+        setWeekList([...newWeekList]);
+        setErrorResponse({ message: null, code: null, isFound: false })
+      }).catch((error) => {
+        setSpinnerShow(false)
+        setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+      })
     }else {
       setCategoryList([]);
     }
@@ -173,10 +189,10 @@ function AddEditFoodLogSuggestion() {
       result=false
     }
 
-    if (!week || week == 0) {
-      setWeekCheck(true)
-      result=false
-    }
+    // if (!week || week == 0) {
+    //   setWeekCheck(true)
+    //   result=false
+    // }
 
     let currentQuantityInputFields = [...quantityInputFields]
     for (let quantityInputField of currentQuantityInputFields) {
@@ -326,7 +342,7 @@ function AddEditFoodLogSuggestion() {
                           <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="week">Week:</CLabel>
                           <CSelect
                       onChange={(e) => {
-                        setWeekCheck(false)
+                        //setWeekCheck(false)
                         setWeek(e.target.value)
                       }}
                           value={week}
@@ -340,7 +356,7 @@ function AddEditFoodLogSuggestion() {
                               return <option key={week.id} value={week.id}> {week.name}</option>
                           })}
                     </CSelect>
-                    <div style={{color:"red",marginLeft:"0.1rem", display:weekCheck?"":"none"}}>Week is required</div>
+                    {/* <div style={{color:"red",marginLeft:"0.1rem", display:weekCheck?"":"none"}}>Week is required</div> */}
                       </CFormGroup>
                                 </div>
                   <CFormGroup >                    
