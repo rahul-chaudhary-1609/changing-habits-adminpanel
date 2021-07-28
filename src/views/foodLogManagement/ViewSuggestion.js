@@ -30,7 +30,7 @@ function ViewFoodLogSuggestion(props) {
   let [foodName, setFoodName] = useState("");
   let [quantityInputFields, setQuantityInputFields] = useState(
     [
-      { quantity_no: 1, quantity_value: "",check:false },
+      { quantity_no: 1, quantity:null,unit:"",check:false, validationMsg:null },
     ]
   )
 
@@ -86,7 +86,7 @@ function ViewFoodLogSuggestion(props) {
         setWeek(response.foodContent.week_selected)
         setFoodName(response.foodContent.food_name)
         let currentQuantityInputFields= response.foodContent.food_quantity.map((quantity,index) => {
-          return { quantity_no: ++index, quantity_value: quantity, check: false };
+          return { quantity_no: ++index, quantity: quantity.quantity,unit:quantity.unit, check: false };
         })
         setQuantityInputFields([...currentQuantityInputFields]);
         setSpinnerShow(false)
@@ -186,7 +186,7 @@ function ViewFoodLogSuggestion(props) {
                       
                         return (<>
                       
-                          <li>{quantityInputField.quantity_value}</li>
+                          <li>{quantityInputField.quantity} {quantityInputField.unit}</li>
                       
                       </>
                       )

@@ -16,7 +16,11 @@ import {
   CSpinner,
   CInputGroup,
   CInputGroupAppend,
-  CBadge
+  CBadge,
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle
 } from "@coreui/react"
 import {listPhases,getFoodTypeByPhaseId,getFoodLogSuggestion,addFoodLogSuggestion,editFoodLogSuggestion} from "../../data/foodLogManagement"
 import { FaPlus, FaMinus } from 'react-icons/fa';
@@ -37,7 +41,7 @@ function AddEditFoodLogSuggestion() {
   let [foodNameCheck, setFoodNameCheck] = useState(false);
   let [quantityInputFields, setQuantityInputFields] = useState(
     [
-      { quantity_no: 1, quantity_value: "",check:false },
+      { quantity_no: 1, quantity:null,unit:"none",check:false, validationMsg:null },
     ]
   )
   let [quantityInputFieldsCheck, setQuantityInputFieldsCheck] = useState(false);
@@ -62,6 +66,31 @@ function AddEditFoodLogSuggestion() {
     // { id: 3, name: "Week 3" },
     // { id: 4, name: "Week 4" },
   ])
+
+
+  let [unitList, setUnitList] = useState([
+    //volume
+    { id: 1, name: "ml", label: "volume" },
+    { id: 2, name: "litre", label: "volume" },
+    { id: 3, name: "quart", label: "volume" },
+    { id: 4, name: "pint", label: "volume" },
+    { id: 5, name: "fl.oz.", label: "volume" },
+    { id: 6, name: "cup(s)", label: "volume" },
+    { id: 7, name: "tbsp", label: "volume" },
+    { id: 8, name: "tsp", label: "volume" },
+
+    //weight
+    { id: 9, name: "lb.", label: "weight" },
+    { id: 10, name: "oz.", label: "weight" },
+    { id: 11, name: "grams", label:"weight" },
+    { id: 12, name: "kg", label: "weight" },
+    
+    //other
+    { id: 13, name: "slices", label: "other" },
+    { id: 14, name: "unit(s)", label:"other" },
+  
+  ])
+
   let [spinnerShow,setSpinnerShow]=useState(false)
   //let spinnerShow = false;
 
@@ -94,7 +123,7 @@ function AddEditFoodLogSuggestion() {
         setWeek(response.foodContent.week_selected)
         setFoodName(response.foodContent.food_name)
         let currentQuantityInputFields= response.foodContent.food_quantity.map((quantity,index) => {
-          return { quantity_no: ++index, quantity_value: quantity, check: false };
+          return { quantity_no: ++index, quantity:quantity.quantity,unit:quantity.unit, check: false, validationMsg:null };
         })
         setQuantityInputFields([...currentQuantityInputFields]);
         setSpinnerShow(false)
@@ -147,7 +176,7 @@ function AddEditFoodLogSuggestion() {
     }
 
     let currentQuantityInputFields = [...quantityInputFields];
-    currentQuantityInputFields.push({ quantity_no: currentQuantityInputFields.length + 1, quantity_value: "", check: false })
+    currentQuantityInputFields.push({ quantity_no: currentQuantityInputFields.length + 1, quantity:null,unit:"none", check: false, validationMsg:null })
     currentQuantityInputFields=currentQuantityInputFields.map((currentQuantityInputField, key) => {
       return {...currentQuantityInputField,quantity_no:++key}
     })
@@ -166,10 +195,26 @@ function AddEditFoodLogSuggestion() {
     setQuantityInputFields(currentQuantityInputFields)
   }
 
-  let handleChangeQuantityFieldValue = (index, e) => {
+  let handleChangeQuantityFieldValue = (index, e, field) => {
+    console.log(e.target.value,typeof e.target.value,isNaN(e.target.value))
     let currentQuantityInputFields = [...quantityInputFields];
-    currentQuantityInputFields[index].quantity_value = e.target.value;
-    currentQuantityInputFields[index].check = false;
+    if (field == "quantity") {
+      if (!e.target.value) {
+        currentQuantityInputFields[index].quantity = e.target.value;
+        currentQuantityInputFields[index].check = true;
+        currentQuantityInputFields[index].validationMsg = `Quantity ${currentQuantityInputFields[index].quantity_no} value is required`;
+      }else {
+        currentQuantityInputFields[index].quantity = e.target.value;
+        currentQuantityInputFields[index].check = false;
+        currentQuantityInputFields[index].validationMsg = null;
+      }
+    }
+    else if (field == "unit") {
+      currentQuantityInputFields[index].unit = e.target.value;
+      currentQuantityInputFields[index].check = false;
+      currentQuantityInputFields[index].validationMsg = null;
+    }
+    
     setQuantityInputFields(currentQuantityInputFields)
   }
 
@@ -196,10 +241,28 @@ function AddEditFoodLogSuggestion() {
 
     let currentQuantityInputFields = [...quantityInputFields]
     for (let quantityInputField of currentQuantityInputFields) {
-      if (!quantityInputField.quantity_value || quantityInputField.quantity_value.trim() == "") {
+      console.log(quantityInputField)
+      if (quantityInputField.check) {
+        result = false
+        continue
+      }else if ((!quantityInputField.quantity && !quantityInputField.unit) || (quantityInputField.quantity == 0 && quantityInputField.unit=="none")) {
         quantityInputField.check = true;
+        quantityInputField.validationMsg = null;
         result=false
-      }
+      } else if(!quantityInputField.quantity || quantityInputField.quantity == 0){
+        quantityInputField.check = true;
+        quantityInputField.validationMsg = `Quantity ${quantityInputField.quantity_no} value is required`;
+        result=false
+      }else if (isNaN(quantityInputField.quantity)) {
+        quantityInputField.check = true;
+        quantityInputField.validationMsg = `Quantity ${quantityInputField.quantity_no} value must be numeric`;
+        result=false
+      }else if(!quantityInputField.unit || quantityInputField.unit=="none"){
+        quantityInputField.check = true;
+        quantityInputField.validationMsg = `Quantity ${quantityInputField.quantity_no} unit is required`;
+        result=false
+      } 
+
     }
     setQuantityInputFields(currentQuantityInputFields);
     
@@ -228,7 +291,12 @@ function AddEditFoodLogSuggestion() {
       foodtype_id : category,
       week_selected : week,
       food_name: foodName,
-      food_quantity: quantityInputFields.map(quantityInputField=>quantityInputField.quantity_value),
+      food_quantity: quantityInputFields.map((quantityInputField) => {
+        return {
+          quantity: parseFloat(quantityInputField.quantity),
+          unit:quantityInputField.unit
+        }
+      }),
     }
     
     if (params.id) {
@@ -382,19 +450,46 @@ function AddEditFoodLogSuggestion() {
                       return (<>
                       <CInputGroup style={{display:"flex",alignItems:"center",marginTop:quantityInputField.quantity_no>1?"0.5rem":"none"}}>
                          <CInput
-                              onChange={(e) => handleChangeQuantityFieldValue(index,e)}
-                              value={quantityInputField.quantity_value}
-                              type="quantityInputField"
+                              onChange={(e) => handleChangeQuantityFieldValue(index,e,"quantity")}
+                              value={quantityInputField.quantity}
+                              type="text"
                               id={`quantity${quantityInputField.quantity_no}`}
                               name={`quantity${quantityInputField.quantity_no}`}
                               placeholder={`Enter quantity ${quantityInputField.quantity_no}`}
                               //required
                           />                          
-                          <CInputGroupAppend style={{display:quantityInputFields.length>1?"":"none"}}>                              
-                                <CBadge style={{marginLeft:"0.5rem", cursor:"pointer"}} color="danger" onClick={()=>handleRemoveQuantityField(index)}><FaMinus/></CBadge>
+                          <CInputGroupAppend style={{ display:"flex", justifyContent:"start",alignItems:"center" }}>
+                          <div>
+                              <CSelect custom className="selectpicker"
+                              onChange={(e) => handleChangeQuantityFieldValue(index,e,"unit")}
+                                    value={quantityInputField.unit}
+                                    id={`unit${quantityInputField.quantity_no}`}
+                                    name={`unit${quantityInputField.quantity_no}`}                                    
+                                    custom
+                                    required>
+                                <option value="none" defaultValue>Select Unit</option>
+                                    <optgroup label="Volume">
+                                      {unitList.filter(unit => unit.label == "volume").map((unit) => {
+                                   return( <option key={unit.id} value={unit.name}>{unit.name}</option>)
+                                  })} 
+                                    </optgroup>
+                                    <optgroup label="Weight">
+                                      {unitList.filter(unit => unit.label == "weight").map((unit) => {
+                                    return( <option key={unit.id} value={unit.name}>{unit.name}</option>)
+                                  })} 
+                                </optgroup>
+                                 <optgroup label="Other">
+                                      {unitList.filter(unit => unit.label == "other").map((unit) => {
+                                    return( <option key={unit.id} value={unit.name}>{unit.name}</option>)
+                                  })} 
+                                    </optgroup>
+                                  </CSelect>
+
+                              </div> 
+                                <div><CBadge style={{marginLeft:"0.5rem", cursor:"pointer",display: quantityInputFields.length > 1 ? "" : "none"}} color="danger" onClick={()=>handleRemoveQuantityField(index)}><FaMinus/></CBadge></div>
                           </CInputGroupAppend>
                         </CInputGroup>
-                        <div style={{ color: "red", marginLeft: "0.1rem", display: quantityInputField.check ? "" : "none" }}>Quantity { quantityInputField.quantity_no} is required</div>
+                        <div style={{ color: "red", marginLeft: "0.1rem", display: quantityInputField.check ? "" : "none" }}>{quantityInputField.validationMsg?quantityInputField.validationMsg:`Quantity  ${quantityInputField.quantity_no} is required`}</div>
                       </>
                       )
                     })}

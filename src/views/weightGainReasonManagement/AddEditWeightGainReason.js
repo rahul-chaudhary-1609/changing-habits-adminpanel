@@ -41,6 +41,8 @@ function AddEditWeightGainReason() {
         numeric:false
   });
   let [weightRangeCheck, setWeightRangeCheck] = useState(false);
+  let [weightUnit, setWeightUnit] = useState("none");
+  let [weightUnitCheck, setWeightUnitCheck] = useState(false);
   let [reasonInputFields, setReasonInputFields] = useState(
     [
       { reason_no: 1, reason_value: "",check:false },
@@ -68,13 +70,37 @@ function AddEditWeightGainReason() {
     { id: 3, name: "Green" },
     { id: 4, name: "Yellow" },
   ])
+
+  let [unitList, setUnitList] = useState([
+    //volume
+    { id: 1, name: "ml", label: "volume" },
+    { id: 2, name: "litre", label: "volume" },
+    { id: 3, name: "quart", label: "volume" },
+    { id: 4, name: "pint", label: "volume" },
+    { id: 5, name: "fl.oz.", label: "volume" },
+    { id: 6, name: "cup(s)", label: "volume" },
+    { id: 7, name: "tbsp", label: "volume" },
+    { id: 8, name: "tsp", label: "volume" },
+
+    //weight
+    { id: 9, name: "lb.", label: "weight" },
+    { id: 10, name: "oz.", label: "weight" },
+    { id: 11, name: "grams", label:"weight" },
+    { id: 12, name: "kg", label: "weight" },
+    
+    //other
+    { id: 13, name: "slices", label: "other" },
+    { id: 14, name: "unit(s)", label:"other" },
+  
+  ])
+
   let [spinnerShow,setSpinnerShow]=useState(false)
   //let spinnerShow = false;
 
   useEffect(() => {
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
-  },[phase,phaseList,colorCodeList,colorCode,weightFrom,weightTo,reasonInputFields])
+  },[phase,phaseList,colorCodeList,colorCode,weightFrom,weightTo,weightUnit,reasonInputFields])
 
   useEffect(() => {
     setSpinnerShow(true)
@@ -99,6 +125,7 @@ function AddEditWeightGainReason() {
         setColorCode(response.reasonDetails.color_code)
         setWeightFrom(response.reasonDetails.weight_from)
         setWeightTo(response.reasonDetails.weight_to)
+        setWeightUnit(response.reasonDetails.weight_unit)
         let currentReasonInputFields= response.reasonDetails.reason.map((reason,index) => {
           return { reason_no: ++index, reason_value: reason, check: false };
         })
@@ -144,7 +171,34 @@ function AddEditWeightGainReason() {
     setReasonInputFields(currentReasonInputFields)
   }
 
+  let handleChangeWeightFromValue = (e) => {
+    setWeightFrom(e.target.value)
+    //   if (!e.target.value) {
+    //     setWeightFromCheck(true)
+    //   }else if (!isNaN(e.target.value)) {
+    //     setWeightFrom(e.target.value)
+    //   } else {
+    //     setWeightFrom(null)
+    // }
+  }
+
+  let handleChangeWeightToValue = (e) => {
+    setWeightTo(e.target.value)
+    // console.log(e.target.value)
+    // if (!e.target.value) {
+    //   console.log("1")
+    //     setWeightToCheck(true)
+    // } else if (!isNaN(e.target.value)) {
+    //   console.log("2")
+    //     setWeightTo(e.target.value)
+    // } else {
+    //   console.log("3")
+    //   setWeightTo(null)
+    //   }  
+  }
+
   let validateField = () => {
+    console.log(weightUnit)
     let result = true;
     if (!weightFrom) {
       setWeightFromCheck({...weightFromCheck,required:true})
@@ -171,6 +225,11 @@ function AddEditWeightGainReason() {
         result=false
     }      
 
+    if (!weightUnit || weightUnit == "none") {
+      console.log(weightUnit)
+      setWeightUnitCheck(true)
+      result=false
+    }
       
     if (!phase || phase == 0) {
       setPhaseCheck(true)
@@ -216,8 +275,9 @@ function AddEditWeightGainReason() {
     let data = {
       phase_id: phase,
       color_code : colorCode,
-      weight_from: weightFrom,
-      weight_to: weightTo,
+      weight_from: parseFloat(weightFrom),
+      weight_to: parseFloat(weightTo),
+      weight_unit:weightUnit,
       reason: reasonInputFields.map(reasonInputField=>reasonInputField.reason_value)
     }
     
@@ -313,14 +373,34 @@ function AddEditWeightGainReason() {
                                 <CFormGroup>
                                     
                                         <CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="weight_gain_range">Weight Gain Range:</CLabel>
-                                    
-                                        <div style={{ width: "45%",display: "flex", justifyConten:"space-between"  }}>
+                                <div style={{ display: "flex", justifyConten: "space-between" }}>
+                                  <div style={{ width: "45%", }}>
+                                          <CSelect custom className="selectpicker"
+                                              onChange={(e) => {
+                                                setWeightUnitCheck(false);
+                                                setWeightUnit(e.target.value);
+                                                }}
+                                                value={weightUnit}
+                                                id="weight_unit"
+                                                name="weight_unit"                                   
+                                                custom
+                                                required
+                                          >
+                                            <option value="none" defaultValue>Select Unit</option>
+                                                  {unitList.filter(unit => unit.label == "weight").map((unit) => {
+                                                return( <option key={unit.id} value={unit.name}>{unit.name}</option>)
+                                                  })}
+                                        
+                                              </CSelect>
+                                     <div style={{color:"red",marginLeft:"0.1rem", display:weightUnitCheck?"":"none"}}>Weight unit is required</div>
+                              </div> 
+                                        <div style={{ marginLeft:"10%", width: "45%",display: "flex", justifyConten:"space-between"  }}>
                                             <div style={{ width: "45%" }}>
                                                 <CInput
                                                     onChange={(e) => {
-                                                    setWeightFromCheck(false)
-                                                    setWeightRangeCheck(false)
-                                                        setWeightFrom(e.target.value)
+                                                      setWeightFromCheck(false)
+                                                      setWeightRangeCheck(false)
+                                                      handleChangeWeightFromValue(e);
                                                     }}
                                                     value={weightFrom}
                                                     type="text"
@@ -339,7 +419,7 @@ function AddEditWeightGainReason() {
                                                     onChange={(e) => {
                                                         setWeightToCheck(false)
                                                         setWeightRangeCheck(false)
-                                                        setWeightTo(e.target.value)
+                                                        handleChangeWeightToValue(e);
                                                     }}
                                                     value={weightTo}
                                                     type="text"
@@ -352,12 +432,13 @@ function AddEditWeightGainReason() {
                                             <div style={{ color: "red", marginLeft: "0.1rem", display: weightToCheck.numeric ? "" : "none" }}>Weight to must be numeric</div>
                                         </div>
                                         
-                                        </div>
-                                        <div style={{ color: "red", marginLeft: "0.1rem", display: weightRangeCheck ? "" : "none" }}>Weight from should be less than weight to</div>
-                                      
-                        
-                                    </CFormGroup>
-          
+                                          </div>       
+                    </div>
+                    
+                                        <div style={{ color: "red", marginLeft: "55%", display: weightRangeCheck ? "" : "none" }}>Weight from should be less than weight to</div>
+                                                         
+                  </CFormGroup>
+                              
                                                     
                                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                         <CFormGroup  style={{width:"45%"}}>

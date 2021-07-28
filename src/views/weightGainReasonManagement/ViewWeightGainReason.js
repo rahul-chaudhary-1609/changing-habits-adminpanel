@@ -32,6 +32,7 @@ function ViewWeightGainReason() {
   let [colorCode, setColorCode] = useState(0);
   let [weightFrom, setWeightFrom] = useState(null);
   let [weightTo, setWeightTo] = useState(null);
+  let [weightUnit, setWeightUnit] = useState("none");
   let [reasonInputFields, setReasonInputFields] = useState(
     [
       { reason_no: 1, reason_value: "",check:false },
@@ -89,6 +90,7 @@ function ViewWeightGainReason() {
         setColorCode(response.reasonDetails.color_code)
         setWeightFrom(response.reasonDetails.weight_from)
         setWeightTo(response.reasonDetails.weight_to)
+        setWeightUnit(response.reasonDetails.weight_unit)
         let currentReasonInputFields= response.reasonDetails.reason.map((reason,index) => {
           return { reason_no: ++index, reason_value: reason, check: false };
         })
@@ -159,7 +161,7 @@ function ViewWeightGainReason() {
                             <tr>
                     <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="weight_range">Weight Range</CLabel></td>
                     <td>:</td>
-                      <td>{`${weightFrom} to ${weightTo}`}</td>
+                      <td>{`${weightFrom} ${weightUnit} to ${weightTo} ${weightUnit}`}</td>
                     </tr>
                     <tr>
                     <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="color_code">Color Code</CLabel></td>

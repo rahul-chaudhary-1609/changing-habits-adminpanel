@@ -73,6 +73,13 @@ const _nav = [
 
   {
     _tag: "CSidebarNavItem",
+    name: "Analytics",
+    to: "/getAnalytics",
+    icon: <CIcon content={freeSet.cilInfo} customClasses="c-sidebar-nav-icon" />,
+  },
+
+  {
+    _tag: "CSidebarNavItem",
     name: "Weight Gain Reason",
     to: "/listWeightGainReason",
     icon: <CIcon content={freeSet.cilWeightlifitng} customClasses="c-sidebar-nav-icon" />,

@@ -359,7 +359,7 @@ function AddEditOnboardingQuiz() {
                               placeholder={`Enter option ${optionInputField.option_no}`}
                               //required
                           />                          
-                          <CInputGroupAppend style={{display:optionInputField.isRequired?"none":"block"}}>                              
+                          <CInputGroupAppend style={{display:optionInputFields.length>2?"":"none"}}>                              
                                 <CBadge style={{marginLeft:"0.5rem", cursor:"pointer"}} color="danger" onClick={()=>handleRemoveOptionField(index)}><FaMinus/></CBadge>
                           </CInputGroupAppend>
                         </CInputGroup>
