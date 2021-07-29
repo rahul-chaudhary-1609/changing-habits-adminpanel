@@ -20,7 +20,8 @@ import {
 } from "@coreui/react"
 import { listPhases } from "../../data/foodLogManagement"
 import {getReason,addReason,editReason} from "../../data/weightGainReasonManagement"
-import { FaPlus,FaMinus } from 'react-icons/fa';
+import { FaPlus, FaMinus } from 'react-icons/fa';
+import { unitList } from "../../utils/helper";
 
 function AddEditWeightGainReason() {
   let history = useHistory();
@@ -69,29 +70,6 @@ function AddEditWeightGainReason() {
     { id: 2, name: "Red" },
     { id: 3, name: "Green" },
     { id: 4, name: "Yellow" },
-  ])
-
-  let [unitList, setUnitList] = useState([
-    //volume
-    { id: 1, name: "ml", label: "volume" },
-    { id: 2, name: "litre", label: "volume" },
-    { id: 3, name: "quart", label: "volume" },
-    { id: 4, name: "pint", label: "volume" },
-    { id: 5, name: "fl.oz.", label: "volume" },
-    { id: 6, name: "cup(s)", label: "volume" },
-    { id: 7, name: "tbsp", label: "volume" },
-    { id: 8, name: "tsp", label: "volume" },
-
-    //weight
-    { id: 9, name: "lb.", label: "weight" },
-    { id: 10, name: "oz.", label: "weight" },
-    { id: 11, name: "grams", label:"weight" },
-    { id: 12, name: "kg", label: "weight" },
-    
-    //other
-    { id: 13, name: "slices", label: "other" },
-    { id: 14, name: "unit(s)", label:"other" },
-  
   ])
 
   let [spinnerShow,setSpinnerShow]=useState(false)
@@ -337,7 +315,7 @@ function AddEditWeightGainReason() {
                 <div style={{color:"green",fontSize:"1rem", display:successResponse.isFound?"flex":"none", justifyContent:"center"}}>
                   <div><h5>{ successResponse.message}</h5></div>
                   </div>
-                <CForm action="" method="post" onSubmit={handleSubmit}>
+                <CForm action="" method="post" onSubmit={handleSubmit}  autoComplete="off">
                     
                     <CFormGroup>
                     <CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="reason">Reason:</CLabel>

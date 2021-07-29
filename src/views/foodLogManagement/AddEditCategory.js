@@ -177,7 +177,7 @@ function AddEditFoodLogCategory() {
                 <div style={{color:"green",fontSize:"1rem", display:successResponse.isFound?"flex":"none", justifyContent:"center"}}>
                   <div><h5>{ successResponse.message}</h5></div>
                   </div>
-                  <CForm action="" method="post" onSubmit={handleSubmit}>
+                  <CForm action="" method="post" onSubmit={handleSubmit}  autoComplete="off">
                       <CFormGroup>
           
                           <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>

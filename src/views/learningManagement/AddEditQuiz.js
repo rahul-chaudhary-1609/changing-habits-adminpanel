@@ -395,7 +395,7 @@ function AddEditLearningQuiz() {
                   </CToastBody>
                   </CToast>
                 </CToaster>
-                <CForm action="" method="post" onSubmit={handleSubmit}>
+                <CForm action="" method="post" onSubmit={handleSubmit}  autoComplete="off">
                   <div style={{display:"flex", justifyContent:"space-between"}}>
                   <CFormGroup style={{width:"45%"}}>
                     

@@ -102,7 +102,7 @@ function ListUserProgress() {
                     <CCard>
                         <CCardHeader>
                             {/* <div style={{display:"flex", justifyContent:"space-between"}}> */}
-                                <h2>User Progresss Management</h2>
+                                <h2>User Progress Management</h2>
                                 {/* <CButton
                                     style={{ width: "5rem",float:"right",backgroundColor:"#008080",color:"#fff"}}
                                     onClick={()=> history.push('/sendNotification')}

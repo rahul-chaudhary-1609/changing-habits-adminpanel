@@ -300,7 +300,7 @@ function ListFoodLogSuggestion() {
                             )
                         },
                         week_selected: (item, index) => {
-                            return (<td>{ `Week ${item.week_selected}`}</td>)
+                            return (<td>{ item.week_selected==0?'N/A':`Week ${item.week_selected}`}</td>)
                         }
                     }}
                 ></CDataTable>

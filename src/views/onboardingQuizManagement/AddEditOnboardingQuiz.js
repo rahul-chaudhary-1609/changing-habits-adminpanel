@@ -297,7 +297,7 @@ function AddEditOnboardingQuiz() {
             <CCard>
               <CCardHeader>
                 <div style={{display:"flex", justifyContent:"space-between"}}>
-                  <h2>{history.location.pathname == "/addOnboardingQuiz" ? "Add Onboarding Quiz" : "Edit Onboadring Quiz"}
+                  <h2>{history.location.pathname == "/addOnboardingQuiz" ? "Add Onboarding Quiz" : "Edit Onboarding Quiz"}
                   <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
                 </div>
                                             
@@ -326,7 +326,7 @@ function AddEditOnboardingQuiz() {
                   </CToastBody>
                   </CToast>
                 </CToaster>
-                <CForm action="" method="post" onSubmit={handleSubmit}>
+                <CForm action="" method="post" onSubmit={handleSubmit} autoComplete="off">
                   
                   <CFormGroup >                    
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="question">Question:</CLabel>
