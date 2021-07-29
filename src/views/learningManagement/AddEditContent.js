@@ -450,7 +450,7 @@ function AddEditLearningContent(props) {
                         checked={phychologicalContentTypeCheck}
                         type="checkbox"
                          id="content_type_phychological"
-                      />Phychological</CLabel></div>
+                      />Physiological</CLabel></div>
                       <div  style={{marginLeft:"1rem"}}><CLabel><CInputCheckbox
                         onChange={() => {
                            if (nutritionContentTypeCheck) {
