@@ -118,7 +118,7 @@ function ViewWeightGainReason() {
               <CCardHeader>
                 <div style={{display:"flex", justifyContent:"space-between"}}>
                   <h2>
-                    View Food Log Suggestion
+                    View Weight Gain Reason
                     <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
                   
                   <CButton

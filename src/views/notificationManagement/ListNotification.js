@@ -13,13 +13,16 @@ import {
     CRow,
     CCard,
     CCardHeader,
-    CCardBody
+    CCardBody,
+    CTooltip
 } from "@coreui/react"
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
 import { listNotification } from "../../data/notificationManagement"
 import { getFormatedDateTime } from "../../utils/helper";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 function ListNotification() {
     let history = useHistory();
@@ -43,9 +46,9 @@ function ListNotification() {
     const fields = [
         { key: 's_no',label:"S.No.",_style: {width: "4%" } },
         { key: 'title', lable: "Title",_style: {width: "40%" } },
-        //{ key: 'description', lable: "Description" },
         { key: 'sent_date', lable: "Sent Date",_style: {width: "20%" } },
-        { key: 'sent_to',label:"Sent To",_style: { width: "36%" } },
+        { key: 'sent_to', label: "Sent To", _style: { width: "26%" } },
+        { key: 'action',label:"Action",_style: { width: "10%" } },
     ]
 
 
@@ -132,6 +135,7 @@ function ListNotification() {
                                 <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by title"
                                     value={searchValue}
                                     onChange={(e) => { setSearchValue(e.target.value) }}
+                                    autoComplete="off"
                                 />
                                 <CButton style={{ marginLeft: "1rem", backgroundColor:"#008080",color:"#fff"}}
                                     onClick={() => { setSearchKey(searchValue.trim() != "" ? searchValue.trim() : null) }}
@@ -166,7 +170,28 @@ function ListNotification() {
                         },
                         sent_to: (item, index) => {
                             return (<td><span style={{fontWeight:"500"}}>{ item.type==0?"All Users":"Individual User: "}</span>{ item.type==0?null:`${item.sent_to}`}</td>)
-                        }
+                        },
+                        action: (item, index) => {
+                            return (
+                                <td>
+                                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
+                                        <CTooltip content={`View Weight Gain Reason`} placement={"top-start"}>
+                                            <FontAwesomeIcon
+                                                color="green"
+                                                size="lg"
+                                                style={{ cursor: "pointer" }}
+                                                onClick={() =>
+                                                history.push({
+                                                    pathname: `/viewNotification/${item.id}`,
+                                                })
+                                                }
+                                                icon={faEye}
+                                            />
+                                        </CTooltip>
+                                    </div>
+                                </td>
+                            )
+                        },
                     }}
                 ></CDataTable>
                 <CPagination

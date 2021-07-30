@@ -167,6 +167,7 @@ function ListOnboardingQuiz() {
                                 <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by question"
                                     value={searchValue}
                                     onChange={(e) => { setSearchValue(e.target.value) }}
+                                    autoComplete="off"
                                 />
                                 <CButton style={{ marginLeft: "1rem", backgroundColor:"#008080",color:"#fff"}}
                                     onClick={() => { setSearchKey(searchValue.trim() != "" ? searchValue.trim() : null) }}

@@ -114,6 +114,10 @@ const SendNotification = React.lazy(() =>
   import("./views/notificationManagement/SendNotification")
 );
 
+const ViewNotification = React.lazy(() =>
+  import("./views/notificationManagement/ViewNotification")
+);
+
 const ListUserProgress = React.lazy(() =>
   import("./views/UserProgressManagement/ListUserProgress")
 );
@@ -395,6 +399,13 @@ const routes = [
     exact: true,
     name: "Send Notification",
     component: SendNotification,
+  },
+
+  {
+    path: `/viewNotification/:id`,
+    exact: true,
+    name: "View Notification",
+    component: ViewNotification,
   },
 
   {
