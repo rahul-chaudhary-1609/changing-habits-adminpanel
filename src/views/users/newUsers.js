@@ -372,6 +372,7 @@ const Users = () => {
                       style={{ maxWidth: "15rem" }}
                       value={onsearchCHange}
                       onChange={handleSearchChange}
+                      autoComplete="off"
                       id="input1-group1"
                       name="input1-group1"
                       placeholder="Search by Name or Email"
