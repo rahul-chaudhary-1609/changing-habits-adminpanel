@@ -264,7 +264,7 @@ const Recipes = () => {
 
   var recipeSubType = [
     {
-      label: "All Sub Types",
+      label: "All Recipe Sub Types",
       value: null,
     },
     {
