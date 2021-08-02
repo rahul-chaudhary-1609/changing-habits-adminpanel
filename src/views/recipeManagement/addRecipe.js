@@ -51,13 +51,92 @@ export default function AddRecipe() {
     },
   ];
 
-  const [recipeType, setRecipeType] = useState(1);
+  var type = [
+    {
+      label: "Vegetarian",
+      value: 1,
+    },
+    {
+      label: "Non Vegetarian",
+      value: 2,
+    },
+
+    {
+      label: "Snacks",
+      value: 3,
+    },
+    {
+      label: "Desserts",
+      value: 4,
+    },
+    {
+      label: "Free Foods",
+      value: 5,
+    },
+    {
+      label: "Fruits",
+      value: 6,
+    },
+  ];
+
+  var vegType = [
+    {
+      label: "Eggs",
+      value: 15,
+    },
+    {
+      label: "Fish",
+      value: 11,
+    },
+
+    {
+      label: "Seafood",
+      value: 12,
+    },
+    {
+      label: "Legumes",
+      value: 13,
+    },
+    {
+      label: "Vegetables",
+      value: 14,
+    },
+  ];
+
+  var nonVegType = [
+    {
+      label: "Chicken",
+      value: 21,
+    },
+    {
+      label: "Beef",
+      value: 22,
+    },
+
+    {
+      label: "Lamb",
+      value: 23,
+    },
+    {
+      label: "Pork",
+      value: 24,
+    },
+    {
+      label: "Turkey",
+      value: 25,
+    },
+  ];
+
   const [disable, setDisable] = useState(false);
+  const [recipeType, setRecipeType] = useState(1);
   const [image, setImage] = useState({});
 
   const [show, setShow] = useState({
+    recipe_sub_type: "",
+    recipe_type: "",
     phase_id: "",
     recipe_image_url: "",
+    serves_quantity: null,
     recipe_title: "",
     recipe_ingredients: "",
     recipe_methods: "",
@@ -68,11 +147,23 @@ export default function AddRecipe() {
       error: "",
       blur: "",
     },
+    recipe_sub_type: {
+      error: "",
+      blur: "",
+    },
+    recipe_type: {
+      error: "",
+      blur: "",
+    },
     recipe_image_url: {
       error: "",
       blur: "",
     },
     recipe_title: {
+      error: "",
+      blur: "",
+    },
+    serves_quantity: {
       error: "",
       blur: "",
     },
@@ -93,7 +184,6 @@ export default function AddRecipe() {
       try {
         const result = await GetRecipeDetail(params.id);
         if (result) {
-          setRecipeType(result.recipeDetails.recipe_type);
           setShow(result.recipeDetails);
         }
       } catch (error) {
@@ -115,6 +205,14 @@ export default function AddRecipe() {
       valid = false;
       showPhase = "Please select Phase";
     }
+    if (show.recipe_type === "none" || show.recipe_type === "") {
+      valid = false;
+      showPhase = "Please select Recipe Type";
+    }
+    if (show.recipe_sub_type === "none" || show.recipe_sub_type === "") {
+      valid = false;
+      showPhase = "Please select Recipe Sub Type";
+    }
     if (show.recipe_ingredients === "") {
       valid = false;
       showIng = "Please enter Recipe Ingredients";
@@ -127,9 +225,14 @@ export default function AddRecipe() {
       valid = false;
       showTitle = "Please enter Recipe Title";
     }
+    if (show.serves_quantity === "") {
+      valid = false;
+      showTitle = "Please enter Quantity Served";
+    }
     setError({
       ...error,
       recipe_title: { ...error.recipe_title, error: showTitle },
+      serves_quantity: { ...error.serves_quantity, error: showTitle },
       recipe_ingredients: {
         ...error.recipe_ingredients,
         error: showIng,
@@ -139,6 +242,8 @@ export default function AddRecipe() {
         error: showMethod,
       },
       phase_id: { ...error.phase_id, error: showPhase },
+      recipe_type: { ...error.recipe_type, error: showPhase },
+      recipe_sub_type: { ...error.recipe_sub_type, error: showPhase },
     });
 
     return valid;
@@ -186,6 +291,24 @@ export default function AddRecipe() {
     setShow({ ...show, recipe_title: e.target.value });
   };
 
+  const handleServedChange = (e) => {
+    setError({
+      ...error,
+      serves_quantity: { ...error.serves_quantity, error: "" },
+    });
+
+    if (e.target.value === "") {
+      setError({
+        ...error,
+        serves_quantity: {
+          ...error.serves_quantity,
+          error: "Please Enter Quantity Served",
+        },
+      });
+    }
+    setShow({ ...show, serves_quantity: e.target.value });
+  };
+
   const handleDescriptionChange = (e) => {
     setError({
       ...error,
@@ -221,6 +344,43 @@ export default function AddRecipe() {
     }
     setShow({ ...show, recipe_methods: e.target.value });
   };
+  const handleTypeChange = (e) => {
+    setRecipeType(e.target.value);
+    setError({
+      ...error,
+      recipe_type: { ...error.recipe_type, error: "" },
+    });
+
+    if (e.target.value === "none") {
+      setError({
+        ...error,
+        recipe_type: {
+          ...error.recipe_type,
+          error: "Please enter recipe type",
+        },
+      });
+    }
+    setShow({ ...show, recipe_type: e.target.value });
+  };
+
+  const handleSubTypeChange = (e) => {
+    setError({
+      ...error,
+      recipe_sub_type: { ...error.recipe_sub_type, error: "" },
+    });
+
+    if (e.target.value === "none") {
+      setError({
+        ...error,
+        recipe_sub_type: {
+          ...error.recipe_sub_type,
+          error: "Please enter recipe sub type",
+        },
+      });
+    }
+    setShow({ ...show, recipe_sub_type: e.target.value });
+  };
+
   const handleCategoryIdChange = (e) => {
     setError({
       ...error,
@@ -271,10 +431,12 @@ export default function AddRecipe() {
 
     if (params.id) {
       body.phase_id = Number(show.phase_id);
+      body.recipe_type = Number(show.recipe_type);
+      body.recipe_sub_type = Number(show.recipe_sub_type);
       body.recipe_title = show.recipe_title;
+      body.serves_quantity = Number(show.serves_quantity);
       body.recipe_ingredients = show.recipe_ingredients;
       body.recipe_methods = show.recipe_methods;
-      body.recipe_type = recipeType ? recipeType : show.recipe_type;
       try {
         const response = await EditPost(params.id, body);
         setLoading(false);
@@ -287,10 +449,12 @@ export default function AddRecipe() {
       }
     } else {
       body.phase_id = Number(show.phase_id);
+      body.recipe_sub_type = Number(show.recipe_sub_type);
+      body.recipe_type = Number(show.recipe_type);
       body.recipe_title = show.recipe_title;
+      body.serves_quantity = Number(show.serves_quantity);
       body.recipe_ingredients = show.recipe_ingredients;
       body.recipe_methods = show.recipe_methods;
-      body.recipe_type = recipeType ? recipeType : show.recipe_type;
 
       try {
         const response = await SavePost(body);
@@ -303,10 +467,6 @@ export default function AddRecipe() {
         console.log(error);
       }
     }
-  };
-
-  const handleRecipeType = (type) => {
-    setRecipeType(type);
   };
 
   return (
@@ -482,52 +642,100 @@ export default function AddRecipe() {
                     </CFormGroup>
                     <CFormGroup row>
                       <CCol md="3">
-                        <CLabel htmlFor="recipe_type">
-                          <h6>Recipe type?</h6>
+                        <CLabel>
+                          <h6>
+                            <strong>Quantity served:</strong>
+                          </h6>
                         </CLabel>
                       </CCol>
-                      <CCol row md="3">
-                        <label for={1}>
-                          <CInput
-                            type="radio"
-                            id={1}
-                            formControlName="recipe_type"
-                            checked={recipeType == 1 ? "checked" : ""}
-                            value={show.recipe_type}
-                            style={{
-                              width: "60%",
-                              marginTop: "-7px",
-                              outline: "none !important",
-                            }}
-                            onChange={() => {
-                              handleRecipeType(1);
-                            }}
-                          />
-                          Veg
-                        </label>
+                      <CCol xs="12" md="9">
+                        <CInput
+                          type="number"
+                          min={0}
+                          id="serves_quantity"
+                          name="serves_quantity"
+                          value={show.serves_quantity}
+                          onChange={handleServedChange}
+                          onBlur={handleServedChange}
+                        />
+                        {error.serves_quantity.error && (
+                          <div className="email-validate">
+                            {error.serves_quantity.error}
+                          </div>
+                        )}
                       </CCol>
-                      <CCol row md="3">
-                        <label for={2}>
-                          <CInput
-                            type="radio"
-                            id={2}
-                            formControlName="recipe_type"
-                            checked={recipeType == 2 ? "checked" : ""}
-                            value={show.recipe_type}
-                            style={{ width: "28%", marginTop: "-7px" }}
-                            onChange={() => {
-                              handleRecipeType(2);
-                            }}
-                          />
-                          Non Veg
-                        </label>
+                    </CFormGroup>
+
+                    <CFormGroup row>
+                      <CCol md="3">
+                        <CLabel htmlFor="recipe_type">
+                          <h6>
+                            <strong>Recipe Type:</strong>
+                          </h6>
+                        </CLabel>
                       </CCol>
+                      <CCol xs="12" md="9">
+                        <CSelect
+                          value={show.recipe_type}
+                          onChange={handleTypeChange}
+                          onBlur={handleTypeChange}
+                          custom
+                          name="recipe_type"
+                          id="recipe_type"
+                          options={type}
+                        >
+                          <option value="none">Select recipe type:</option>
+                          {type.map((item, index) => (
+                            <option key={index} value={item.value}>
+                              {item.label}
+                            </option>
+                          ))}
+                        </CSelect>
+                        {error.recipe_type.error && (
+                          <div className="email-validate">
+                            {error.recipe_type.error}
+                          </div>
+                        )}
+                      </CCol>
+                      {show.recipe_type == 1 || show.recipe_type == 2 ? (
+                        <CCol
+                          xs="12"
+                          md="9"
+                          style={{ marginLeft: "11.5rem", marginTop: "0.5rem" }}
+                        >
+                          <CSelect
+                            value={show.recipe_sub_type}
+                            onChange={handleSubTypeChange}
+                            onBlur={handleSubTypeChange}
+                            custom
+                            name="recipe_sub_type"
+                            id="recipe_sub_type"
+                            options={recipeType == 1 ? vegType : nonVegType}
+                          >
+                            <option value="none">Select recipe sub type</option>
+                            {(recipeType == 1 ? vegType : nonVegType).map(
+                              (item, index) => (
+                                <option key={index} value={item.value}>
+                                  {item.label}
+                                </option>
+                              )
+                            )}
+                          </CSelect>
+                          {error.recipe_sub_type.error && (
+                            <div className="email-validate">
+                              {error.recipe_sub_type.error}
+                            </div>
+                          )}
+                        </CCol>
+                      ) : (
+                        ""
+                      )}
                     </CFormGroup>
                     <CFormGroup row>
                       <CCol md="3">
                         <CLabel htmlFor="hf-category">
                           <h6>
-                            <strong>Phase</strong>
+                            <strong>Phase:</strong>
                           </h6>
                         </CLabel>
                       </CCol>
@@ -553,7 +761,6 @@ export default function AddRecipe() {
                             {error.phase_id.error}
                           </div>
                         )}
-                        {/* {formik.touched.categoryTypeId && formik.errors.categoryTypeId ? <div className="email-validate">{formik.errors.categoryTypeId}</div> : null} */}
                       </CCol>
                     </CFormGroup>
                   </div>
