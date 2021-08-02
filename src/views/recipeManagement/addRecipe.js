@@ -202,7 +202,7 @@ export default function AddRecipe() {
               return {
                 quantity_no: ++index,
                 ingredient: data.ingredient,
-                quantity: data.quantity_no,
+                quantity: data.quantity,
                 unit: data.unit,
                 check: false,
                 validationMsg: null,
@@ -554,16 +554,18 @@ export default function AddRecipe() {
     if (params.id) {
       body.phase_id = Number(show.phase_id);
       body.recipe_type = Number(show.recipe_type);
-      body.recipe_sub_type = Number(show.recipe_sub_type);
+      body.recipe_sub_type =
+        show.recipe_type == 1 || show.recipe_type == 2
+          ? Number(show.recipe_sub_type)
+          : null;
       body.recipe_title = show.recipe_title;
       body.serves_quantity = Number(show.serves_quantity);
       body.recipe_methods = show.recipe_methods;
       body.recipe_ingredients = quantityInputFields.map(
         (quantityInputField) => {
-          debugger;
           return {
             ingredient: quantityInputField.ingredient,
-            quantity: quantityInputField.quantity_no,
+            quantity: quantityInputField.quantity,
             unit: quantityInputField.unit,
           };
         }
@@ -748,7 +750,7 @@ export default function AddRecipe() {
                                     : "none",
                                 marginLeft:
                                   quantityInputField.quantity_no > 1
-                                    ? "11.5rem"
+                                    ? "12.5rem"
                                     : "",
                               }}
                             >
@@ -998,7 +1000,7 @@ export default function AddRecipe() {
                         <CCol
                           xs="12"
                           md="9"
-                          style={{ marginLeft: "11.5rem", marginTop: "0.5rem" }}
+                          style={{ marginLeft: "12.5rem", marginTop: "0.5rem" }}
                         >
                           <CSelect
                             value={show.recipe_sub_type}
@@ -1007,16 +1009,29 @@ export default function AddRecipe() {
                             custom
                             name="recipe_sub_type"
                             id="recipe_sub_type"
-                            options={recipeType == 1 ? vegType : nonVegType}
+                            options={
+                              show.recipe_type
+                                ? show.recipe_type == 1
+                                  ? vegType
+                                  : nonVegType
+                                : recipeType == 1
+                                ? vegType
+                                : nonVegType
+                            }
                           >
                             <option value="none">Select recipe sub type</option>
-                            {(recipeType == 1 ? vegType : nonVegType).map(
-                              (item, index) => (
-                                <option key={index} value={item.value}>
-                                  {item.label}
-                                </option>
-                              )
-                            )}
+                            {(show.recipe_type
+                              ? show.recipe_type == 1
+                                ? vegType
+                                : nonVegType
+                              : recipeType == 1
+                              ? vegType
+                              : nonVegType
+                            ).map((item, index) => (
+                              <option key={index} value={item.value}>
+                                {item.label}
+                              </option>
+                            ))}
                           </CSelect>
                           {error.recipe_sub_type.error && (
                             <div className="email-validate">

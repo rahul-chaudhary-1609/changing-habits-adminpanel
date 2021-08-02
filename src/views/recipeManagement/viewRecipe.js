@@ -370,7 +370,7 @@ export default function ViewRecipe() {
                         </CCol>
                         <CCol row md="3">
                           <label for="recipe_sub_type">
-                            {getRecipeSubType(show.recipe_type)}
+                            {getRecipeSubType(show.recipe_sub_type)}
                           </label>
                         </CCol>
                       </CFormGroup>
