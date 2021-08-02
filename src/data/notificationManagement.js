@@ -79,3 +79,27 @@ export const sendNotification = (req = {}) => {
     })
 
 }
+
+export const getNotification = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await api.get(
+                `${apiConstant.getNotification}/${req.pathParams.id}`,
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+        }
+        
+    })
+
+}

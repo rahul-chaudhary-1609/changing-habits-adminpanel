@@ -72,6 +72,7 @@ const apiConstant = {
   listNotification: "/api/v1/admin/listNotification",
   sendNotification: "/api/v1/admin/sendNotification",
   listUser: "/api/v1/admin/listActiveUsers",
+  getNotification: "/api/v1/admin/getNotification",
 
   //food log suggestion API's
   listFoodLogSuggestion: "/api/v1/admin/listFoodContent",
