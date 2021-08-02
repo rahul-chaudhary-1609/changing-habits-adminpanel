@@ -421,10 +421,10 @@ export const GetRecipeList = (page, search, data) => {
   } else {
     searchKey = "";
   }
-  let type;
+  let recipe_type;
   if (data && data.recipeType) {
-    type = `&type=${data.recipeType}`;
-  } else type = "";
+    recipe_type = `&recipe_type=${data.recipeType}`;
+  } else recipe_type = "";
 
   let status;
   if (data && (data.recipeStatus || data.recipeStatus == 0)) {
@@ -436,11 +436,16 @@ export const GetRecipeList = (page, search, data) => {
     phase_id = `&phase_id=${data.phaseId}`;
   } else phase_id = "";
 
+  let recipe_sub_type;
+  if (data && data.subType) {
+    recipe_sub_type = `&recipe_sub_type=${data.subType}`;
+  } else recipe_sub_type = "";
+
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.get(
         apiConstant.GetRecipesList.concat(
-          `${page}${searchKey}${type}${status}${phase_id}`
+          `${page}${searchKey}${recipe_type}${status}${phase_id}${recipe_sub_type}`
         ),
         {
           headers: header(),

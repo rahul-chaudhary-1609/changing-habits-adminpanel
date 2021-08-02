@@ -118,6 +118,7 @@ const Recipes = () => {
   const [recipeType, setRecipeType] = useState(null);
   const [recipeStatus, setRecipeStatus] = useState(null);
   const [phaseId, setPhaseId] = useState(null);
+  const [subType, setSubType] = useState(null);
   let currentId = page && page * 10 - 10;
 
   var recipe_status = [
@@ -261,6 +262,55 @@ const Recipes = () => {
     }
   };
 
+  var recipeSubType = [
+    {
+      label: "All Sub Types",
+      value: null,
+    },
+    {
+      label: "Eggs",
+      value: 15,
+    },
+    {
+      label: "Fish",
+      value: 11,
+    },
+
+    {
+      label: "Seafood",
+      value: 12,
+    },
+    {
+      label: "Legumes",
+      value: 13,
+    },
+    {
+      label: "Vegetables",
+      value: 14,
+    },
+    {
+      label: "Chicken",
+      value: 21,
+    },
+    {
+      label: "Beef",
+      value: 22,
+    },
+
+    {
+      label: "Lamb",
+      value: 23,
+    },
+    {
+      label: "Pork",
+      value: 24,
+    },
+    {
+      label: "Turkey",
+      value: 25,
+    },
+  ];
+
   const pageChange = (newPage) => {
     let newPage1 = newPage;
     if (newPage1 === 0) {
@@ -314,9 +364,10 @@ const Recipes = () => {
         let dropdown = {};
         dropdown.recipeType = recipeType ? Number(recipeType) : null;
         dropdown.recipeStatus = recipeStatus ? Number(recipeStatus) : null;
+        dropdown.subType = subType ? Number(subType) : null;
         dropdown.phaseId = phaseId ? Number(phaseId) : null;
         const data =
-          phaseId || recipeType || recipeStatus
+          phaseId || recipeType || recipeStatus || subType
             ? await GetRecipeList(currentPage, currentPageSearch, dropdown)
             : await GetRecipeList(currentPage, currentPageSearch);
         setLoading(false);
@@ -348,6 +399,7 @@ const Recipes = () => {
     recipeStatus,
     recipeType,
     phaseId,
+    subType,
   ]);
 
   return (
@@ -448,6 +500,33 @@ const Recipes = () => {
                       >
                         Reset
                       </CButton>
+                    </CInputGroup>
+                    <CInputGroup style={{ width: "48%" }}>
+                      <CInputGroupText
+                        style={{
+                          borderRadius: "2px",
+                          backgroundColor: "#008080",
+                          color: "#fff",
+                        }}
+                      >
+                        <FaFilter />
+                      </CInputGroupText>
+                      <CSelect
+                        onChange={(e) => {
+                          setSubType(e.target.value);
+                        }}
+                        custom
+                        value={subType}
+                        placeholder="All Recipe Sub Type"
+                        name="sub_type"
+                        id="sub_type"
+                      >
+                        {recipeSubType.map((item) => (
+                          <option key={item.value} value={item.value}>
+                            {item.label}
+                          </option>
+                        ))}
+                      </CSelect>
                     </CInputGroup>
                   </CCol>
                   <CCol style={{ marginBottom: "1rem", display: "flex" }}>

@@ -994,7 +994,7 @@ export default function AddRecipe() {
                         <CCol
                           xs="12"
                           md="9"
-                          style={{ marginLeft: "11.5rem", marginTop: "0.5rem" }}
+                          style={{ marginLeft: "12.5rem", marginTop: "0.5rem" }}
                         >
                           <CSelect
                             value={show.recipe_sub_type}
