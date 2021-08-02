@@ -217,6 +217,7 @@ export default function EditUser(props) {
               <CCol xs="12" md="9">
                 <CInput
                   type="text"
+                  autoComplete="off"
                   id="subscription_token_id"
                   name="subscription_token_id"
                   onChange={(e) => {
@@ -312,6 +313,7 @@ export default function EditUser(props) {
                       type="text"
                       id="name"
                       name="name"
+                      autoComplete="off"
                       onBlur={formik.handleBlur}
                       value={formik.values.name}
                       onChange={formik.handleChange}
@@ -332,6 +334,7 @@ export default function EditUser(props) {
                       type="text"
                       id="email"
                       name="email"
+                      autoComplete="off"
                       onBlur={formik.handleBlur}
                       value={formik.values.email}
                       onChange={formik.handleChange}
@@ -367,6 +370,7 @@ export default function EditUser(props) {
                       type="text"
                       id="phone_no"
                       name="phone_no"
+                      autoComplete="off"
                       onBlur={formik.handleBlur}
                       value={formik.values.phone_no}
                       onChange={formik.handleChange}
@@ -390,6 +394,7 @@ export default function EditUser(props) {
                         type="text"
                         id="subscription_token_id"
                         name="subscription_token_id"
+                        autoComplete="off"
                         disabled="true"
                         onBlur={formik.handleBlur}
                         value={formik.values.subscription_token_id}
@@ -534,6 +539,7 @@ export default function EditUser(props) {
                       type="text"
                       id="name"
                       name="name"
+                      autoComplete="off"
                       onBlur={formik.handleBlur}
                       value={formik.values.name}
                       onChange={formik.handleChange}
@@ -554,6 +560,7 @@ export default function EditUser(props) {
                       type="text"
                       id="email"
                       name="email"
+                      autoComplete="off"
                       onBlur={formik.handleBlur}
                       value={formik.values.email}
                       onChange={formik.handleChange}
@@ -602,6 +609,7 @@ export default function EditUser(props) {
                       type="text"
                       id="phone_no"
                       name="phone_no"
+                      autoComplete="off"
                       onBlur={formik.handleBlur}
                       value={formik.values.phone_no}
                       onChange={formik.handleChange}
@@ -625,6 +633,7 @@ export default function EditUser(props) {
                         type="radio"
                         id={0}
                         formControlName="recipe_type"
+                        autoComplete="off"
                         checked={subscriptionStatus == 0 ? "checked" : ""}
                         style={{
                           width: "20%",
@@ -644,6 +653,7 @@ export default function EditUser(props) {
                       <CInput
                         type="radio"
                         id={1}
+                        autoComplete="off"
                         formControlName="recipe_type"
                         checked={subscriptionStatus == 1 ? "checked" : ""}
                         style={{
@@ -671,6 +681,7 @@ export default function EditUser(props) {
                         type="text"
                         id="subscription_token_id"
                         name="subscription_token_id"
+                        autoComplete="off"
                         onBlur={formik.handleBlur}
                         value={formik.values.subscription_token_id}
                         onChange={formik.handleChange}

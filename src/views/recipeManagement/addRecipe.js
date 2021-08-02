@@ -652,6 +652,7 @@ export default function AddRecipe() {
                           type="text"
                           id="recipe_title"
                           name="recipe_title"
+                          autoComplete="off"
                           value={show.recipe_title}
                           onChange={(e) => handleTitleChange(e)}
                           onBlur={handleTitleChange}
@@ -759,6 +760,7 @@ export default function AddRecipe() {
                                     "ingredient"
                                   )
                                 }
+                                autoComplete="off"
                                 value={quantityInputField.ingredient}
                                 type="text"
                                 id={`ingredient${quantityInputField.quantity_no}`}
@@ -773,6 +775,7 @@ export default function AddRecipe() {
                                     "quantity"
                                   )
                                 }
+                                autoComplete="off"
                                 value={quantityInputField.quantity}
                                 type="number"
                                 id={`quantity${quantityInputField.quantity_no}`}
@@ -947,6 +950,7 @@ export default function AddRecipe() {
                           min={0}
                           id="serves_quantity"
                           name="serves_quantity"
+                          autoComplete="off"
                           value={show.serves_quantity}
                           onChange={handleServedChange}
                           onBlur={handleServedChange}
