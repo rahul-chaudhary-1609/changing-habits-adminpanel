@@ -102,7 +102,7 @@ function ListUserProgress() {
                     <CCard>
                         <CCardHeader>
                             {/* <div style={{display:"flex", justifyContent:"space-between"}}> */}
-                                <h2>User Progresss Management</h2>
+                                <h2>User Progress Management</h2>
                                 {/* <CButton
                                     style={{ width: "5rem",float:"right",backgroundColor:"#008080",color:"#fff"}}
                                     onClick={()=> history.push('/sendNotification')}
@@ -132,6 +132,7 @@ function ListUserProgress() {
                                 <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by title"
                                     value={searchValue}
                                     onChange={(e) => { setSearchValue(e.target.value) }}
+                                    autoComplete="off"
                                 />
                                 <CButton style={{ marginLeft: "1rem", backgroundColor:"#008080",color:"#fff"}}
                                     onClick={() => { setSearchKey(searchValue.trim() != "" ? searchValue.trim() : null) }}

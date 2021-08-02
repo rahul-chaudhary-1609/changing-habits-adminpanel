@@ -332,7 +332,7 @@ function AddEditLearningContent(props) {
                 <div style={{color:"green",fontSize:"1rem", display:successResponse.isFound?"flex":"none", justifyContent:"center"}}>
                   <div><h5>{ successResponse.message}</h5></div>
                   </div>
-                  <CForm action="" method="post" onSubmit={handleSubmit}>
+                  <CForm action="" method="post" onSubmit={handleSubmit}  autoComplete="off">
                   <CFormGroup >                    
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="title">Title:</CLabel>
                     <CInput
@@ -450,7 +450,7 @@ function AddEditLearningContent(props) {
                         checked={phychologicalContentTypeCheck}
                         type="checkbox"
                          id="content_type_phychological"
-                      />Phychological</CLabel></div>
+                      />Physiological</CLabel></div>
                       <div  style={{marginLeft:"1rem"}}><CLabel><CInputCheckbox
                         onChange={() => {
                            if (nutritionContentTypeCheck) {

@@ -287,7 +287,7 @@ function AddEditKnowledgeBlog(props) {
                 <div style={{color:"green",fontSize:"1rem", display:successResponse.isFound?"flex":"none", justifyContent:"center"}}>
                   <div><h5>{ successResponse.message}</h5></div>
                   </div>
-                  <CForm action="" method="post" onSubmit={handleSubmit}>
+                  <CForm action="" method="post" onSubmit={handleSubmit}  autoComplete="off">
                   <CFormGroup >                    
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="title">Title:</CLabel>
                     <CInput
@@ -383,7 +383,7 @@ function AddEditKnowledgeBlog(props) {
                         checked={phychologicalContentTypeCheck}
                         type="checkbox"
                          id="content_type_phychological"
-                      />Phychological</CLabel></div>
+                      />Physiological</CLabel></div>
                       <div  style={{marginLeft:"1rem"}}><CLabel><CInputCheckbox
                         onChange={() => {
                            if (nutritionContentTypeCheck) {
@@ -439,64 +439,7 @@ function AddEditKnowledgeBlog(props) {
                     />
                     <div style={{color:"red",marginLeft:"0.1rem", display:externalLinkCheck?"":"none"}}>External link is required</div>
                       </CFormGroup>
-                  {/* <CFormGroup style={{display:"flex", alignItems:"center",}} >                    
-                      <CLabel style={{marginRight:"2rem",fontWeight:"600",fontSize:"1rem"}} htmlFor="title">Content Type:</CLabel>
-                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent:"start",  }}>
-                      
-                      <div style={{marginRight:"1rem"}}><CLabel><CInputCheckbox
-                        onChange={() => {
-                          if (phychologicalContentTypeCheck) {
-                            setPhychologicalContentTypeCheck(false)
-                            setCheckRequired(true)
-                          } else {
-                            setPhychologicalContentTypeCheck(true)
-                            setNutritionContentTypeCheck(false)
-                            setProtocolContentTypeCheck(false)
-                            setCheckRequired(false)
-                          }
-                        }}
-                        checked={phychologicalContentTypeCheck}
-                        type="checkbox"
-                         id="content_type_phychological"
-                      />Phychological</CLabel></div>
-                      <div  style={{marginLeft:"1rem"}}><CLabel><CInputCheckbox
-                        onChange={() => {
-                           if (nutritionContentTypeCheck) {
-                             setNutritionContentTypeCheck(false)
-                             setCheckRequired(true)
-                          }else {
-                            setPhychologicalContentTypeCheck(false)
-                             setNutritionContentTypeCheck(true)
-                             setProtocolContentTypeCheck(false)
-                            setCheckRequired(false) 
-                          }
-                        }}
-                       checked={nutritionContentTypeCheck}
-                        type="checkbox"
-                        id="content_type_nutrition"
-                      />Nutrition</CLabel></div>
-
-                      <div  style={{marginLeft:"2rem"}}><CLabel><CInputCheckbox
-                        onChange={() => {
-                           if (protocolContentTypeCheck) {
-                             setProtocolContentTypeCheck(false)
-                             setCheckRequired(true)
-                          }else {
-                            setPhychologicalContentTypeCheck(false)
-                             setNutritionContentTypeCheck(false)
-                             setProtocolContentTypeCheck(true)
-                            setCheckRequired(false) 
-                          }
-                        }}
-                       checked={protocolContentTypeCheck}
-                        type="checkbox"
-                        id="content_type_nutrition"
-                      />Protocol Info</CLabel></div>
-                      
-                      </div>
-                   
-                    <div style={{color:"red",marginLeft:"2.5rem",display: checkRequired ? "" : "none"}}>Content type is required</div>
-                  </CFormGroup> */}
+                  
                   
                   <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
                     <CButton
