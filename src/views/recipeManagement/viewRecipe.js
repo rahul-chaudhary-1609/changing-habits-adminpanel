@@ -44,6 +44,48 @@ export default function ViewRecipe() {
     }
   };
 
+  const getRecipeType = (type) => {
+    switch (type) {
+      case 1:
+        return "Vegetarian";
+      case 2:
+        return "Non Vegetarian";
+      case 3:
+        return "Snacks";
+      case 4:
+        return "Desserts";
+      case 5:
+        return "Free Foods";
+      default:
+        return "Fruits";
+    }
+  };
+
+  const getRecipeSubType = (subType) => {
+    switch (subType) {
+      case 11:
+        return "Fish";
+      case 12:
+        return "Seafood";
+      case 13:
+        return " Legumes";
+      case 14:
+        return "Vegetables";
+      case 15:
+        return "Eggs";
+      case 21:
+        return "Chicken";
+      case 22:
+        return "Beef";
+      case 23:
+        return "Lamb";
+      case 24:
+        return "Pork";
+      case 25:
+        return "Turkey";
+    }
+  };
+
   const [loading, setLoading] = useState(false);
   const [enableModal, setEnableModal] = useState(false);
   const [status, setStatus] = useState(null);
@@ -268,7 +310,18 @@ export default function ViewRecipe() {
                         </CLabel>
                       </CCol>
                       <CCol xs="4" md="9" style={{ whiteSpace: "pre-line" }}>
-                        {show.recipe_ingredients}
+                        <ul className="flex flex-row md:flex-col">
+                          {show &&
+                            show.recipe_ingredients &&
+                            show.recipe_ingredients.map((item, index) => {
+                              return (
+                                <li>
+                                  {item.ingredient} {item.quantity}
+                                  {item.unit}
+                                </li>
+                              );
+                            })}
+                        </ul>
                       </CCol>
                     </CFormGroup>
                     <CFormGroup row>
@@ -298,11 +351,32 @@ export default function ViewRecipe() {
                         </CLabel>
                       </CCol>
                       <CCol row md="3">
-                        <label for={1}>
-                          {show.recipe_type == 1 ? "Veg" : "Non Veg"}
+                        <label for="recipe_type">
+                          {getRecipeType(show.recipe_type)}
                         </label>
                       </CCol>
                     </CFormGroup>
+                    {show.recipe_sub_type ? (
+                      <CFormGroup row>
+                        <CCol md="3">
+                          <CLabel
+                            style={{ fontFamily: "Poppins" }}
+                            htmlFor="recipe_sub_type"
+                          >
+                            <h6>
+                              <strong>Recipe sub type : </strong>
+                            </h6>
+                          </CLabel>
+                        </CCol>
+                        <CCol row md="3">
+                          <label for="recipe_sub_type">
+                            {getRecipeSubType(show.recipe_type)}
+                          </label>
+                        </CCol>
+                      </CFormGroup>
+                    ) : (
+                      ""
+                    )}
                     <CFormGroup row>
                       <CCol md="3">
                         <CLabel htmlFor="hf-category">
@@ -329,6 +403,23 @@ export default function ViewRecipe() {
                           : show.status == 1
                           ? "Approved"
                           : "Rejected"}
+                      </CCol>
+                    </CFormGroup>
+                    <CFormGroup row>
+                      <CCol md="3">
+                        <CLabel
+                          style={{ fontFamily: "Poppins" }}
+                          htmlFor="textarea-input"
+                        >
+                          <h6>
+                            <strong>Amount of Serves : </strong>
+                          </h6>
+                        </CLabel>
+                      </CCol>
+                      <CCol xs="4" md="9">
+                        {show.serves_quantity > 1
+                          ? `${show.serves_quantity}${" "}people`
+                          : `${show.serves_quantity}${" "}person`}
                       </CCol>
                     </CFormGroup>
                   </div>

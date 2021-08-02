@@ -46,12 +46,17 @@ const fields = [
   { key: "currentId", label: "Id", _style: { fontFamily: "Poppins" } },
   {
     key: "recipe_title",
-    label: "Recipe Title ",
+    label: "Recipe Name ",
     _style: { fontFamily: "Poppins" },
   },
   {
     key: "recipeType",
     label: "Recipe Type",
+    _style: { fontFamily: "Poppins" },
+  },
+  {
+    key: "recipeSubType",
+    label: "Recipe Sub Type",
     _style: { fontFamily: "Poppins" },
   },
   {
@@ -140,12 +145,28 @@ const Recipes = () => {
       value: null,
     },
     {
-      label: "Veg",
+      label: "Vegetarian",
       value: 1,
     },
     {
-      label: "Non Veg",
+      label: "Non Vegetarian",
       value: 2,
+    },
+    {
+      label: "Snacks",
+      value: 3,
+    },
+    {
+      label: "Desserts",
+      value: 4,
+    },
+    {
+      label: "Free Foods",
+      value: 5,
+    },
+    {
+      label: "Fruits",
+      value: 6,
     },
   ];
 
@@ -193,6 +214,50 @@ const Recipes = () => {
         return "phase 4";
       default:
         return "phase 4 eva";
+    }
+  };
+
+  const getRecipeType = (type) => {
+    switch (type) {
+      case 1:
+        return "Vegetarian";
+      case 2:
+        return "Non Vegetarian";
+      case 3:
+        return "Snacks";
+      case 4:
+        return "Desserts";
+      case 5:
+        return "Free Foods";
+      default:
+        return "Fruits";
+    }
+  };
+
+  const getRecipeSubType = (subType) => {
+    switch (subType) {
+      case 11:
+        return "Fish";
+      case 12:
+        return "Seafood";
+      case 13:
+        return " Legumes";
+      case 14:
+        return "Vegetables";
+      case 15:
+        return "Eggs";
+      case 21:
+        return "Chicken";
+      case 22:
+        return "Beef";
+      case 23:
+        return "Lamb";
+      case 24:
+        return "Pork";
+      case 25:
+        return "Turkey";
+      default:
+        return "NA";
     }
   };
 
@@ -352,13 +417,13 @@ const Recipes = () => {
                         </CInputGroupText>
                       </CInputGroupPrepend>
                       <CInput
-                        style={{ maxWidth: "15rem" }}
+                        style={{ maxWidth: "16rem" }}
                         value={onsearchCHange}
                         onChange={handleSearchChange}
                         autoComplete="off"
                         id="input1-group1"
                         name="input1-group1"
-                        placeholder="Search by Recipe Title"
+                        placeholder="Search by Recipe Name or Ingredients Name"
                       />
 
                       <CButton
@@ -494,7 +559,10 @@ const Recipes = () => {
                   </td>
                 ),
                 recipeType: (item) => (
-                  <td>{item.recipe_type == 1 ? "Veg" : "Non Veg"}</td>
+                  <td>{getRecipeType(item.recipe_type)}</td>
+                ),
+                recipeSubType: (item) => (
+                  <td>{getRecipeSubType(item.recipe_sub_type)}</td>
                 ),
                 status: (item) => (
                   <td>

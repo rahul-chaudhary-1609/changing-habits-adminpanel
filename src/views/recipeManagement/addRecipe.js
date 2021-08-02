@@ -12,11 +12,16 @@ import {
   CTextarea,
   CInputFile,
   CSelect,
+  CInputGroup,
+  CInputGroupAppend,
+  CBadge,
 } from "@coreui/react";
 
 import { uploadImage, SavePost, EditPost, GetRecipeDetail } from "../../api";
 import { useLocation, useHistory, useParams } from "react-router-dom";
 import FormData from "form-data";
+import { unitList } from "../../utils/helper";
+import { FaPlus, FaMinus } from "react-icons/fa";
 
 export default function AddRecipe() {
   const location = useLocation();
@@ -131,6 +136,17 @@ export default function AddRecipe() {
   const [recipeType, setRecipeType] = useState(1);
   const [image, setImage] = useState({});
 
+  let [quantityInputFields, setQuantityInputFields] = useState([
+    {
+      quantity_no: 1,
+      ingredient: "",
+      quantity: null,
+      unit: "none",
+      check: false,
+      validationMsg: null,
+    },
+  ]);
+
   const [show, setShow] = useState({
     recipe_sub_type: "",
     recipe_type: "",
@@ -138,7 +154,6 @@ export default function AddRecipe() {
     recipe_image_url: "",
     serves_quantity: null,
     recipe_title: "",
-    recipe_ingredients: "",
     recipe_methods: "",
   });
 
@@ -167,10 +182,6 @@ export default function AddRecipe() {
       error: "",
       blur: "",
     },
-    recipe_ingredients: {
-      error: "",
-      blur: "",
-    },
     recipe_methods: {
       error: "",
       blur: "",
@@ -178,6 +189,7 @@ export default function AddRecipe() {
   });
 
   const [loading, setLoading] = useState(false);
+  let [quantityInputFieldsCheck, setQuantityInputFieldsCheck] = useState(false);
 
   useEffect(() => {
     const GetRecipe = async () => {
@@ -185,6 +197,19 @@ export default function AddRecipe() {
         const result = await GetRecipeDetail(params.id);
         if (result) {
           setShow(result.recipeDetails);
+          let currentQuantityInputFields = result.recipeDetails.recipe_ingredients.map(
+            (data, index) => {
+              return {
+                quantity_no: ++index,
+                ingredient: data.ingredient,
+                quantity: data.quantity_no,
+                unit: data.unit,
+                check: false,
+                validationMsg: null,
+              };
+            }
+          );
+          setQuantityInputFields([...currentQuantityInputFields]);
         }
       } catch (error) {
         console.log(error);
@@ -200,6 +225,7 @@ export default function AddRecipe() {
     let showPhase = "";
     let showTitle = "";
     let showIng = "";
+    let showSubType = "";
     let showMethod = "";
     if (show.phase_id === "none" || show.phase_id === "") {
       valid = false;
@@ -207,15 +233,13 @@ export default function AddRecipe() {
     }
     if (show.recipe_type === "none" || show.recipe_type === "") {
       valid = false;
-      showPhase = "Please select Recipe Type";
+      showIng = "Please select Recipe Type";
     }
-    if (show.recipe_sub_type === "none" || show.recipe_sub_type === "") {
-      valid = false;
-      showPhase = "Please select Recipe Sub Type";
-    }
-    if (show.recipe_ingredients === "") {
-      valid = false;
-      showIng = "Please enter Recipe Ingredients";
+    if (show.recipe_type == 1 || show.recipe_type == 2) {
+      if (show.recipe_sub_type === "none" || show.recipe_sub_type === "") {
+        valid = false;
+        showSubType = "Please select Recipe Sub Type";
+      }
     }
     if (show.recipe_methods === "") {
       valid = false;
@@ -233,18 +257,61 @@ export default function AddRecipe() {
       ...error,
       recipe_title: { ...error.recipe_title, error: showTitle },
       serves_quantity: { ...error.serves_quantity, error: showTitle },
-      recipe_ingredients: {
-        ...error.recipe_ingredients,
-        error: showIng,
-      },
       recipe_methods: {
         ...error.recipe_methods,
         error: showMethod,
       },
       phase_id: { ...error.phase_id, error: showPhase },
-      recipe_type: { ...error.recipe_type, error: showPhase },
-      recipe_sub_type: { ...error.recipe_sub_type, error: showPhase },
+      recipe_type: { ...error.recipe_type, error: showIng },
+      recipe_sub_type: { ...error.recipe_sub_type, error: showSubType },
     });
+
+    let currentQuantityInputFields = [...quantityInputFields];
+    for (let quantityInputField of currentQuantityInputFields) {
+      console.log(quantityInputField);
+      if (quantityInputField.check) {
+        valid = false;
+        continue;
+      } else if (
+        (!quantityInputField.ingredient &&
+          !quantityInputField.unit &&
+          quantityInputField.quantity) ||
+        (quantityInputField.ingredient == "" &&
+          quantityInputField.quantity == 0 &&
+          quantityInputField.unit == "none")
+      ) {
+        quantityInputField.check = true;
+        quantityInputField.validationMsg = null;
+        valid = false;
+      } else if (
+        !quantityInputField.ingredient ||
+        quantityInputField.ingredient == ""
+      ) {
+        quantityInputField.check = true;
+        quantityInputField.validationMsg = `Ingredient ${quantityInputField.quantity_no} name is required`;
+        valid = false;
+      } else if (
+        !quantityInputField.quantity ||
+        quantityInputField.quantity == 0
+      ) {
+        quantityInputField.check = true;
+        quantityInputField.validationMsg = `Ingredient ${quantityInputField.quantity_no} quantity is required`;
+        valid = false;
+      } else if (
+        !quantityInputField.unit ||
+        quantityInputField.unit == "none"
+      ) {
+        quantityInputField.check = true;
+        quantityInputField.validationMsg = `Ingredient ${quantityInputField.quantity_no} unit is required`;
+        valid = false;
+      }
+    }
+    setQuantityInputFields(currentQuantityInputFields);
+
+    if (quantityInputFields.length < 1) {
+      setQuantityInputFieldsCheck(true);
+      valid = false;
+    }
 
     return valid;
   };
@@ -307,24 +374,6 @@ export default function AddRecipe() {
       });
     }
     setShow({ ...show, serves_quantity: e.target.value });
-  };
-
-  const handleDescriptionChange = (e) => {
-    setError({
-      ...error,
-      recipe_ingredients: { ...error.recipe_ingredients, error: "" },
-    });
-
-    if (e.target.value === "") {
-      setError({
-        ...error,
-        recipe_ingredients: {
-          ...error.recipe_ingredients,
-          error: "Please enter Recipe Ingredients",
-        },
-      });
-    }
-    setShow({ ...show, recipe_ingredients: e.target.value });
   };
 
   const handleMethodsChange = (e) => {
@@ -399,6 +448,79 @@ export default function AddRecipe() {
     setShow({ ...show, phase_id: e.target.value });
   };
 
+  let handleChangeQuantityFieldValue = (index, e, field) => {
+    console.log(e.target.value, typeof e.target.value, isNaN(e.target.value));
+    let currentQuantityInputFields = [...quantityInputFields];
+    if (field == "ingredient") {
+      if (!e.target.value) {
+        currentQuantityInputFields[index].ingredient = e.target.value;
+        currentQuantityInputFields[index].check = true;
+        currentQuantityInputFields[
+          index
+        ].validationMsg = `Ingredient ${currentQuantityInputFields[index].quantity_no} name is required`;
+      } else {
+        currentQuantityInputFields[index].ingredient = e.target.value;
+        currentQuantityInputFields[index].check = false;
+        currentQuantityInputFields[index].validationMsg = null;
+      }
+    }
+    if (field == "quantity") {
+      if (!e.target.value) {
+        currentQuantityInputFields[index].quantity = e.target.value;
+        currentQuantityInputFields[index].check = true;
+        currentQuantityInputFields[
+          index
+        ].validationMsg = `Ingredient ${currentQuantityInputFields[index].quantity_no} quantity is required`;
+      } else {
+        currentQuantityInputFields[index].quantity = e.target.value;
+        currentQuantityInputFields[index].check = false;
+        currentQuantityInputFields[index].validationMsg = null;
+      }
+    } else if (field == "unit") {
+      currentQuantityInputFields[index].unit = e.target.value;
+      currentQuantityInputFields[index].check = false;
+      currentQuantityInputFields[index].validationMsg = null;
+    }
+
+    setQuantityInputFields(currentQuantityInputFields);
+  };
+
+  let handleAddQuantityField = () => {
+    if (quantityInputFields.length >= 0) {
+      setQuantityInputFieldsCheck(false);
+    }
+
+    let currentQuantityInputFields = [...quantityInputFields];
+    currentQuantityInputFields.push({
+      quantity_no: currentQuantityInputFields.length + 1,
+      ingredient: "",
+      quantity: null,
+      unit: "none",
+      check: false,
+      validationMsg: null,
+    });
+    currentQuantityInputFields = currentQuantityInputFields.map(
+      (currentQuantityInputField, key) => {
+        return { ...currentQuantityInputField, quantity_no: ++key };
+      }
+    );
+    setQuantityInputFields(currentQuantityInputFields);
+  };
+
+  let handleRemoveQuantityField = (index) => {
+    if (quantityInputFields.length < 2) {
+      setQuantityInputFieldsCheck(true);
+    }
+    let currentQuantityInputFields = [...quantityInputFields];
+    currentQuantityInputFields.splice(index, 1);
+    currentQuantityInputFields = currentQuantityInputFields.map(
+      (currentQuantityInputField, key) => {
+        return { ...currentQuantityInputField, quantity_no: ++key };
+      }
+    );
+    setQuantityInputFields(currentQuantityInputFields);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -435,8 +557,17 @@ export default function AddRecipe() {
       body.recipe_sub_type = Number(show.recipe_sub_type);
       body.recipe_title = show.recipe_title;
       body.serves_quantity = Number(show.serves_quantity);
-      body.recipe_ingredients = show.recipe_ingredients;
       body.recipe_methods = show.recipe_methods;
+      body.recipe_ingredients = quantityInputFields.map(
+        (quantityInputField) => {
+          debugger;
+          return {
+            ingredient: quantityInputField.ingredient,
+            quantity: quantityInputField.quantity_no,
+            unit: quantityInputField.unit,
+          };
+        }
+      );
       try {
         const response = await EditPost(params.id, body);
         setLoading(false);
@@ -453,8 +584,16 @@ export default function AddRecipe() {
       body.recipe_type = Number(show.recipe_type);
       body.recipe_title = show.recipe_title;
       body.serves_quantity = Number(show.serves_quantity);
-      body.recipe_ingredients = show.recipe_ingredients;
       body.recipe_methods = show.recipe_methods;
+      body.recipe_ingredients = quantityInputFields.map(
+        (quantityInputField) => {
+          return {
+            ingredient: quantityInputField.ingredient,
+            quantity: quantityInputField.quantity,
+            unit: quantityInputField.unit,
+          };
+        }
+      );
 
       try {
         const response = await SavePost(body);
@@ -595,21 +734,175 @@ export default function AddRecipe() {
                           </h6>
                         </CLabel>
                       </CCol>
-                      <CCol xs="4" md="9">
-                        <CTextarea
-                          type="text"
-                          id="recipe_ingredients"
-                          name="recipe_ingredients"
-                          onBlur={handleDescriptionChange}
-                          value={show.recipe_ingredients}
-                          onChange={handleDescriptionChange}
-                          rows="6"
-                        />
-                        {error.recipe_ingredients.error && (
-                          <div className="email-validate">
-                            {error.recipe_ingredients.error}
-                          </div>
-                        )}
+                      {quantityInputFields.map((quantityInputField, index) => {
+                        return (
+                          <CCol xs="4" md="9">
+                            <CInputGroup
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                marginTop:
+                                  quantityInputField.quantity_no > 1
+                                    ? "0.5rem"
+                                    : "none",
+                                marginLeft:
+                                  quantityInputField.quantity_no > 1
+                                    ? "11.5rem"
+                                    : "",
+                              }}
+                            >
+                              <CInput
+                                onChange={(e) =>
+                                  handleChangeQuantityFieldValue(
+                                    index,
+                                    e,
+                                    "ingredient"
+                                  )
+                                }
+                                value={quantityInputField.ingredient}
+                                type="text"
+                                id={`ingredient${quantityInputField.quantity_no}`}
+                                name={`ingredient${quantityInputField.quantity_no}`}
+                                placeholder="Ingredient name"
+                              />
+                              <CInput
+                                onChange={(e) =>
+                                  handleChangeQuantityFieldValue(
+                                    index,
+                                    e,
+                                    "quantity"
+                                  )
+                                }
+                                value={quantityInputField.quantity}
+                                type="number"
+                                id={`quantity${quantityInputField.quantity_no}`}
+                                name={`quantity${quantityInputField.quantity_no}`}
+                                placeholder="Ingredient quantity"
+                              />
+                              <CInputGroupAppend
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "start",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <div>
+                                  <CSelect
+                                    custom
+                                    className="selectpicker"
+                                    onChange={(e) =>
+                                      handleChangeQuantityFieldValue(
+                                        index,
+                                        e,
+                                        "unit"
+                                      )
+                                    }
+                                    value={quantityInputField.unit}
+                                    id={`unit${quantityInputField.quantity_no}`}
+                                    name={`unit${quantityInputField.quantity_no}`}
+                                    custom
+                                    required
+                                  >
+                                    <option value="none" defaultValue>
+                                      Select Unit
+                                    </option>
+                                    <optgroup label="Volume">
+                                      {unitList
+                                        .filter(
+                                          (unit) => unit.label == "volume"
+                                        )
+                                        .map((unit) => {
+                                          return (
+                                            <option
+                                              key={unit.id}
+                                              value={unit.name}
+                                            >
+                                              {unit.name}
+                                            </option>
+                                          );
+                                        })}
+                                    </optgroup>
+                                    <optgroup label="Weight">
+                                      {unitList
+                                        .filter(
+                                          (unit) => unit.label == "weight"
+                                        )
+                                        .map((unit) => {
+                                          return (
+                                            <option
+                                              key={unit.id}
+                                              value={unit.name}
+                                            >
+                                              {unit.name}
+                                            </option>
+                                          );
+                                        })}
+                                    </optgroup>
+                                    <optgroup label="Other">
+                                      {unitList
+                                        .filter((unit) => unit.label == "other")
+                                        .map((unit) => {
+                                          return (
+                                            <option
+                                              key={unit.id}
+                                              value={unit.name}
+                                            >
+                                              {unit.name}
+                                            </option>
+                                          );
+                                        })}
+                                    </optgroup>
+                                  </CSelect>
+                                </div>
+                                <div>
+                                  <CBadge
+                                    style={{
+                                      marginLeft: "0.5rem",
+                                      cursor: "pointer",
+                                      display:
+                                        quantityInputFields.length > 1
+                                          ? ""
+                                          : "none",
+                                    }}
+                                    color="danger"
+                                    onClick={() =>
+                                      handleRemoveQuantityField(index)
+                                    }
+                                  >
+                                    <FaMinus />
+                                  </CBadge>
+                                </div>
+                              </CInputGroupAppend>
+                            </CInputGroup>
+                            <div
+                              style={{
+                                color: "red",
+                                marginLeft:
+                                  quantityInputField.quantity_no > 1
+                                    ? "11.5rem"
+                                    : "",
+                                display: quantityInputField.check ? "" : "none",
+                              }}
+                            >
+                              {quantityInputField.validationMsg
+                                ? quantityInputField.validationMsg
+                                : `ingredient  ${quantityInputField.quantity_no} is required`}
+                            </div>
+                          </CCol>
+                        );
+                      })}
+                      <CCol xs="12" md="9">
+                        <CBadge
+                          style={{
+                            marginTop: "0.5rem",
+                            marginLeft: "11.5rem",
+                            cursor: "pointer",
+                          }}
+                          color="secondary"
+                          onClick={handleAddQuantityField}
+                        >
+                          <FaPlus />
+                        </CBadge>
                       </CCol>
                     </CFormGroup>
                     <CFormGroup row>
@@ -684,7 +977,7 @@ export default function AddRecipe() {
                           id="recipe_type"
                           options={type}
                         >
-                          <option value="none">Select recipe type:</option>
+                          <option value="none">Select recipe type</option>
                           {type.map((item, index) => (
                             <option key={index} value={item.value}>
                               {item.label}
