@@ -20,20 +20,20 @@ import {
   CFormText
    
 } from "@coreui/react"
-import { sendNotification, listUser } from "src/data/notificationManagement";
+import { getNotification } from "src/data/notificationManagement";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 
 function ViewNotification(props) {
   let history = useHistory();
+  let params = useParams();
 
   let [title, setTitle] = useState("");
   let [description, setDescription] = useState("");
+  let [type, setType] = useState(null);
   let [user, setUser] = useState(null);
-    let [userCheck, setUserCheck] = useState(false);
-    
-    let [userList, setUserList] = useState([]);
+  
   let [errorResponse, setErrorResponse] = useState({
         message: null,
         code: null,
@@ -56,14 +56,26 @@ function ViewNotification(props) {
     
   
     useEffect(() => {
-        setSpinnerShow(true)
-        listUser().then((response) => {
-            setSpinnerShow(false)
-            setUserList(response.activeUsers)
+        if (params.id) {
+          let req = {
+            pathParams: {
+                id: params.id,
+            },
+          }
+          setSpinnerShow(true)
+
+        getNotification(req).then((response)=>{
+          setTitle(response.notificationDetails.title)
+          setDescription(response.notificationDetails.description)
+          setUser(response.notificationDetails.sent_to)
+          setType(response.notificationDetails.type)
+          setSpinnerShow(false)
         }).catch((error) => {
-            setSpinnerShow(false)
-            setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
-        })
+          setSpinnerShow(false)
+          setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+      })
+
+        }
 
     },[])
 
@@ -101,8 +113,7 @@ function ViewNotification(props) {
                                             
               </CCardHeader>
                         <CCardBody >
-                            Work in progress...
-                {/* <div style={{color:"red",fontSize:"1rem", display:errorResponse.isFound?"flex":"none", justifyContent:"center"}}>
+                <div style={{color:"red",fontSize:"1rem", display:errorResponse.isFound?"flex":"none", justifyContent:"center"}}>
                   <div><h5>{ errorResponse.message}</h5></div>
                 </div>
                 <div style={{display:"flex", justifyContent:"center"}} >                 
@@ -116,14 +127,22 @@ function ViewNotification(props) {
                             <tr>
                     <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="description">Description</CLabel></td>
                     <td>:</td>
-                    <td >{ description}</td>
+                    <td ><CTextarea
+                      value={description}
+                      id="description"
+                      name="description"
+                        rows="10"
+                        cols="80"
+                      placeholder="Enter Description"
+                      required
+                  /></td>
                       </tr>
                     <tr>
                     <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="sent_to">Sent To</CLabel></td>
                     <td>:</td>
-                      <td><span style={{fontWeight:"500"}}>{ item.type==0?"All Users":"Individual User: "}</span>{ item.type==0?null:`${item.sent_to}`}</td>
+                      <td><span style={{fontWeight:"500"}}>{ type==0?"All Users":"Individual User: "}</span>{ type==0?null:user}</td>
                       </tr> </table>
-                  </div> */}
+                  </div>
               </CCardBody>
             </CCard>
         </CCol>
