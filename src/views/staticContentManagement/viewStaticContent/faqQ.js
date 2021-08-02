@@ -249,6 +249,7 @@ const FAQS = () => {
                 onChange={(e) => {
                   setOnSearchChange(e.target.value);
                 }}
+                autoComplete="off"
                 id="input1-group1"
                 name="input1-group1"
                 placeholder="Search by Question"
