@@ -137,6 +137,7 @@ function AddEditKnowledgeBlog(props) {
           )
         }
         setContentType(currentSelectedContentType)
+        setContentTypeCheck(false)
         setNewContentType("")
       }
       setSpinnerShow(false)
