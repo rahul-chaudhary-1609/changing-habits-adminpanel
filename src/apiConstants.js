@@ -67,6 +67,8 @@ const apiConstant = {
   getBlog: "/api/v1/admin/getBlog",
   editBlog: "api/v1/admin/editBlog",
   addBlog: "api/v1/admin/addBlog",
+  listBlogContentType:"api/v1/admin/listBlogContentType",
+  addBlogContentType:"api/v1/admin/addBlogContentType",
 
   //notification management API's
   listNotification: "/api/v1/admin/listNotification",

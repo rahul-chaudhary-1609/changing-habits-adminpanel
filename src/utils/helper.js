@@ -76,3 +76,44 @@ export const unitList = [
   { id: 13, name: "slices", label: "other" },
   { id: 14, name: "unit(s)", label: "other" },
 ];
+
+
+export const phaseList = [
+  {
+    id: 1,
+    name:"Kickstart",
+    value:1,
+    label:"Kickstart",
+  },
+  {
+    id: 2,
+    name:"Phase 1",
+    value: 2,
+    label:"Phase 1"
+  },
+  {
+    id: 3,
+    name:"Phase 2",
+    value: 3,
+    label:"Phase 2"
+  },
+  {
+    id: 4,
+    name:"Phase 3",
+    value: 4,
+    label:"Phase 3"
+  },
+  {
+    id: 5,
+    name:"Phase 4",
+    value: 5,
+    label:"Phase 4"
+  },
+  {
+    id: 6,
+    name:"Phase 4 EVA",
+    value: 6,
+    label:"Phase 4 EVA",
+  }
+  
+]

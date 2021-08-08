@@ -40,7 +40,14 @@ function MediaView(props) {
                         }}
                         controlsList="nodownload" controls>
                             <source src={props.mediaInput.source}/>
-                            </audio> :null}
+                            </audio> :<a 
+                                href={props.mediaInput.source}
+                                style={{
+                                    width: "100%",
+                                }}
+                                target="_blank"
+                                rel="noreferrer"
+                            >External Link</a>}
                 </div>
         </div>
     )

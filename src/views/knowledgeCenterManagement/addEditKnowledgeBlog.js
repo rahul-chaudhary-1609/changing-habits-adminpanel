@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import Select from 'react-select';
 import {    
     CCardBody,
     CContainer,
@@ -17,13 +18,17 @@ import {
   CInputCheckbox,
   CInputFile,
   CSpinner,
-  CFormText
-   
+  CFormText,
+  CInputGroup,
+  CInputGroupAppend,
+  CBadge,
+  CTooltip
 } from "@coreui/react"
-import CIcon from "@coreui/icons-react";
+import { FaPlus } from 'react-icons/fa';
 import { upload } from "../../data/upload";
 import MediaView from "src/utils/components/mediaView";
-import {getBlog,addBlog,editBlog} from "../../data/knowledgeCenterManagement"
+import {getBlog,addBlog,editBlog, listBlogContentType,addBlogContentType} from "../../data/knowledgeCenterManagement"
+import {phaseList} from "../../utils/helper";
 
 
 function AddEditKnowledgeBlog(props) {
@@ -34,14 +39,17 @@ function AddEditKnowledgeBlog(props) {
   let [titleCheck,setTitleCheck ] = useState(false);
   let [description, setDescription] = useState("");
   let [descriptionCheck,setDescriptionCheck] = useState(false);
-  let [phase, setPhase] = useState(0);
+  let [phase, setPhase] = useState([]);
   let [phaseCheck,setPhaseCheck] = useState(false);
   let [externalLink, setExternalLink] = useState("");
   let [externalLinkCheck,setExternalLinkCheck] = useState(false);
-  let [phychologicalContentTypeCheck,setPhychologicalContentTypeCheck]  = useState(false);
-  let [nutritionContentTypeCheck, setNutritionContentTypeCheck] = useState(false);
-  let [protocolContentTypeCheck, setProtocolContentTypeCheck] = useState(false);
-  let [checkRequired, setCheckRequired] = useState(false);
+  let [contentTypeCheck, setContentTypeCheck] = useState(false);
+  let [contentTypeList,setContentTypeList]=useState([]);
+  let [contentType,setContentType]=useState([]);
+  let [showAddContentInput,setShowAddContentInput]=useState(false);
+  let [disableAddContentInput,setDisableAddContentInput]=useState(false);
+  let [newContentType,setNewContentType]=useState("");
+  let [newContentTypeCheck,setNewContentTypeCheck]=useState(false);
   let [errorResponse, setErrorResponse] = useState({
         message: null,
         code: null,
@@ -59,46 +67,19 @@ function AddEditKnowledgeBlog(props) {
     type: "image",
     source: null,
     isError: false,
-    errorMessage:"Image/Audio/Video is Required",
+    errorMessage:"Image/Audio/Video/External link is required",
   })
 
-  let phases = [
-    {
-      id: 1,
-      name:"Kickstart"
-    },
-    {
-      id: 2,
-      name:"Phase 1"
-    },
-    {
-      id: 3,
-      name:"Phase 2"
-    },
-    {
-      id: 4,
-      name:"Phase 3"
-    },
-    {
-      id: 5,
-      name:"Phase 4"
-    },
-    {
-      id: 6,
-      name:"Phase 4 EVA"
-    }
-    
-  ]
 
   let [spinnerShow,setSpinnerShow]=useState(false)
 
   useEffect(() => {
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
-  },[title,description,mediaInput,phase,externalLink,phychologicalContentTypeCheck,nutritionContentTypeCheck.protocolContentTypeCheck])
+  },[title,description,mediaInput,phase,externalLink,contentType])
     
   let handleUpload = (e) => {
-    
+    setExternalLinkCheck(false)
     setMediaInput({...mediaInput,type:"image",isError:false,source:"https://changinghabits-dev-backend.s3.amazonaws.com/changinghabits/learning_content/loading-buffering_1625498388794.gif"})
     if (e.target.files[0]) {
       let fileType = e.target.files[0].type.split("/")[0];
@@ -129,11 +110,45 @@ function AddEditKnowledgeBlog(props) {
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     } else {
-      setMediaInput({...mediaInput,type:null, source:null, isError: true, errorMessage: "Image/Audio/Video is Required" });
+      setMediaInput({...mediaInput,type:null, source:null, isError: true, errorMessage: "Image/Audio/Video/External link is required" });
     }
   }
 
+  let updateContentList=(data={})=>{
+    setSpinnerShow(true)
+    listBlogContentType().then((response)=>{
+      setContentTypeList(response.blogContentType.map((content)=>{
+        return {
+          ...content,
+          value:content.id,
+          label:content.content_name
+        }
+      }))
 
+      if(data.content_name){
+        let currentSelectedContentType=[...contentType];
+        let newContent=response.blogContentType.find(content=>content.content_name==data.content_name);
+        if(newContent) {currentSelectedContentType.push(
+            {
+              ...newContent,
+              value:newContent.id,
+              label:newContent.content_name
+            }
+          )
+        }
+        setContentType(currentSelectedContentType)
+        setNewContentType("")
+      }
+      setSpinnerShow(false)
+    }).catch((error) => {
+      setSpinnerShow(false)
+      setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+    })
+  }
+
+  useEffect(()=>{
+    updateContentList();
+  },[])
   
   useEffect(() => {
     if (params.id) {
@@ -147,12 +162,25 @@ function AddEditKnowledgeBlog(props) {
         setErrorResponse({ message: null, code: null, isFound: false })
         setTitle(response.blogDetails.title)
         setDescription(response.blogDetails.description)
-        setPhase(response.blogDetails.phase_id)
+        let currentPhase=[];
+        for(let label of response.blogDetails.phase_id){
+          let ph=phaseList.find(item=>item.label==label)
+          if(ph) currentPhase.push(ph);
+        }
+        setPhase(currentPhase)
+        if(contentType.length==0){
+          let currentContentType=[];
+          for(let label of response.blogDetails.content_type){
+            let content=contentTypeList.find(item=>item.label==label)
+            if(content) currentContentType.push(content);
+          }
+          setContentType(currentContentType)
+        }
+        // else{
+        //   setContentType([...contentType])
+        // }
         setExternalLink(response.blogDetails.external_link)
-        setPhychologicalContentTypeCheck(response.blogDetails.content_type == 1 ? true:false)
-        setNutritionContentTypeCheck(response.blogDetails.content_type == 2 ? true : false)
-        setProtocolContentTypeCheck(response.blogDetails.content_type == 3 ? true:false)
-        setCheckRequired(false)
+        setContentTypeCheck(false)
         if (response.blogDetails.image_url || response.blogDetails.video_url || response.blogDetails.audio_url) {
           setMediaInput({
             type: response.blogDetails.image_url?"image":response.blogDetails.video_url?"video":"audio",
@@ -166,7 +194,31 @@ function AddEditKnowledgeBlog(props) {
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     }
-  }, [])
+  }, [contentTypeList])
+
+  let handleAddNewContent=(e)=>{
+    e.preventDefault();
+    if (!newContentType || newContentType.trim() == "") {
+      setNewContentTypeCheck(true)
+      return
+    }
+    setSpinnerShow(true)
+    let data={
+      content_name:newContentType,
+    }
+    let req = {
+      data
+    }
+
+    addBlogContentType(req).then((response) => {
+      setSpinnerShow(false)
+      setErrorResponse({ message: null, code: null, isFound: false })
+      updateContentList(data);
+    }).catch((error) => {
+      setSpinnerShow(false)
+      setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+    })
+  }
   
   let validateField = () => {
     let result = true;
@@ -178,29 +230,30 @@ function AddEditKnowledgeBlog(props) {
       setDescriptionCheck(true)
       result=false
     }
-    if (!phase || phase == 0) {
+    if (phase.length==0) {
       setPhaseCheck(true)
       result=false
     }
-    if (!externalLink || externalLink == "") {
-      setExternalLinkCheck(true)
+    if (contentType.length==0) {
+      setContentTypeCheck(true)
       result=false
     }
-    if (mediaInput.source == "https://changinghabits-dev-backend.s3.amazonaws.com/changinghabits/learning_content/loading-buffering_1625498388794.gif" || !mediaInput.source) {
+    // if (!externalLink || externalLink == "") {
+    //   setExternalLinkCheck(true)
+    //   result=false
+    // }
+    if ((!externalLink || externalLink == "") && (mediaInput.source == "https://changinghabits-dev-backend.s3.amazonaws.com/changinghabits/learning_content/loading-buffering_1625498388794.gif" || !mediaInput.source)) {
       setMediaInput({ ...mediaInput, isError: true });
-      result=false
-    }
-    if (!phychologicalContentTypeCheck && !nutritionContentTypeCheck && !protocolContentTypeCheck) {
-      setCheckRequired(true)
+      setExternalLinkCheck(true)
       result=false
     }
 
     return result
   }
 
-
   let handleSubmit = (e) => {
     e.preventDefault();
+    
     if (!validateField()) {
       return
     }
@@ -212,9 +265,9 @@ function AddEditKnowledgeBlog(props) {
     let data = {
       title: title,
       description: description,
-      phase_id: phase,
+      phase_id: phase.map(ph=>ph.id),
       external_link:externalLink,
-      content_type: phychologicalContentTypeCheck ? 1 :nutritionContentTypeCheck? 2:3,
+      content_type: contentType.map(content=>content.id),
       image_url: mediaInput.type == "image"?mediaInput.source:null,
       video_url: mediaInput.type == "video" ? mediaInput.source : null,
       audio_url:mediaInput.type == "audio"?mediaInput.source:null,
@@ -287,7 +340,7 @@ function AddEditKnowledgeBlog(props) {
                 <div style={{color:"green",fontSize:"1rem", display:successResponse.isFound?"flex":"none", justifyContent:"center"}}>
                   <div><h5>{ successResponse.message}</h5></div>
                   </div>
-                  <CForm action="" method="post" onSubmit={handleSubmit}  autoComplete="off">
+                  <CForm action="#" method="post" onSubmit={handleSubmit}  autoComplete="off">
                   <CFormGroup >                    
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="title">Title:</CLabel>
                     <CInput
@@ -347,80 +400,87 @@ function AddEditKnowledgeBlog(props) {
                   <CFormGroup style={{width:"45%"}}>
                     
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
-                    <CSelect
+                    
+                      <Select 
+                        options={phaseList}
+                        isMulti
+                        placeholder="Select Phase"
                         onChange={(e) => {
+                          console.log(e)
                           setPhaseCheck(false)
-                          setPhase(e.target.value)
+                          setPhase(e)
                         }}
-                      value={phase}
-                      id="phase"
-                        name="phase"
-                        custom
-                      //required
-                    > <option value="0" defaultValue>Select Phase</option>
-                      {phases.map((phase) => {
-                        return <option key={phase.id} value={phase.id}> {phase.name}</option>
-                    })}
-                      </CSelect>
+                        value={phase}/>
                     <div style={{color:"red",marginLeft:"0.1rem", display:phaseCheck?"":"none"}}>Phase is required</div>  
                     </CFormGroup>
                     <CFormGroup  style={{width:"45%"}}>                    
                       <CLabel style={{marginRight:"0rem",fontWeight:"600",fontSize:"1rem"}} >Content Type:</CLabel>
-                    <div style={{ marginLeft:"1.3rem",display: "flex", flexDirection: "row", alignItems:"baseline", justifyContent:"start",  }}>
-                      
-                      <div style={{marginRight:"1rem"}}><CLabel><CInputCheckbox
-                        onChange={() => {
-                          if (phychologicalContentTypeCheck) {
-                            setPhychologicalContentTypeCheck(false)
-                            setCheckRequired(true)
-                          } else {
-                            setPhychologicalContentTypeCheck(true)
-                            setNutritionContentTypeCheck(false)
-                            setProtocolContentTypeCheck(false)
-                            setCheckRequired(false)
-                          }
+                  
+                      <div>
+                        <div>
+                      <Select 
+                        options={contentTypeList}
+                        isMulti
+                        placeholder="Select Content Type"
+                        onChange={(e) => {
+                          console.log(e)
+                          setContentTypeCheck(false)
+                          setContentType(e)
                         }}
-                        checked={phychologicalContentTypeCheck}
-                        type="checkbox"
-                         id="content_type_phychological"
-                      />Physiological</CLabel></div>
-                      <div  style={{marginLeft:"1rem"}}><CLabel><CInputCheckbox
-                        onChange={() => {
-                           if (nutritionContentTypeCheck) {
-                             setNutritionContentTypeCheck(false)
-                             setCheckRequired(true)
-                          }else {
-                            setPhychologicalContentTypeCheck(false)
-                             setNutritionContentTypeCheck(true)
-                             setProtocolContentTypeCheck(false)
-                            setCheckRequired(false) 
-                          }
-                        }}
-                       checked={nutritionContentTypeCheck}
-                        type="checkbox"
-                        id="content_type_nutrition"
-                      />Nutrition</CLabel></div>
-
-                      <div  style={{marginLeft:"2rem"}}><CLabel><CInputCheckbox
-                        onChange={() => {
-                           if (protocolContentTypeCheck) {
-                             setProtocolContentTypeCheck(false)
-                             setCheckRequired(true)
-                          }else {
-                            setPhychologicalContentTypeCheck(false)
-                             setNutritionContentTypeCheck(false)
-                             setProtocolContentTypeCheck(true)
-                            setCheckRequired(false) 
-                          }
-                        }}
-                       checked={protocolContentTypeCheck}
-                        type="checkbox"
-                        id="content_type_nutrition"
-                      />Protocol Info</CLabel></div>
-                      
-                      </div>
+                        value={contentType}
+                        isDisabled={disableAddContentInput}
+                        />
+                        <div style={{color:"red",display: contentTypeCheck ? "" : "none"}}>Content type is required</div>
+                        </div>
+                        <div style={{marginTop:"0.5rem",display:showAddContentInput?"none":""}}>
+                        <CTooltip content={"Add new content type"} placement={"top-start"}>
+                        <CBadge
+                          style={{ cursor: "pointer"}}
+                          color="secondary"
+                          onClick={()=>{
+                            setShowAddContentInput(true)
+                            setDisableAddContentInput(true)
+                          }}
+                          
+                        ><FaPlus /></CBadge>
+                        </CTooltip>
+                        </div>
+                        <div style={{marginTop:"1rem", display:showAddContentInput?"":"none"}}>
+                        <CInputGroup >
+                         <CInput
+                          onChange={(e) => {
+                            setNewContentTypeCheck(false)
+                            setNewContentType(e.target.value)
+                          }}
+                          value={newContentType}
+                          type="text"
+                          id="new_content_type_name"
+                          name="new_content_type_name"
+                          placeholder="Enter new content type name"
+                              
+                          />                          
+                          <CInputGroupAppend >                              
+                                <CButton 
+                                  style={{width:"4rem",backgroundColor: "#008080", color: "#fff", marginLeft:"0.5rem", borderRadius:"5px"}}
+                                  onClick={handleAddNewContent}
+                                  disabled={spinnerShow}
+                                >{spinnerShow?<CSpinner style={{ color: "#fff"}} size="sm" />:"Add"}</CButton>
+                                <CButton 
+                                  style={{ width:"4rem",backgroundColor: "grey", color: "#fff",marginLeft:"0.5rem",borderRadius:"5px"}}
+                                  onClick={()=>{
+                                    setNewContentType("")
+                                    setShowAddContentInput(false)
+                                    setDisableAddContentInput(false)
+                                  }}
+                                  disabled={spinnerShow}
+                                >Done</CButton>
+                          </CInputGroupAppend>
+                        </CInputGroup>
+                        <div style={{color:"red",display: newContentTypeCheck ? "" : "none"}}>New content type name is required</div>
+                        </div>
+                        </div>
                    
-                    <div style={{color:"red",display: checkRequired ? "" : "none"}}>Content type is required</div>
+                    
                   </CFormGroup>
                   </div>
                   <CFormGroup >                    
@@ -428,6 +488,7 @@ function AddEditKnowledgeBlog(props) {
                     <CInput
                       onChange={(e) => {
                         setExternalLinkCheck(false)
+                        setMediaInput({ ...mediaInput, isError: false });
                         setExternalLink(e.target.value)
                       }}
                       value={externalLink}
@@ -437,7 +498,7 @@ function AddEditKnowledgeBlog(props) {
                       placeholder="Enter external link (eg: https://www.google.com)"
                       //required
                     />
-                    <div style={{color:"red",marginLeft:"0.1rem", display:externalLinkCheck?"":"none"}}>External link is required</div>
+                    <div style={{color:"red",marginLeft:"0.1rem", display:externalLinkCheck?"":"none"}}>Image/Audio/Video/External link is required</div>
                       </CFormGroup>
                   
                   

@@ -26,11 +26,9 @@ function ViewKnowledgeBlog(props) {
   let params = useParams();
 let [title, setTitle] = useState("");
   let [description, setDescription] = useState("");
-  let [phase, setPhase] = useState(0);
+  let [phase, setPhase] = useState([]);
   let [externalLink, setExternalLink] = useState("");
-  let [phychologicalContentTypeCheck,setPhychologicalContentTypeCheck]  = useState(false);
-  let [nutritionContentTypeCheck, setNutritionContentTypeCheck] = useState(false);
-  let [protocolContentTypeCheck, setProtocolContentTypeCheck] = useState(false);
+  let [contentType,setContentType]=useState([]);
   let [postedDate, setPostedDate] = useState("");
  let [errorResponse, setErrorResponse] = useState({
         message: null,
@@ -46,15 +44,6 @@ let [title, setTitle] = useState("");
     isError: false,
     errorMessage:"Required",
   })
-
-  let phases = [
-    "Kickstart",
-   "Phase 1",
-   "Phase 2",
-    "Phase 3",
-   "Phase 4",
-    "Phase 4 EVA"
-  ]
   
   useEffect(() => {
     if (params.id) {
@@ -68,17 +57,15 @@ let [title, setTitle] = useState("");
         setErrorResponse({ message: null, code: null, isFound: false })
         setTitle(response.blogDetails.title)
         setDescription(response.blogDetails.description)
-        setPhase(phases[response.blogDetails.phase_id-1])
+        setPhase(response.blogDetails.phase_id)
         setExternalLink(response.blogDetails.external_link)
+        setContentType(response.blogDetails.content_type)
         setPostedDate(response.blogDetails.createdAt)
-        setPhychologicalContentTypeCheck(response.blogDetails.content_type == 1 ? true:false)
-        setNutritionContentTypeCheck(response.blogDetails.content_type == 2 ? true : false)
-        setProtocolContentTypeCheck(response.blogDetails.content_type == 3 ? true:false)
         
-        if (response.blogDetails.image_url || response.blogDetails.video_url || response.blogDetails.audio_url) {
+        if (response.blogDetails.image_url || response.blogDetails.video_url || response.blogDetails.audio_url || response.blogDetails.external_link) {
           setMediaInput({
-            type: response.blogDetails.image_url?"image":response.blogDetails.video_url?"video":"audio",
-            source: response.blogDetails.image_url || response.blogDetails.video_url || response.blogDetails.audio_url || null,
+            type: response.blogDetails.image_url?"image":response.blogDetails.video_url?"video":response.blogDetails.audio_url?"audio":"link",
+            source: response.blogDetails.image_url || response.blogDetails.video_url || response.blogDetails.audio_url || response.blogDetails.external_link || null,
             isError: false,
           })
         }
@@ -155,12 +142,24 @@ let [title, setTitle] = useState("");
                       <tr>
                           <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase</CLabel></td>
                           <td>:</td>
-                      <td>{phase}</td>
+                      <td>{phase.map((ph,index)=>{
+                            if(index==phase.length-1){
+                              return `${ph}`
+                            }else{
+                              return `${ph}, `
+                            }
+                      })}</td>
                       </tr>
                       <tr>
                           <td><CLabel style={{marginRight:"2rem",fontWeight:"600",fontSize:"1rem"}} htmlFor="title">Content Type</CLabel></td>
                           <td>:</td>
-                      <td>{phychologicalContentTypeCheck ? "Phychological" : nutritionContentTypeCheck ?"Nutrition": "Protocol Info"}</td>
+                      <td>{contentType.map((content,index)=>{
+                        if(index==contentType.length-1){
+                          return `${content}`
+                        }else{
+                          return `${content}, `
+                        }
+                      })}</td>
                         </tr>
                         <tr>
                           <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="external_link">External Link</CLabel></td>

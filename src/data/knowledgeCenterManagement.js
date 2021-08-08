@@ -127,3 +127,53 @@ export const addBlog = (req = {}) => {
     })
 
 }
+
+export const listBlogContentType = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await api.get(
+                apiConstant.listBlogContentType,
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+            
+        }
+        
+    })
+}
+
+export const addBlogContentType = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log(req)
+            let response = await api.post(
+                `${apiConstant.addBlogContentType}`,
+                JSON.stringify(req.data),
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+        }
+        
+    })
+
+}

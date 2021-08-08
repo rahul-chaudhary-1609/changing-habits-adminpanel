@@ -242,8 +242,8 @@ function ListKnowledgeBlog() {
                         },
                         media: (item, index) => {
                             let mediaInput={
-                                    type: item.image_url?"image":item.video_url?"video":"audio",
-                                    source: item.image_url || item.video_url || item.audio_url || null,
+                                    type: item.image_url?"image":item.video_url?"video":item.audio_url?"audio":"link",
+                                    source: item.image_url || item.video_url || item.audio_url || item.external_link || null,
                                     isError: false,
                                     errorMessage:"Image/Video/Audio is Required",
                                 }
