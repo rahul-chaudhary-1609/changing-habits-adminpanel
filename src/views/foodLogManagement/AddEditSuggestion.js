@@ -341,6 +341,7 @@ function AddEditFoodLogSuggestion() {
                           <CSelect
                         onChange={(e) => {
                         setCategory(0)
+                        setWeek(0)
                         setPhaseCheck(false)
                         setPhase(e.target.value)
                       }}
@@ -384,7 +385,7 @@ function AddEditFoodLogSuggestion() {
                           <CSelect
                       onChange={(e) => {
                         //setWeekCheck(false)
-                        setWeek(e.target.value)
+                        setWeek(parseInt(e.target.value))
                       }}
                           value={week}
                           id="week"

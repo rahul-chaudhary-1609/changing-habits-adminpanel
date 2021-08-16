@@ -148,7 +148,7 @@ function ViewWeightGainReason() {
                                     <tr>
                       <td><CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="reason">Reason:</CLabel></td>
                      <td>:</td>
-                      <td><div style={{border:"2px solid rgba(0,0,0,0.2)", padding:"10px 20px 0px 0px", borderRadius:"5px"}}><ul> {reasonInputFields.map((reasonInputField, index) => {
+                      <td><div style={{border:"2px solid rgba(0,0,0,0.2)", padding:"10px 20px 0px 0px", borderRadius:"5px", maxHeight:"200px", overflow:"scroll"}}><ul> {reasonInputFields.map((reasonInputField, index) => {
                       
                         return (<>
                       

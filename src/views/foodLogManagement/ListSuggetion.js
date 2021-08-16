@@ -17,12 +17,13 @@ import {
     CInputGroupPrepend,
     CInput,
     CPagination,
-    CSelect
+    CSelect,
+    CSpinner
 } from "@coreui/react"
 import CIcon from "@coreui/icons-react";
 import { FaFilter} from 'react-icons/fa';
 
-import { listFoodLogSuggestion,listPhases,toggleFoodLogSuggestionStatus } from "../../data/foodLogManagement"
+import { listFoodLogSuggestion,listPhases,getFoodTypeByPhaseId,toggleFoodLogSuggestionStatus } from "../../data/foodLogManagement"
 import { StatusModal } from "../../utils/components/modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
@@ -49,12 +50,15 @@ function ListFoodLogSuggestion() {
     let [toggleData, setToggleData] = useState(null);
     let [phase, setPhase] = useState(0);
     let [phases,setPhases]=useState([])
+    let [category, setCategory] = useState(0);
+    let [categoryList, setCategoryList] = useState([])
+    let [spinnerShow,setSpinnerShow]=useState(false)
 
 
     const fields = [
         { key: 's_no', label: "S.No.", _style: { width: "4%" } },
-        { key: 'food_name', lable: "Food",_style: { width: "26%" } },
-        { key: 'food_type', lable: "Category", _style: { width: "26%" } },
+        { key: 'food_name', label: "Food",_style: { width: "26%" } },
+        { key: 'food_type', label: "Category", _style: { width: "26%" } },
         { key: 'phase_id', label: "Phase",_style: { width: "8%" } },
         { key: 'week_selected', label: "Weeek",_style: { width: "8%" } },
         { key: 'status', label: "Status",_style: { width: "8%" } },
@@ -102,6 +106,27 @@ function ListFoodLogSuggestion() {
             console.log(error)
         })
     }, [])
+
+    useEffect(() => {
+        if (phase > 0) {
+          let req = {
+            pathParams: {
+              id: phase,
+            },
+          }
+          setSpinnerShow(true)
+          getFoodTypeByPhaseId(req).then((response) => {
+            setSpinnerShow(false)
+            setCategoryList(response.foodTypeList)
+            setErrorResponse({ message: null, code: null, isFound: false })
+          }).catch((error) => {
+            setSpinnerShow(false)
+            setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+          })
+        }else {
+          setCategoryList([]);
+        }
+      }, [phase])
     
     useEffect(() => {
         const getData = async () => {
@@ -115,6 +140,9 @@ function ListFoodLogSuggestion() {
                 }
                 if (phase > 0) {
                     req.queryParams.phase_id=phase
+                }
+                if (category > 0) {
+                    req.queryParams.foodtype_id=category
                 }
                 setLoading(true)
                 let response = await listFoodLogSuggestion(req);
@@ -138,7 +166,7 @@ function ListFoodLogSuggestion() {
         getData();
         
         
-    },[page.number,searchKey,status,phase])
+    },[page.number,searchKey,status,phase,category])
     
     
     return (
@@ -157,7 +185,7 @@ function ListFoodLogSuggestion() {
                     <CCard>
                         <CCardHeader>
                             {/* <div style={{display:"flex", justifyContent:"space-between"}}> */}
-                                <h2>Food Log Suggestion</h2>
+                                <h2>Food Log Suggestion <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
                                 <CButton
                                     style={{ width: "5rem",float:"right",backgroundColor:"#008080",color:"#fff"}}
                                     onClick={()=> history.push('/addFoodLogSuggestion')}
@@ -197,7 +225,7 @@ function ListFoodLogSuggestion() {
                             
                             
                             
-                                <CInputGroupPrepend style={{marginLeft:"3rem",}}>
+                                <CInputGroupPrepend style={{marginLeft:"2rem",}}>
                                     <CInputGroupText style={{ borderRadius:"2px",backgroundColor:"#008080",color:"#fff"}} >
                                         <FaFilter/>
                                     </CInputGroupText>
@@ -214,12 +242,33 @@ function ListFoodLogSuggestion() {
                                     {phases.map((phase) => {
                                         return <option key={phase.id} value={phase.id}> {phase.phase_name}</option>
                                     })}
+                                </CSelect>
+
+                                 <CInputGroupPrepend style={{marginLeft:"1rem",}}>
+                                    <CInputGroupText style={{ borderRadius:"2px",backgroundColor:"#008080",color:"#fff"}} >
+                                        <FaFilter/>
+                                    </CInputGroupText>
+                                </CInputGroupPrepend>
+                                <CSelect
+                                    style={{ maxWidth: "14rem" }}
+                                    onChange={(e)=>setCategory(e.target.value)}
+                                    value={category}
+                                    id="category"
+                                    name="category"
+                                    custom
+                                    required
+                                    disabled={phase>0?false:true}
+                                    > <option value="0" defaultValue>All Category</option>
+                                    {categoryList.map((category) => {
+                                        return <option key={category.id} value={category.id}> {category.food_type}</option>
+                                    })}
                                 </CSelect> 
-                                <CButton style={{ marginLeft: "4rem",backgroundColor:"#008080",color:"#fff" }}
+                                <CButton style={{ marginLeft: "2rem",backgroundColor:"#008080",color:"#fff" }}
                                     onClick={() => {
                                         setSearchValue("")
                                         setSearchKey(null)
                                         setPhase(0)
+                                        setCategory(0)
                                     }}
                                 >
                                     Reset

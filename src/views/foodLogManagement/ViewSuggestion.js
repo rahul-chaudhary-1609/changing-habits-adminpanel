@@ -182,7 +182,7 @@ function ViewFoodLogSuggestion(props) {
                     <tr>
                       <td><CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="quantity">Quantity:</CLabel></td>
                      <td>:</td>
-                      <td><div style={{border:"2px solid rgba(0,0,0,0.2)", padding:"10px 10px 0px 0px", borderRadius:"5px"}}><ul> {quantityInputFields.map((quantityInputField, index) => {
+                      <td><div style={{border:"2px solid rgba(0,0,0,0.2)", padding:"10px 10px 0px 0px", borderRadius:"5px",overflow:"scroll", maxHeight:"200px"}}><ul> {quantityInputFields.map((quantityInputField, index) => {
                       
                         return (<>
                       

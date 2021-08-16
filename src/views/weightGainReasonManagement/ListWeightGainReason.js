@@ -204,12 +204,13 @@ function ListWeightGainReason() {
                     scopedSlots={{
                         reason: (item, index) => {
                             return (
-                                <td> {item.reason.map((ele, index) => {
+                                <td align="justify"><div style={{maxHeight:"150px", overflow:"scroll" }}><ui>{item.reason.map((ele, index) => {
                       
-                                    return (<div>{ `${++index}.   ${ele}`}</div>)
-                                    })}
+                                    return (<>
+                                    <li>{`${ele}`}</li>
+                                    </>)})}
                                     
-                                </td>
+                                    </ui></div> </td>
                             )
                         },
                         action: (item, index) => {
