@@ -232,7 +232,10 @@ function ListFoodLogSuggestion() {
                                 </CInputGroupPrepend>
                                 <CSelect
                                     style={{ maxWidth: "14rem" }}
-                                    onChange={(e)=>setPhase(e.target.value)}
+                                    onChange={(e) => {
+                                        setCategory(0)
+                                        setPhase(e.target.value)
+                                    }}
                                     value={phase}
                                     id="phase"
                                     name="phase"
