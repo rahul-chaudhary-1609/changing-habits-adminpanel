@@ -73,7 +73,7 @@ const apiConstant = {
   //notification management API's
   listNotification: "/api/v1/admin/listNotification",
   sendNotification: "/api/v1/admin/sendNotification",
-  listUser: "/api/v1/admin/listActiveUsers",
+  listActiveUser: "/api/v1/admin/listActiveUsers",
   getNotification: "/api/v1/admin/getNotification",
 
   //food log suggestion API's
@@ -90,6 +90,9 @@ const apiConstant = {
   getReason: "/api/v1/admin/getReason",
   editReason: "api/v1/admin/editReason",
   addReason: "api/v1/admin/addReason",
+
+  //user progress management API's
+  listUser: "/api/v1/admin/listUsers",
 };
 
 export default apiConstant;

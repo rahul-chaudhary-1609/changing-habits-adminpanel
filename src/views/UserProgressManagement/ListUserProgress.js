@@ -18,7 +18,7 @@ import {
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
-//import { listNotification } from "../../data/notificationManagement"
+import { listUser } from "../../data/userProgressManagement";
 import { getFormatedDateTime } from "../../utils/helper";
 
 function ListUserProgress() {
@@ -42,9 +42,8 @@ function ListUserProgress() {
 
     const fields = [
         { key: 's_no',label:"S.No.",_style: {width: "4%" } },
-        { key: 'name', lable: "User Name",_style: {width: "40%" } },
-        //{ key: 'description', lable: "Description" },
-        { key: 'email', lable: "Eamil",_style: {width: "20%" } },
+        { key: 'name', lable: "User Name",_style: {width: "20%" } },
+        { key: 'email', lable: "Eamil",_style: {width: "40%" } },
         { key: 'action',label:"Action",_style: { width: "36%" } },
     ]
 
@@ -61,35 +60,35 @@ function ListUserProgress() {
     }
 
     useEffect(() => {
-        // const getData = async () => {
-        //     try {
-        //         let req = {
-        //             queryParams: {
-        //                 searchKey: searchKey,
-        //                 page: page.number,
-        //                 page_size: page.size
-        //             }
-        //         }
-        //         setLoading(true)
-        //         let response = await listNotification(req);
-        //         let updatedData = formatData(response.rows);
-        //         setData([...updatedData])
-        //         setDataCount(response.count)
-        //         setLoading(false)
-        //         setErrorResponse({ message: null, code: null, isFound: false })
+        const getData = async () => {
+            try {
+                let req = {
+                    queryParams: {
+                        searchKey: searchKey,
+                        page: page.number,
+                        page_size: page.size
+                    }
+                }
+                setLoading(true)
+                let response = await listUser(req);
+                let updatedData = formatData(response.rows);
+                setData([...updatedData])
+                setDataCount(response.count)
+                setLoading(false)
+                setErrorResponse({ message: null, code: null, isFound: false })
                 
 
-        //     } catch (error) {
-        //         setData([])
-        //         setDataCount(0)
-        //         if (error.message) {
-        //             setLoading(false)
-        //             setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
-        //         }
-        //     } 
-        // }
+            } catch (error) {
+                setData([])
+                setDataCount(0)
+                if (error.message) {
+                    setLoading(false)
+                    setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+                }
+            } 
+        }
         
-        // getData();
+        getData();
         
         
     },[page.number,searchKey])
@@ -129,7 +128,7 @@ function ListUserProgress() {
                                         <CIcon name={'cilSearch'} />
                                     </CInputGroupText>
                                 </CInputGroupPrepend>
-                                <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by title"
+                                <CInput style={{ maxWidth: "14rem" }} type="text" id="search" name="search" placeholder="Search by name or email"
                                     value={searchValue}
                                     onChange={(e) => { setSearchValue(e.target.value) }}
                                     autoComplete="off"
@@ -162,12 +161,9 @@ function ListUserProgress() {
                         </CCol>
                     }
                     scopedSlots={{
-                        sent_date: (item, index) => {
-                            return (<td>{ getFormatedDateTime(item.sent_date)}</td>)
+                        action: (item, index) => {
+                            return (<td><a href="#">View Progress Data</a></td>)
                         },
-                        sent_to: (item, index) => {
-                            return (<td><span style={{fontWeight:"500"}}>{ item.type==0?"All Users":"Individual User: "}</span>{ item.type==0?null:`${item.sent_to}`}</td>)
-                        }
                     }}
                 ></CDataTable>
                 <CPagination

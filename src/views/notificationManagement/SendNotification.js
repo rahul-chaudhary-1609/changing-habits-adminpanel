@@ -20,7 +20,7 @@ import {
   CFormText
    
 } from "@coreui/react"
-import { sendNotification,listUser } from "src/data/notificationManagement";
+import { sendNotification,listActiveUser } from "src/data/notificationManagement";
 
 
 function SendNotification(props) {
@@ -57,7 +57,7 @@ function SendNotification(props) {
   
     useEffect(() => {
         setSpinnerShow(true)
-        listUser().then((response) => {
+        listActiveUser().then((response) => {
             setSpinnerShow(false)
             setUserList(response.activeUsers)
         }).catch((error) => {

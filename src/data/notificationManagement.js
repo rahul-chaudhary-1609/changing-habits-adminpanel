@@ -30,11 +30,11 @@ export const listNotification = (req = {}) => {
 }
 
 
-export const listUser = (req = {}) => {
+export const listActiveUser = (req = {}) => {
     return new Promise(async (resolve, reject) => {
         try {
             let response = await api.get(
-                apiConstant.listUser,
+                apiConstant.listActiveUser,
                 getHeader()
             )
             if (response.status == 200) {
