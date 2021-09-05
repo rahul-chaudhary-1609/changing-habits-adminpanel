@@ -93,6 +93,7 @@ const apiConstant = {
 
   //user progress management API's
   listUser: "/api/v1/admin/listUsers",
+  getUserProgress:"/api/v1/admin/getUserProgress",
 };
 
 export default apiConstant;

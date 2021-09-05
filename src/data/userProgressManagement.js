@@ -28,3 +28,30 @@ export const listUser = (req = {}) => {
         
     })
 }
+
+export const getUserProgress = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let config = {
+                queryParams: req.queryParams
+            }
+            let response = await api.get(
+                apiConstant.getUserProgress,
+                getHeader(config)
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+            
+        }
+        
+    })
+}

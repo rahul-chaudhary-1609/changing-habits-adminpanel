@@ -13,9 +13,12 @@ import {
     CRow,
     CCard,
     CCardHeader,
-    CCardBody
+    CCardBody,
+    CTooltip,
 } from "@coreui/react"
 import { freeSet } from "@coreui/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 import CIcon from "@coreui/icons-react";
 
 import { listUser } from "../../data/userProgressManagement";
@@ -43,8 +46,8 @@ function ListUserProgress() {
     const fields = [
         { key: 's_no',label:"S.No.",_style: {width: "4%" } },
         { key: 'name', lable: "User Name",_style: {width: "20%" } },
-        { key: 'email', lable: "Eamil",_style: {width: "40%" } },
-        { key: 'action',label:"Action",_style: { width: "36%" } },
+        { key: 'email', lable: "Eamil",_style: {width: "56%" } },
+        { key: 'action',label:"Action",_style: { width: "20%" } },
     ]
 
 
@@ -162,7 +165,19 @@ function ListUserProgress() {
                     }
                     scopedSlots={{
                         action: (item, index) => {
-                            return (<td><a href="#">View Progress Data</a></td>)
+                            return (<td><CTooltip content={`View Progress`} placement={"top-start"}>
+                            <FontAwesomeIcon
+                                color="green"
+                                size="lg"
+                                style={{ cursor: "pointer" }}
+                                onClick={() =>
+                                history.push({
+                                    pathname: `/viewUserProgress/${item.id}`,
+                                })
+                                }
+                                icon={faEye}
+                            />
+                        </CTooltip></td>)
                         },
                     }}
                 ></CDataTable>

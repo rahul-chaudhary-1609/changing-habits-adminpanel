@@ -122,6 +122,10 @@ const ListUserProgress = React.lazy(() =>
   import("./views/UserProgressManagement/ListUserProgress")
 );
 
+const ViewUserProgress = React.lazy(() =>
+  import("./views/UserProgressManagement/ViewUserProgress")
+);
+
 const ListFoodLogSuggestion = React.lazy(() =>
   import("./views/foodLogManagement/ListSuggetion")
 );
@@ -413,6 +417,13 @@ const routes = [
     exact: true,
     name: "List User Progress",
     component: ListUserProgress,
+  },
+
+  {
+    path: `/viewUserProgress/:id`,
+    exact: true,
+    name: "View User Progress",
+    component: ViewUserProgress,
   },
 
 
