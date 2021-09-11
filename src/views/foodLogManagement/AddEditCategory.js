@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory,useParams } from "react-router-dom";
+import Select from 'react-select';
 import {    
     CCardBody,
     CContainer,
@@ -16,7 +17,7 @@ import {
   CSpinner
 } from "@coreui/react"
 import {listPhases,getFoodLogCategory,addFoodLogCategory,editFoodLogCategory} from "../../data/foodLogManagement"
-
+import {phaseList} from "../../utils/helper";
 
 function AddEditFoodLogCategory() {
   let history = useHistory();
@@ -24,7 +25,7 @@ function AddEditFoodLogCategory() {
 
   let [categoryName, setCategoryName] = useState("");
   let [categoryNameCheck,setCategoryNameCheck ] = useState(false);
-  let [phase, setPhase] = useState(0);
+  let [phase, setPhase] = useState([]);
   let [phaseCheck,setPhaseCheck] = useState(false);
   let [errorResponse, setErrorResponse] = useState({
         message: null,
@@ -38,25 +39,16 @@ function AddEditFoodLogCategory() {
         isFound: true,
   });
 
-  let [phases, setPhases] = useState([])
   let [spinnerShow,setSpinnerShow]=useState(false)
   //let spinnerShow = false;
 
   useEffect(() => {
+    console.log("phase",phase)
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
-  },[categoryName,phase,phases])
+  },[categoryName,phase])
 
-  useEffect(() => {
-    setSpinnerShow(true)
-    listPhases().then((response) => {
-      setPhases(response.phasesList)
-      setSpinnerShow(false)
-    }).catch((error) => {
-          setSpinnerShow(false)
-            setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
-        })
-    
+  useEffect(() => {    
     if (params.id) {
       let req = {
         pathParams: {
@@ -67,7 +59,7 @@ function AddEditFoodLogCategory() {
       getFoodLogCategory(req).then((response) => {
         setErrorResponse({ message: null, code: null, isFound: false })
         setCategoryName(response.foodType.food_type)
-        setPhase(response.foodType.phase_id)
+        setPhase([phaseList.find(ph=>ph.id==response.foodType.phase_id)])
         setSpinnerShow(false)
         
       }).catch((error) => {
@@ -83,7 +75,7 @@ function AddEditFoodLogCategory() {
       setCategoryNameCheck(true)
       result=false
     }
-    if (!phase || phase == 0) {
+    if (phase.length == 0) {
       setPhaseCheck(true)
       result=false
     }
@@ -105,10 +97,14 @@ function AddEditFoodLogCategory() {
     
     let data = {
       food_type: categoryName,
-      phase_id: phase
     }
     
     if (params.id) {
+
+      data={
+        ...data,
+        phase_id: phase[0].id//phase
+      }
 
       let req = {
         pathParams: {
@@ -127,6 +123,11 @@ function AddEditFoodLogCategory() {
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     } else {
+
+      data={
+        ...data,
+        phase_id: phase.map(ph=>ph.id)//phase
+      }
 
       let req = {
         data
@@ -181,22 +182,18 @@ function AddEditFoodLogCategory() {
                       <CFormGroup>
           
                           <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
-                          <CSelect
-                      onChange={(e) => {
-                        setPhaseCheck(false)
-                        setPhase(e.target.value)
-                      }}
-                          value={phase}
-                          id="phase"
-                          name="phase"
-                          custom
-                          required
                           
-                          > <option value="0" defaultValue>Select Phase</option>
-                          {phases.map((phase) => {
-                              return <option key={phase.id} value={phase.id}> {phase.phase_name}</option>
-                          })}
-                    </CSelect>
+                    <Select 
+                        options={phaseList}
+                        isMulti={params.id?false:true}
+                        placeholder="Select Phase"
+                        onChange={(e) => {
+                          console.log(e)
+                          console.log(e)
+                          setPhaseCheck(false)
+                          params.id?setPhase([e]):setPhase(e)
+                        }}
+                        value={phase}/>
                     <div style={{color:"red",marginLeft:"0.1rem", display:phaseCheck?"":"none"}}>Phase is required</div>
                       </CFormGroup>
                                 

@@ -53,10 +53,10 @@ function ListFoodLogCategory() {
 
     const fields = [
         { key: 's_no',label:"S.No.",_style: { width: "4%" } },
-        { key: 'food_type', label: "Category Name",_style: { width: "60%" } },
-        { key: 'phase_id', label: "Phase",_style: { width: "8%" } },
+        { key: 'food_type', label: "Category Name",_style: { width: "40%" } },
+        { key: 'phase_id', label: "Phase",_style: { width: "20%" } },
         { key: 'status', label: "Status",_style: { width: "8%" } },
-        { key: 'action',label:"Action",_style: { width: "20%" } },
+        { key: 'action',label:"Action",_style: { width: "28%" } },
     ]
 
     let toggleModal = (item) => {

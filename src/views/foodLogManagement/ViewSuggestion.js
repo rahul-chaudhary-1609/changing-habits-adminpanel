@@ -15,7 +15,9 @@ import {
    
 } from "@coreui/react"
 import CIcon from "@coreui/icons-react";
-import { listPhases,getFoodTypeByPhaseId, getFoodLogSuggestion } from "../../data/foodLogManagement"
+import { listPhases,getFoodTypeByPhaseId, getFoodLogSuggestion } from "../../data/foodLogManagement";
+import { getPhaseDays } from "../../data/learningContentManagement";
+import { checkLeapYear, unitList } from "../../utils/helper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -24,15 +26,16 @@ function ViewFoodLogSuggestion(props) {
  let history = useHistory();
   let params = useParams();
 
-  let [phase, setPhase] = useState(0);
-  let [category, setCategory] = useState(0);
-  let [week, setWeek] = useState(0);
+  let [inputGroups,setInputGroups]=useState([{
+    inputGroup_no:1,phase:0,phaseCheck:false,categoryList:[],category:0,categoryCheck:false,weekList:[],week:0,
+  }])
   let [foodName, setFoodName] = useState("");
-  let [quantityInputFields, setQuantityInputFields] = useState(
-    [
-      { quantity_no: 1, quantity:null,unit:"",check:false, validationMsg:null },
-    ]
-  )
+
+  let [quantityFrom, setQuantityFrom]=useState(null);
+  
+  let [quantityTo, setQuantityTo]=useState(null);
+  
+  let [quantityUnit, setQuantityUnit]=useState(null);
 
   let [errorResponse, setErrorResponse] = useState({
         message: null,
@@ -47,20 +50,12 @@ function ViewFoodLogSuggestion(props) {
   });
 
   let [phaseList, setPhaseList] = useState([])
-  let [categoryList, setCategoryList] = useState([])
-  let [weekList, setWeekList] = useState([
-    { id: 1, name: "Week 1", },
-    { id: 2, name: "Week 2" },
-    { id: 3, name: "Week 3" },
-    { id: 4, name: "Week 4" },
-  ])
   let [spinnerShow,setSpinnerShow]=useState(false)
-  //let spinnerShow = false;
 
   useEffect(() => {
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
-  },[phase,phaseList,categoryList,weekList,category,week,foodName,quantityInputFields])
+  },[phaseList,inputGroups,foodName,quantityFrom,quantityTo,quantityUnit])
 
   useEffect(() => {
     setSpinnerShow(true)
@@ -81,14 +76,16 @@ function ViewFoodLogSuggestion(props) {
       setSpinnerShow(true)
       getFoodLogSuggestion(req).then((response) => {
         setErrorResponse({ message: null, code: null, isFound: false })
-        setPhase(response.foodContent.phase_id)
-        setCategory(response.foodContent.foodtype_id)
-        setWeek(response.foodContent.week_selected)
+        let currentInputGroups=[...inputGroups];
+        currentInputGroups[0].phase=response.foodContent.phase_id;
+        currentInputGroups[0].category=response.foodContent.foodtype_id;
+        currentInputGroups[0].week=response.foodContent.week_selected;
+        setInputGroups(currentInputGroups);
+        handlePhaseChange(0);
         setFoodName(response.foodContent.food_name)
-        let currentQuantityInputFields= response.foodContent.food_quantity.map((quantity,index) => {
-          return { quantity_no: ++index, quantity: quantity.quantity,unit:quantity.unit, check: false };
-        })
-        setQuantityInputFields([...currentQuantityInputFields]);
+        setQuantityFrom(response.foodContent.quantity_from)
+        setQuantityTo(response.foodContent.quantity_to)
+        setQuantityUnit(response.foodContent.unit)
         setSpinnerShow(false)
         
       }).catch((error) => {
@@ -98,30 +95,41 @@ function ViewFoodLogSuggestion(props) {
     }
   }, [])
 
-    useEffect(() => {
-    if (phase > 0) {
+  let handlePhaseChange=(index)=>{
+    let currentInputGroups=[...inputGroups];
+    if (currentInputGroups[index].phase > 0) {
       let req = {
         pathParams: {
-          id: phase,
+          id: currentInputGroups[index].phase,
         },
       }
       setSpinnerShow(true)
       getFoodTypeByPhaseId(req).then((response) => {
         setSpinnerShow(false)
-        setCategoryList(response.foodTypeList)
+        currentInputGroups[index].categoryList=response.foodTypeList.rows;
+        setErrorResponse({ message: null, code: null, isFound: false })
+      }).catch((error) => {
+        setSpinnerShow(false)
+        setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+      })
+      setSpinnerShow(true)
+      getPhaseDays(req).then((response) => {
+        setSpinnerShow(false)
+        let newWeekList = []
+        let limit = response.phaseDays ? response.phaseDays : checkLeapYear(new Date().getFullYear()) ? 366 : 365;
+        for (let i = 1; i <= Math.ceil(limit/7); i++) {
+          newWeekList.push({ id: i, name: `Week ${i}`, })
+        }
+        currentInputGroups[index].weekList=[...newWeekList];
         setErrorResponse({ message: null, code: null, isFound: false })
       }).catch((error) => {
         setSpinnerShow(false)
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     }else {
-      setCategoryList([]);
+      currentInputGroups[index].categoryList=[];
     }
-  }, [phase])
-
-
-
-
+  }
 
 
     return (
@@ -162,36 +170,38 @@ function ViewFoodLogSuggestion(props) {
                     <tr>
                     <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase</CLabel></td>
                     <td>:</td>
-                      <td>{phaseList.find((item)=>item.id==phase)?.phase_name || ""}</td>
+                      <td>{phaseList.find((item)=>item.id==inputGroups[0].phase)?.phase_name || ""}</td>
                       </tr>
                       <tr>
                     <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="category">Category</CLabel></td>
                     <td>:</td>
-                      <td>{categoryList.find((item)=>item.id==category)?.food_type || ""}</td>
+                      <td>{inputGroups[0].categoryList.find((item)=>item.id==inputGroups[0].category)?.food_type || ""}</td>
                       </tr>
                       <tr>
                     <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="week">Week</CLabel></td>
                     <td>:</td>
-                      <td>{weekList.find((item)=>item.id==week)?.name || ""}</td>
+                      <td>{inputGroups[0].weekList.find((item)=>item.id==inputGroups[0].week)?.name || "N/A"}</td>
                       </tr>
                       <tr>
                           <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="food_name">Food Name</CLabel></td>
                           <td>:</td>
                       <td>{foodName}</td>
                       </tr>
-                    <tr>
-                      <td><CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="quantity">Quantity:</CLabel></td>
-                     <td>:</td>
-                      <td><div style={{border:"2px solid rgba(0,0,0,0.2)", padding:"10px 10px 0px 0px", borderRadius:"5px",overflow:"scroll", maxHeight:"200px"}}><ul> {quantityInputFields.map((quantityInputField, index) => {
-                      
-                        return (<>
-                      
-                          <li>{quantityInputField.quantity} {quantityInputField.unit}</li>
-                      
-                      </>
-                      )
-                    })}</ul></div></td>
-                     </tr>
+                      <tr>
+                          <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="quantity_from">Quantity From</CLabel></td>
+                          <td>:</td>
+                      <td>{quantityFrom}</td>
+                      </tr>
+                      <tr>
+                          <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="quantity_to">Quantity To</CLabel></td>
+                          <td>:</td>
+                      <td>{quantityTo}</td>
+                      </tr>
+                      <tr>
+                          <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="unit">Quantity Unit</CLabel></td>
+                          <td>:</td>
+                      <td>{quantityUnit}</td>
+                      </tr>
                       
                     
                   </table>
