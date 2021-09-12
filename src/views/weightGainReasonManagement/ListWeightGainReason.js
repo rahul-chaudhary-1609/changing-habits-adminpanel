@@ -24,9 +24,8 @@ import CIcon from "@coreui/icons-react";
 import { listReason,deleteReason } from "../../data/weightGainReasonManagement"
 import {DeleteModal} from "src/utils/components/modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {phaseList} from "../../utils/helper";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { getFormatedDateTime } from "../../utils/helper";
-import MediaView from "src/utils/components/mediaView";
 
 function ListWeightGainReason() {
     let history = useHistory();
@@ -204,13 +203,13 @@ function ListWeightGainReason() {
                     scopedSlots={{
                         reason: (item, index) => {
                             return (
-                                <td align="justify"><div style={{maxHeight:"150px", overflow:"scroll" }}><ui>{item.reason.map((ele, index) => {
+                                <td align="justify"><div style={{maxHeight:"150px", overflow:"scroll" }}><ul>{item.reason.map((ele, index) => {
                       
                                     return (<>
                                     <li>{`${ele}`}</li>
                                     </>)})}
                                     
-                                    </ui></div> </td>
+                                    </ul></div> </td>
                             )
                         },
                         action: (item, index) => {
@@ -249,22 +248,15 @@ function ListWeightGainReason() {
                             )
                         },
                         phase_id: (item, index) => {
-                            switch (item.phase_id) {
-                                case 1:
-                                    return (<td>Kickstart</td>)
-                                case 2:
-                                    return (<td>Phase 1</td>)
-                                case 3:
-                                    return (<td>Phase 2</td>)
-                                case 4:
-                                    return (<td>Phase 3</td>)
-                                case 5:
-                                    return (<td>Phase 4</td>)
-                                case 6:
-                                    return (<td>Phase 4 EVA</td>)
-                                default:
-                                    return (<td>Phase 4 EVA</td>)
-                            }  
+                            return(
+                                <td><ul style={{listStyleType:"none",padding:"0",margin:"0"}}>{
+                                        phaseList.filter(ph=>item.phase_id.includes(ph.id)).map((ph)=>{
+                                            return(<li>{ph.name}</li>)
+                                        })
+                                    }</ul></td>
+                            )
+                            
+
                         },      
                     }}
                 ></CDataTable>

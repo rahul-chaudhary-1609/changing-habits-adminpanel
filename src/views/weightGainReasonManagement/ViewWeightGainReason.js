@@ -19,16 +19,16 @@ import {
     CBadge
   
 } from "@coreui/react"
-import { listPhases} from "../../data/foodLogManagement"
-import {getReason,addReason,editReason} from "../../data/weightGainReasonManagement"
+import {getReason} from "../../data/weightGainReasonManagement"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {phaseList} from "../../utils/helper";
 
 function ViewWeightGainReason() {
   let history = useHistory();
   let params = useParams();
 
-  let [phase, setPhase] = useState(0);
+  let [phase, setPhase] = useState([]);
   let [colorCode, setColorCode] = useState(0);
   let [weightFrom, setWeightFrom] = useState(null);
   let [weightTo, setWeightTo] = useState(null);
@@ -51,7 +51,6 @@ function ViewWeightGainReason() {
         isFound: true,
   });
 
-  let [phaseList, setPhaseList] = useState([])
 
   let [colorCodeList, setColorCodeList] = useState([
     { id: 1, name: "Orange", },
@@ -63,19 +62,12 @@ function ViewWeightGainReason() {
   //let spinnerShow = false;
 
   useEffect(() => {
+    console.log("phase",phase)
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
-  },[phase,phaseList,colorCodeList,colorCode,weightFrom,weightTo,reasonInputFields])
+  },[phase,colorCodeList,colorCode,weightFrom,weightTo,reasonInputFields])
 
   useEffect(() => {
-    setSpinnerShow(true)
-    listPhases().then((response) => {
-      setPhaseList(response.phasesList)
-      setSpinnerShow(false)
-    }).catch((error) => {
-          setSpinnerShow(false)
-            setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
-        })
     
     if (params.id) {
       let req = {
@@ -86,7 +78,7 @@ function ViewWeightGainReason() {
       setSpinnerShow(true)
       getReason(req).then((response) => {
         setErrorResponse({ message: null, code: null, isFound: false })
-        setPhase(response.reasonDetails.phase_id)
+        setPhase(phaseList.filter(ph=>response.reasonDetails.phase_id.includes(ph.id)))
         setColorCode(response.reasonDetails.color_code)
         setWeightFrom(response.reasonDetails.weight_from)
         setWeightTo(response.reasonDetails.weight_to)
@@ -168,17 +160,33 @@ function ViewWeightGainReason() {
                     <td>:</td>
                       <td ><span style={{padding:"0.2rem 1rem 0.2rem 1rem",backgroundColor:colorCode>0?colorCodeList.find((item)=>item.id==colorCode)?.name:"",color:colorCode>0?"#fff":""}}>{colorCodeList.find((item)=>item.id==colorCode)?.name || ""}</span></td>
                       </tr>
-                    <tr>
-                    <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase</CLabel></td>
-                    <td>:</td>
-                      <td>{phaseList.find((item)=>item.id==phase)?.phase_name || ""}</td>
+                      <tr>
+                      <td><CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="phase">Phase:</CLabel></td>
+                     <td>:</td>
+                      <td>
+                        <div 
+                          style={{
+                            border:"2px solid rgba(0,0,0,0.2)",
+                            padding:"10px 20px 0px 0px",
+                            borderRadius:"5px",
+                            maxHeight:"200px",
+                            overflow:"scroll"
+                          }}>
+                            <ul style={{listStyleType:"none",padding:"0.5rem 1rem 0.5rem 1rem"}}>
+                               {phase.map((ph, index) => {
+                      
+                                return (<>
+                              
+                                  <li>{ph.name}</li>
+                              
+                              </>
+                              )
+                            })}
+                            </ul>
+                          </div>
+                        </td>
                       </tr>
-                      
-                      
-                      
-                    
-                      
-                    
+              
                   </table>
                   </div>
               </CCardBody>

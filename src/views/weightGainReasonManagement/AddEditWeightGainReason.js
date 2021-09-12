@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory,useParams } from "react-router-dom";
+import Select from 'react-select';
 import {    
     CCardBody,
     CContainer,
@@ -18,8 +19,8 @@ import {
   CInputGroupAppend,
   CBadge
 } from "@coreui/react"
-import { listPhases } from "../../data/foodLogManagement"
 import {getReason,addReason,editReason} from "../../data/weightGainReasonManagement"
+import {phaseList} from "../../utils/helper";
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import { unitList } from "../../utils/helper";
 
@@ -27,7 +28,7 @@ function AddEditWeightGainReason() {
   let history = useHistory();
   let params = useParams();
 
-  let [phase, setPhase] = useState(0);
+  let [phase, setPhase] = useState([]);
   let [phaseCheck, setPhaseCheck] = useState(false);
   let [colorCode, setColorCode] = useState(0);
   let [colorCodeCheck, setColorCodeCheck] = useState(false);
@@ -63,7 +64,7 @@ function AddEditWeightGainReason() {
         isFound: true,
   });
 
-  let [phaseList, setPhaseList] = useState([])
+  //let [phaseList, setPhaseList] = useState([])
 
   let [colorCodeList, setColorCodeList] = useState([
     { id: 1, name: "Orange", },
@@ -78,17 +79,9 @@ function AddEditWeightGainReason() {
   useEffect(() => {
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
-  },[phase,phaseList,colorCodeList,colorCode,weightFrom,weightTo,weightUnit,reasonInputFields])
+  },[phase,colorCodeList,colorCode,weightFrom,weightTo,weightUnit,reasonInputFields])
 
   useEffect(() => {
-    setSpinnerShow(true)
-    listPhases().then((response) => {
-      setPhaseList(response.phasesList)
-      setSpinnerShow(false)
-    }).catch((error) => {
-          setSpinnerShow(false)
-            setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
-        })
     
     if (params.id) {
       let req = {
@@ -99,7 +92,7 @@ function AddEditWeightGainReason() {
       setSpinnerShow(true)
       getReason(req).then((response) => {
         setErrorResponse({ message: null, code: null, isFound: false })
-        setPhase(response.reasonDetails.phase_id)
+        setPhase(phaseList.filter(ph=>response.reasonDetails.phase_id.includes(ph.id)))
         setColorCode(response.reasonDetails.color_code)
         setWeightFrom(response.reasonDetails.weight_from)
         setWeightTo(response.reasonDetails.weight_to)
@@ -209,7 +202,7 @@ function AddEditWeightGainReason() {
       result=false
     }
       
-    if (!phase || phase == 0) {
+    if (phase.length == 0) {
       setPhaseCheck(true)
       result=false
     }
@@ -251,7 +244,7 @@ function AddEditWeightGainReason() {
 
     
     let data = {
-      phase_id: phase,
+      phase_id: phase.map(ph=>ph.id),
       color_code : colorCode,
       weight_from: parseFloat(weightFrom),
       weight_to: parseFloat(weightTo),
@@ -445,22 +438,18 @@ function AddEditWeightGainReason() {
                                         <CFormGroup style={{width:"45%"}}>
                             
                                             <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
-                                            <CSelect
-                                            onChange={(e) => {
-                                            setPhaseCheck(false)
-                                            setPhase(e.target.value)
-                                        }}
-                                            value={phase}
-                                            id="phase"
-                                            name="phase"
-                                            custom
-                                            required
                                             
-                                            > <option value="0" defaultValue>Select Phase</option>
-                                            {phaseList.map((phase) => {
-                                                return <option key={phase.id} value={phase.id}> {phase.phase_name}</option>
-                                            })}
-                                        </CSelect>
+                                        <Select 
+                                            options={phaseList}
+                                            isMulti
+                                            placeholder="Select Phase"
+                                            onChange={(e) => {
+                                              console.log(e)
+                                              console.log(e)
+                                              setPhaseCheck(false)
+                                              setPhase(e)
+                                            }}
+                                            value={phase}/>
                                         <div style={{color:"red",marginLeft:"0.1rem", display:phaseCheck?"":"none"}}>Phase is required</div>
                                         </CFormGroup>
                                         
