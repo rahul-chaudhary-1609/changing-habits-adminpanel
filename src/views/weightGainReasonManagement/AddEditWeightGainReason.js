@@ -358,7 +358,7 @@ function AddEditWeightGainReason() {
                                                 required
                                           >
                                             <option value="none" defaultValue>Select Unit</option>
-                                                  {unitList.filter(unit => unit.label == "weight").map((unit) => {
+                                                  {unitList.filter(unit => (unit.label == "weight") && (unit.name == "LB" || unit.name == "KG")).map((unit) => {
                                                 return( <option key={unit.id} value={unit.name}>{unit.name}</option>)
                                                   })}
                                         

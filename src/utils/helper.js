@@ -67,10 +67,10 @@ export const unitList = [
   { id: 8, name: "tsp", label: "volume" },
 
   //weight
-  { id: 9, name: "lb.", label: "weight" },
+  { id: 9, name: "LB", label: "weight" },
   { id: 10, name: "oz.", label: "weight" },
   { id: 11, name: "grams", label: "weight" },
-  { id: 12, name: "kg", label: "weight" },
+  { id: 12, name: "KG", label: "weight" },
 
   //other
   { id: 13, name: "slices", label: "other" },
