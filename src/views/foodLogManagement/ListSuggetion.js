@@ -117,7 +117,7 @@ function ListFoodLogSuggestion() {
           setSpinnerShow(true)
           getFoodTypeByPhaseId(req).then((response) => {
             setSpinnerShow(false)
-            setCategoryList(response.foodTypeList)
+            setCategoryList(response.foodTypeList.rows)
             setErrorResponse({ message: null, code: null, isFound: false })
           }).catch((error) => {
             setSpinnerShow(false)
