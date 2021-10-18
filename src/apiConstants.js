@@ -45,6 +45,8 @@ const apiConstant = {
   getLearningQuiz: "/api/v1/admin/getQuiz",
   editLearningQuiz: "/api/v1/admin/editQuiz",
   addLearningQuiz: "/api/v1/admin/addQuiz",
+  deleteLearningContent: "/api/v1/admin/deleteLearningContent",
+  deleteLearningQuiz: "/api/v1/admin/deleteQuiz",
 
   //food log category API's
   listFoodLogCategory: "/api/v1/admin/listFoodType",
@@ -53,6 +55,7 @@ const apiConstant = {
   getFoodLogCategory: "/api/v1/admin/getFoodType",
   addFoodLogCategory: "/api/v1/admin/addFoodType",
   editFoodLogCategory: "/api/v1/admin/editFoodType",
+  deleteFoodLogCategory: "/api/v1/admin/deleteFoodType",
 
   //onboarding quiz management API's
   listOnboardingQuiz: "/api/v1/admin/listOnboardingQuiz",

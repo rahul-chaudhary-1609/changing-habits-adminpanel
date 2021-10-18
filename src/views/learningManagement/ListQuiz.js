@@ -21,7 +21,8 @@ import {
 import { freeSet } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
-import { listLearningQuiz,toggleLearningQuizStatus } from "../../data/learningContentManagement"
+import { listLearningQuiz,toggleLearningQuizStatus,deleteLearningQuiz } from "../../data/learningContentManagement"
+import {DeleteModal} from "src/utils/components/modal";
 import {StatusModal} from "src/utils/components/modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
@@ -46,6 +47,10 @@ function ListLearningQuiz() {
     let [status, setStatus] = useState(true);
     let [modal, setModal] = useState(false);
     let [toggleData, setToggleData] = useState(null);
+
+    let [deleteLog, setDeleteLog] = useState(true);
+    let [deleteModal, setDeleteModal] = useState(false);
+    let [toggleDeleteData, setToggleDeleteData] = useState(null);
 
 
     const fields = [
@@ -80,6 +85,29 @@ function ListLearningQuiz() {
         }
         
     }
+
+    let toggleDeleteModal = (item) => {
+        setDeleteModal(!deleteModal);
+        setToggleDeleteData(item);
+    }
+
+    let deleteFoodLog =(item) => {
+        setDeleteModal(!deleteModal)
+            let req = {
+                pathParams: {
+                    id: item.id,
+                },
+                data:{}
+        }
+        deleteLearningQuiz(req).then((response) => {
+                setDeleteLog(!deleteLog)
+                setErrorResponse({ message: null, code: null, isFound: false })
+            }).catch((error)=> {
+                setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+        })
+
+    }
+
 
     let formatData = (rows) => {
         let s_no = (page.number - 1) * page.size;
@@ -123,7 +151,7 @@ function ListLearningQuiz() {
         getData();
         
         
-    },[page.number,searchKey,status])
+    },[page.number,searchKey,deleteLog,status])
 
 
     return (
@@ -136,6 +164,15 @@ function ListLearningQuiz() {
                 setStatus={setStatus}
                 status={status}
                 info={"learning quiz"}
+            />
+            <DeleteModal
+                toggleModal={toggleDeleteModal}
+                modal={deleteModal}
+                toggleData={toggleDeleteData}
+                deleteQuestion={deleteFoodLog}
+                setStatus={setDeleteLog}
+                status={deleteLog}
+                info={"Learning Quiz"}
             />
                            
                            
@@ -219,6 +256,13 @@ function ListLearningQuiz() {
                                             color={"success"}
                                             checked={item.status == 1 ? true : false}
                                         />
+                                        <CTooltip content={`Delete Learning Quiz`} placement={"top-start"}>
+                                            <CIcon style={{ color: "red", cursor: "pointer" }}
+                                                size="lg"
+                                                name={"cilTrash"}
+                                                onClick={()=>toggleDeleteModal(item)}
+                                            />
+                                        </CTooltip>
                                     </div>
                                 </td>
                             )

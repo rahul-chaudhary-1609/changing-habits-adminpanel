@@ -22,7 +22,8 @@ import {
 import CIcon from "@coreui/icons-react";
 import { FaFilter} from 'react-icons/fa';
 
-import { listFoodLogCategory,listPhases,toggleFoodLogCategoryStatus } from "../../data/foodLogManagement"
+import { listFoodLogCategory,listPhases,toggleFoodLogCategoryStatus, deleteFoodLogCategory } from "../../data/foodLogManagement"
+import {DeleteModal} from "src/utils/components/modal";
 import { StatusModal } from "../../utils/components/modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
@@ -45,8 +46,11 @@ function ListFoodLogCategory() {
         isFound: false,
     });
     let [status, setStatus] = useState(true);
-    let [modal, setModal] = useState(false);
-    let [toggleData, setToggleData] = useState(null);
+    let [statusModal, setStatusModal] = useState(false);
+    let [toggleStatusData, setToggleStatusData] = useState(null);
+    let [deleteLog, setDeleteLog] = useState(true);
+    let [deleteModal, setDeleteModal] = useState(false);
+    let [toggleDeleteData, setToggleDeleteData] = useState(null);
     let [phase, setPhase] = useState(0);
     let [phases,setPhases]=useState([])
 
@@ -59,13 +63,13 @@ function ListFoodLogCategory() {
         { key: 'action',label:"Action",_style: { width: "28%" } },
     ]
 
-    let toggleModal = (item) => {
-        setModal(!modal);
-        setToggleData(item);
+    let toggleStatusModal = (item) => {
+        setStatusModal(!statusModal);
+        setToggleStatusData(item);
     }
 
     let toggleStatus = async (item) => {
-        setModal(!modal)
+        setStatusModal(!statusModal)
         try {
             let req = {
                 pathParams: {
@@ -81,6 +85,28 @@ function ListFoodLogCategory() {
                 setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
         }
         
+    }
+
+    let toggleDeleteModal = (item) => {
+        setDeleteModal(!deleteModal);
+        setToggleDeleteData(item);
+    }
+
+    let deleteFoodLog =(item) => {
+        setDeleteModal(!deleteModal)
+            let req = {
+                pathParams: {
+                    id: item.id,
+                },
+                data:{}
+        }
+        deleteFoodLogCategory(req).then((response) => {
+                setDeleteLog(!deleteLog)
+                setErrorResponse({ message: null, code: null, isFound: false })
+            }).catch((error)=> {
+                setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+        })
+
     }
 
     let formatData = (rows) => {
@@ -136,19 +162,29 @@ function ListFoodLogCategory() {
         getData();
         
         
-    },[page.number,searchKey,status,phase])
+    },[page.number,searchKey,status,deleteLog,phase])
     
     
     return (
         <CContainer>
             <StatusModal
-                toggleModal={toggleModal}
-                modal={modal}
-                toggleData={toggleData}
+                toggleModal={toggleStatusModal}
+                modal={statusModal}
+                toggleData={toggleStatusData}
                 toggleStatus={toggleStatus}
                 setStatus={setStatus}
                 status={status}
                 info={"food log category"}
+            />
+            <DeleteModal
+                toggleModal={toggleDeleteModal}
+                modal={deleteModal}
+                toggleData={toggleDeleteData}
+                deleteQuestion={deleteFoodLog}
+                setStatus={setDeleteLog}
+                status={deleteLog}
+                info={"Food Log Category"}
+                message={"If you delete this category then all food log suggestions related to this category will also be deleted!"}
             />
             <CRow>
                 <CCol sm="12">
@@ -263,12 +299,19 @@ function ListFoodLogCategory() {
                                             />
                                         </CTooltip>
                                         <CSwitch
-                                            onChange={() => toggleModal(item)}
+                                            onChange={() => toggleStatusModal(item)}
                                             size="sm"
                                             variant={"3d"}
                                             color={"success"}
                                             checked={item.status == 1 ? true : false}
                                         />
+                                        <CTooltip content={`Delete Food Log Category`} placement={"top-start"}>
+                                            <CIcon style={{ color: "red", cursor: "pointer" }}
+                                                size="lg"
+                                                name={"cilTrash"}
+                                                onClick={()=>toggleDeleteModal(item)}
+                                            />
+                                        </CTooltip>
                                     </div>
                                 </td>
                             )

@@ -64,6 +64,7 @@ export function DeleteModal(props) {
                 ><CModalTitle>{`Delete ${props.info}`}?</CModalTitle></CModalHeader>
                 <CModalBody>
                     Are you sure you want to delete this { props.info}?
+                    {props.message?<div style={{marginTop:"1rem"}}>{props.message}</div>:null}
           </CModalBody>
                 <CModalFooter>
                     <CButton
