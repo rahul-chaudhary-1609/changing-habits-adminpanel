@@ -20,6 +20,7 @@ import CIcon from "@coreui/icons-react";
 import { getOnboardingQuiz } from "../../data/onboardingQuizManagement"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { CustomEditorViewer } from "src/utils/components/customEditor";
 
 function ViewOnboardingQuiz(props) {
   let history = useHistory();
@@ -153,15 +154,20 @@ let [question,setQuestion ] = useState("");
                       <tr>
                           <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="description">Description</CLabel></td>
                           <td>:</td>
-                      <td> <CTextarea
-                      value={description}
-                      id="description"
-                      name="description"
-                        rows="5"
-                        cols="80"
-                      placeholder="Enter Description"
-                      required
-                  /></td>
+                      <td> 
+                        {/* <CTextarea
+                            value={description}
+                            id="description"
+                            name="description"
+                              rows="5"
+                              cols="80"
+                            placeholder="Enter Description"
+                            required
+                        /> */}
+                        <CustomEditorViewer
+                          description={description}
+                        />
+                  </td>
                       </tr>
                     
                   </table>

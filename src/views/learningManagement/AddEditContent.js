@@ -26,10 +26,12 @@ import MediaView from "src/utils/components/mediaView";
 import {getPhaseDays,getLearningContent,addLearningContent,editLearningContent} from "../../data/learningContentManagement"
 import { faLaptopHouse } from "@fortawesome/free-solid-svg-icons";
 import { checkLeapYear } from "../../utils/helper";
+import { CustomEditor } from "src/utils/components/customEditor";
 
 function AddEditLearningContent(props) {
   let history = useHistory();
   let params = useParams();
+  let customEditorRef=useRef()
 
   let [title, setTitle] = useState("");
   let [titleCheck,setTitleCheck ] = useState(false);
@@ -172,6 +174,7 @@ function AddEditLearningContent(props) {
         setErrorResponse({ message: null, code: null, isFound: false })
         setTitle(response.learningContentDetails.title)
         setDescription(response.learningContentDetails.description)
+        customEditorRef.current.updateEditorValue()
         setPhase(response.learningContentDetails.phase_id)
         setPhaseDay(response.learningContentDetails.phase_day)
         setPhychologicalContentTypeCheck(response.learningContentDetails.content_type == 1 ? true:false)
@@ -198,8 +201,11 @@ function AddEditLearningContent(props) {
       setTitleCheck(true)
       result=false
     }
-    if (!description || description.trim() == "") {
-      setDescriptionCheck(true)
+    // if (!description || description.trim() == "<p></p>" || description.trim() == "") {
+    //   setDescriptionCheck(true)
+    //   result=false
+    // }
+    if(!customEditorRef.current.validateEditorValue()){
       result=false
     }
     if (!phase || phase == 0) {
@@ -253,8 +259,6 @@ function AddEditLearningContent(props) {
         },
         data
       }
-
-      console.log("data",data)
 
       editLearningContent(req).then((response) => {
         setSpinnerShow(false)
@@ -371,7 +375,7 @@ function AddEditLearningContent(props) {
                   <CFormGroup >
                     
                       <CLabel style={{fontWeight:"600",fontSize:"1rem",}} htmlFor="description">Description:</CLabel>
-                    <CTextarea
+                    {/* <CTextarea
                       onChange={(e) => {
                         setDescriptionCheck(false)
                         setDescription(e.target.value)
@@ -385,7 +389,16 @@ function AddEditLearningContent(props) {
                           name="title"
                       placeholder="Enter Description"
                       //required
-                        />       
+                        />        */}
+                        <CustomEditor
+                          {...{
+                            description,
+                            setDescription,
+                            descriptionCheck,
+                            setDescriptionCheck,
+                          }}
+                          ref={customEditorRef}
+                      />
                     <div style={{color:"red",marginLeft:"0.1rem", display:descriptionCheck?"":"none"}}>Description is required</div>
                   </CFormGroup>
                   <div style={{display:"flex", justifyContent:"space-between"}}>

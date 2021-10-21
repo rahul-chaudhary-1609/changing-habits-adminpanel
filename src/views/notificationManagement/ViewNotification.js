@@ -23,6 +23,7 @@ import {
 import { getNotification } from "src/data/notificationManagement";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { CustomEditorViewer } from "src/utils/components/customEditor";
 
 
 function ViewNotification(props) {
@@ -127,15 +128,20 @@ function ViewNotification(props) {
                             <tr>
                     <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="description">Description</CLabel></td>
                     <td>:</td>
-                    <td ><CTextarea
-                      value={description}
-                      id="description"
-                      name="description"
-                        rows="10"
-                        cols="80"
-                      placeholder="Enter Description"
-                      required
-                  /></td>
+                    <td >
+                      {/* <CTextarea
+                          value={description}
+                          id="description"
+                          name="description"
+                            rows="10"
+                            cols="80"
+                          placeholder="Enter Description"
+                          required
+                      /> */}
+                        <CustomEditorViewer
+                          description={description}
+                        />
+                  </td>
                       </tr>
                     <tr>
                     <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="sent_to">Sent To</CLabel></td>

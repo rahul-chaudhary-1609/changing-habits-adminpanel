@@ -21,10 +21,11 @@ import {
    
 } from "@coreui/react"
 import { sendNotification,listActiveUser } from "src/data/notificationManagement";
-
+import {CustomEditor} from "src/utils/components/customEditor";
 
 function SendNotification(props) {
   let history = useHistory();
+  let customEditorRef=useRef()
 
   let [title, setTitle] = useState("");
   let [titleCheck,setTitleCheck ] = useState(false);
@@ -74,8 +75,11 @@ function SendNotification(props) {
       setTitleCheck(true)
       result=false
     }
-    if (!description || description.trim() == "") {
-      setDescriptionCheck(true)
+    // if (!description || description.trim() == "") {
+    //   setDescriptionCheck(true)
+    //   result=false
+    // }
+    if(!customEditorRef.current.validateEditorValue()){
       result=false
     }
     if (!user || user == null) {
@@ -172,7 +176,7 @@ function SendNotification(props) {
                   <CFormGroup >
                     
                       <CLabel style={{fontWeight:"600",fontSize:"1rem",}} htmlFor="description">Description:</CLabel>
-                    <CTextarea
+                    {/* <CTextarea
                       onChange={(e) => {
                         setDescriptionCheck(false)
                         setDescription(e.target.value)
@@ -186,7 +190,16 @@ function SendNotification(props) {
                           name="title"
                       placeholder="Enter Description"
                       //required
-                        />       
+                        />        */}
+                        <CustomEditor
+                          {...{
+                            description,
+                            setDescription,
+                            descriptionCheck,
+                            setDescriptionCheck
+                          }}
+                          ref={customEditorRef}
+                      />
                     <div style={{color:"red",marginLeft:"0.1rem", display:descriptionCheck?"":"none"}}>Description is required</div>
                   </CFormGroup>
                   

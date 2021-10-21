@@ -29,11 +29,12 @@ import { upload } from "../../data/upload";
 import MediaView from "src/utils/components/mediaView";
 import {getBlog,addBlog,editBlog, listBlogContentType,addBlogContentType} from "../../data/knowledgeCenterManagement"
 import {phaseList} from "../../utils/helper";
-
+import {CustomEditor} from "src/utils/components/customEditor";
 
 function AddEditKnowledgeBlog(props) {
   let history = useHistory();
   let params = useParams();
+  let customEditorRef=useRef()
 
   let [title, setTitle] = useState("");
   let [titleCheck,setTitleCheck ] = useState(false);
@@ -163,6 +164,7 @@ function AddEditKnowledgeBlog(props) {
         setErrorResponse({ message: null, code: null, isFound: false })
         setTitle(response.blogDetails.title)
         setDescription(response.blogDetails.description)
+        customEditorRef.current.updateEditorValue()
         let currentPhase=[];
         for(let label of response.blogDetails.phase_id){
           let ph=phaseList.find(item=>item.label==label)
@@ -227,8 +229,11 @@ function AddEditKnowledgeBlog(props) {
       setTitleCheck(true)
       result=false
     }
-    if (!description || description.trim() == "") {
-      setDescriptionCheck(true)
+    // if (!description || description.trim() == "") {
+    //   setDescriptionCheck(true)
+    //   result=false
+    // }
+    if(!customEditorRef.current.validateEditorValue()){
       result=false
     }
     if (phase.length==0) {
@@ -380,7 +385,7 @@ function AddEditKnowledgeBlog(props) {
                   <CFormGroup >
                     
                       <CLabel style={{fontWeight:"600",fontSize:"1rem",}} htmlFor="description">Description:</CLabel>
-                    <CTextarea
+                    {/* <CTextarea
                       onChange={(e) => {
                         setDescriptionCheck(false)
                         setDescription(e.target.value)
@@ -394,7 +399,16 @@ function AddEditKnowledgeBlog(props) {
                           name="title"
                       placeholder="Enter Description"
                       //required
-                        />       
+                        />        */}
+                        <CustomEditor
+                          {...{
+                            description,
+                            setDescription,
+                            descriptionCheck,
+                            setDescriptionCheck
+                          }}
+                          ref={customEditorRef}
+                      />
                     <div style={{color:"red",marginLeft:"0.1rem", display:descriptionCheck?"":"none"}}>Description is required</div>
                   </CFormGroup>
                   <div style={{display:"flex", justifyContent:"space-between"}}>

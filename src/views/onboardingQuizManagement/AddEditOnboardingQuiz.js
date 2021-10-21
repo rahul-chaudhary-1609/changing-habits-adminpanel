@@ -25,10 +25,12 @@ import {
 } from "@coreui/react"
 import { FaPlus,FaMinus } from 'react-icons/fa';
 import {getOnboardingQuiz,addOnboardingQuiz,editOnboardingQuiz} from "../../data/onboardingQuizManagement"
+import {CustomEditor} from "src/utils/components/customEditor";
 
 function AddEditOnboardingQuiz() {
   let history = useHistory();
   let params = useParams();
+  let customEditorRef=useRef()
 
   let [question, setQuestion] = useState("");
   let [questionCheck,setQuestionCheck ] = useState(false);
@@ -79,6 +81,7 @@ function AddEditOnboardingQuiz() {
         setErrorResponse({ message: null, code: null, isFound: false })
         setQuestion(response.onboardingQuizDetails.question)
         setDescription(response.onboardingQuizDetails.description)
+        customEditorRef.current.updateEditorValue()
         let currentOptionInputFields = [
           { option_no: 1, option_value:response.onboardingQuizDetails.option_1 ,isRequired:false,check:false },
           { option_no: 2, option_value: response.onboardingQuizDetails.option_2,isRequired:false,check:false },
@@ -157,6 +160,9 @@ function AddEditOnboardingQuiz() {
     //   result=false
     // }
    
+    // if(!customEditorRef.current.validateEditorValue()){
+    //   result=false
+    // }
 
     // if (!correctOption || correctOption == 0) {
     //   setCorrectOptionCheck(true)
@@ -402,7 +408,7 @@ function AddEditOnboardingQuiz() {
                   <CFormGroup >
                     
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="description">Description:</CLabel>
-                    <CTextarea
+                    {/* <CTextarea
                       onChange={(e) => {
                         setDescriptionCheck(false)
                         setDescription(e.target.value)
@@ -413,7 +419,16 @@ function AddEditOnboardingQuiz() {
                           rows="5"
                       placeholder="Enter Answer Description"
                       //required
-                    />
+                    /> */}
+                    <CustomEditor
+                          {...{
+                            description,
+                            setDescription,
+                            descriptionCheck,
+                            setDescriptionCheck
+                          }}
+                          ref={customEditorRef}
+                      />
                     {/* <div style={{color:"red",marginLeft:"0.1rem", display:descriptionCheck?"":"none"}}>Description is required</div> */}
                     
                   </CFormGroup>

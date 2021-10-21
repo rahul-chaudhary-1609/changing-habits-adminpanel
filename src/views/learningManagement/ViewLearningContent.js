@@ -19,6 +19,7 @@ import MediaView from "src/utils/components/mediaView";
 import { getLearningContent } from "../../data/learningContentManagement"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { CustomEditorViewer } from "src/utils/components/customEditor";
 
 function ViewLearningContent(props) {
   let history = useHistory();
@@ -137,15 +138,15 @@ let [title,setTitle ] = useState("");
                       <tr>
                           <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="description">Description</CLabel></td>
                           <td>:</td>
-                      <td> <CTextarea
-                      value={description}
-                      id="description"
-                      name="description"
-                        rows="5"
-                        cols="80"
-                      placeholder="Enter Description"
-                      required
-                  /></td>
+                      <td>
+                      {/* <div dangerouslySetInnerHTML={{__html: description}} />  */}
+                        
+                        <CustomEditorViewer
+                          description={description}
+                        />
+                  
+                  
+                  </td>
                       </tr>
                       <tr>
                           <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase</CLabel></td>

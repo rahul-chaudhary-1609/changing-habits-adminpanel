@@ -20,6 +20,7 @@ import { getBlog } from "../../data/knowledgeCenterManagement"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { getFormatedDateTime } from "../../utils/helper";
+import { CustomEditorViewer } from "src/utils/components/customEditor";
 
 function ViewKnowledgeBlog(props) {
   let history = useHistory();
@@ -129,7 +130,8 @@ let [title, setTitle] = useState("");
                       <tr>
                           <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="description">Description</CLabel></td>
                           <td>:</td>
-                      <td> <CTextarea
+                      <td> 
+                        {/* <CTextarea
                       value={description}
                       id="description"
                       name="description"
@@ -137,7 +139,11 @@ let [title, setTitle] = useState("");
                         cols="80"
                       placeholder="Enter Description"
                       required
-                  /></td>
+                  /> */}
+                        <CustomEditorViewer
+                          description={description}
+                        />
+                  </td>
                       </tr>
                       <tr>
                           <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase</CLabel></td>
