@@ -85,6 +85,13 @@ const _nav = [
     icon: <CIcon content={freeSet.cilWeightlifitng} customClasses="c-sidebar-nav-icon" />,
   },
 
+  {
+    _tag: "CSidebarNavItem",
+    name: "List Informative Slides",
+    to: "/listInformativeSlides",
+    icon: <CIcon content={freeSet.cilWeightlifitng} customClasses="c-sidebar-nav-icon" />,
+  },
+
   
 ];
 

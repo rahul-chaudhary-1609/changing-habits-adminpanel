@@ -97,6 +97,12 @@ const apiConstant = {
   //user progress management API's
   listUser: "/api/v1/admin/listUsers",
   getUserProgress:"/api/v1/admin/getUserProgress",
+
+  //informative slides API's
+  listSlides:"/api/v1/admin/listSlides",
+  deleteSlide:"/api/v1/admin/deleteSlide",
+  getSectionList:"/api/v1/admin/getSlideCategoryList",
+  changeSlideOrder:"/api/v1/admin/changeSlideOrder"
 };
 
 export default apiConstant;

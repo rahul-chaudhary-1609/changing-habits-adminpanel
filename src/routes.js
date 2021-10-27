@@ -154,6 +154,10 @@ const GetAnalytics = React.lazy(() =>
   import("./views/analytics/GetAnalytics")
 );
 
+const ListInfromativeSlides=React.lazy(()=>
+  import("./views/informativeSlides/ListInformativeSlides")
+);
+
 
 
 const routes = [
@@ -488,6 +492,13 @@ const routes = [
     exact: true,
     name: "Get Analitics",
     component: GetAnalytics,
+  },
+
+  {
+    path: `/listInformativeSlides`,
+    exact: true,
+    name: "List Informative Slides",
+    component: ListInfromativeSlides,
   },
 
   { component: Page404 },
