@@ -55,7 +55,10 @@ function CustomEditorViewer(props){
                 maxHeight:"150px",
                 minHeight:"150px",
                 maxWidth:"500px",
-                minWidth:"500px"
+                minWidth:"500px",
+                border:"1px solid rgba(0,0,0,0.2)",
+                borderRadius:"5px",
+                padding:"10px"
             }}
         >
             {parse(props.description)}

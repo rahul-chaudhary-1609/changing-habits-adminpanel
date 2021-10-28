@@ -16,21 +16,19 @@ import {
 } from "@coreui/react"
 import CIcon from "@coreui/icons-react";
 import MediaView from "src/utils/components/mediaView";
-import { getBlog } from "../../data/knowledgeCenterManagement"
+import { getSlide,getSectionList } from "../../data/informativeSlides"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { getFormatedDateTime } from "../../utils/helper";
 import { CustomEditorViewer } from "src/utils/components/customEditor";
 
-function ViewKnowledgeBlog(props) {
+function ViewInformativeSlide(props) {
   let history = useHistory();
   let params = useParams();
-let [title, setTitle] = useState("");
+  let [slideNumber, setSlideNumber] = useState("");
+  let [title, setTitle] = useState("");
   let [description, setDescription] = useState("");
-  let [phase, setPhase] = useState([]);
-  let [externalLink, setExternalLink] = useState("");
-  let [contentType,setContentType]=useState([]);
-  let [postedDate, setPostedDate] = useState("");
+  let [section,setSection]=useState(null);
+  let [sectionList,setSectionList]=useState([]);
  let [errorResponse, setErrorResponse] = useState({
         message: null,
         code: null,
@@ -45,6 +43,15 @@ let [title, setTitle] = useState("");
     isError: false,
     errorMessage:"Required",
   })
+
+  useEffect(()=>{
+        getSectionList().then((response) => {
+            setSectionList(response.slideCategoryList)
+        }).catch((error) => {
+            setSpinnerShow(false);
+            setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
+        })
+  },[])
   
   useEffect(() => {
     if (params.id) {
@@ -54,19 +61,17 @@ let [title, setTitle] = useState("");
         },
       }
       setSpinnerShow(true);
-      getBlog(req).then((response) => {
+      getSlide(req).then((response) => {
         setErrorResponse({ message: null, code: null, isFound: false })
-        setTitle(response.blogDetails.title)
-        setDescription(response.blogDetails.description)
-        setPhase(response.blogDetails.phase_id)
-        setExternalLink(response.blogDetails.external_link)
-        setContentType(response.blogDetails.content_type)
-        setPostedDate(response.blogDetails.createdAt)
+        setTitle(response.slideDetails.title)
+        setDescription(response.slideDetails.description)
+        setSlideNumber(response.slideDetails.order)
+        setSection(sectionList.find(item=>item.id==response.slideDetails.section_id))
         
-        if (response.blogDetails.image_url || response.blogDetails.video_url || response.blogDetails.audio_url || response.blogDetails.external_link) {
+        if (response.slideDetails.image_url) {
           setMediaInput({
-            type: response.blogDetails.image_url?"image":response.blogDetails.video_url?"video":response.blogDetails.audio_url?"audio":"link",
-            source: response.blogDetails.image_url || response.blogDetails.video_url || response.blogDetails.audio_url || response.blogDetails.external_link || null,
+            type: response.slideDetails.image_url?"image":response.slideDetails.video_url?"video":response.slideDetails.audio_url?"audio":"link",
+            source: response.slideDetails.image_url || response.slideDetails.video_url || response.slideDetails.audio_url || response.slideDetails.external_link || null,
             isError: false,
           })
         }
@@ -76,7 +81,7 @@ let [title, setTitle] = useState("");
         setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
       })
     }
-  },[])
+  },[sectionList])
 
 
   
@@ -90,7 +95,7 @@ let [title, setTitle] = useState("");
               <CCardHeader>
                 <div style={{display:"flex", justifyContent:"space-between"}}>
                   <h2>
-                    View Knowledge Blog
+                    View Informative Slide
                     <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
                  
                   <CButton
@@ -117,13 +122,23 @@ let [title, setTitle] = useState("");
                 <div style={{display:"flex", justifyContent:"center"}} >                 
                 
                   <table cellpadding="12" cellSpacing="10">
+                  <tr>
+                          <td><CLabel style={{marginRight:"2rem",fontWeight:"600",fontSize:"1rem"}} htmlFor="title">Section</CLabel></td>
+                          <td>:</td>
+                      <td>{section && section.slide_category_name}</td>
+                        </tr>
+                        <tr>
+                          <td><CLabel style={{marginRight:"2rem",fontWeight:"600",fontSize:"1rem"}} htmlFor="title">Slide No.</CLabel></td>
+                          <td>:</td>
+                      <td>{slideNumber}</td>
+                        </tr>
                       <tr>
                           <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="title">Title</CLabel></td>
                           <td>:</td>
                       <td>{title}</td>
                       </tr>
                       <tr>
-                          <td><CLabel style={{marginRight:"2rem",fontWeight:"600",fontSize:"1rem"}} htmlFor="media">Image/Audio/Video</CLabel></td>
+                          <td><CLabel style={{marginRight:"2rem",fontWeight:"600",fontSize:"1rem"}} htmlFor="media">Image</CLabel></td>
                           <td>:</td>
                       <td><MediaView mediaInput={mediaInput} /></td>
                       </tr>
@@ -131,52 +146,14 @@ let [title, setTitle] = useState("");
                           <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="description">Description</CLabel></td>
                           <td>:</td>
                       <td> 
-                        {/* <CTextarea
-                      value={description}
-                      id="description"
-                      name="description"
-                        rows="5"
-                        cols="80"
-                      placeholder="Enter Description"
-                      required
-                  /> */}
+                        
                         <CustomEditorViewer
                           description={description}
                         />
                   </td>
                       </tr>
-                      <tr>
-                          <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase</CLabel></td>
-                          <td>:</td>
-                      <td>{phase.map((ph,index)=>{
-                            if(index==phase.length-1){
-                              return `${ph}`
-                            }else{
-                              return `${ph}, `
-                            }
-                      })}</td>
-                      </tr>
-                      <tr>
-                          <td><CLabel style={{marginRight:"2rem",fontWeight:"600",fontSize:"1rem"}} htmlFor="title">Content Type</CLabel></td>
-                          <td>:</td>
-                      <td>{contentType.map((content,index)=>{
-                        if(index==contentType.length-1){
-                          return `${content}`
-                        }else{
-                          return `${content}, `
-                        }
-                      })}</td>
-                        </tr>
-                        <tr>
-                          <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="external_link">External Link</CLabel></td>
-                          <td>:</td>
-                      <td><a href={externalLink} target="_blank">{externalLink}</a></td>
-                        </tr>
-                        <tr>
-                          <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="posted_date">Posted Date</CLabel></td>
-                          <td>:</td>
-                      <td>{getFormatedDateTime(postedDate)}</td>
-                      </tr>
+                    
+                    
                     
                   </table>
                   </div>
@@ -189,4 +166,4 @@ let [title, setTitle] = useState("");
   
 }
 
-export default ViewKnowledgeBlog
+export default ViewInformativeSlide;

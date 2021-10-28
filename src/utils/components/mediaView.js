@@ -47,7 +47,7 @@ function MediaView(props) {
                                 }}
                                 target="_blank"
                                 rel="noreferrer"
-                            >External Link</a>}
+                            >{props.showFlag?"External Link":null}</a>}
                 </div>
         </div>
     )

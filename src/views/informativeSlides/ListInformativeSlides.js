@@ -44,9 +44,6 @@ function ListInfromativeSlides() {
         code: null,
         isFound: false,
     });
-    let [status, setStatus] = useState(true);
-    let [modal, setModal] = useState(false);
-    let [toggleData, setToggleData] = useState(null);
     let [deleteSlides, setDeleteSlides] = useState(true);
     let [deleteModal, setDeleteModal] = useState(false);
     let [toggleDeleteData, setToggleDeleteData] = useState(null);
@@ -187,7 +184,7 @@ function ListInfromativeSlides() {
                                 <h2>Informative Onboarding Slides</h2>
                                 <CButton
                                     style={{ width: "5rem",float:"right",backgroundColor:"#008080",color:"#fff"}}
-                                    onClick={()=> history.push('/addKnowledgeBlog')}
+                                    onClick={()=> history.push('/addInformativeSlide')}
                                 >
                                     <strong>Add</strong>
                                 </CButton>
@@ -280,7 +277,7 @@ function ListInfromativeSlides() {
                                             <CIcon style={{ color: "black", cursor: "pointer" }}
                                                 size="lg"
                                                 name={"cilPencil"}
-                                                onClick={()=>history.push(`/editKnowledgeBlog/${item.id}`)}
+                                                onClick={()=>history.push(`/editInformativeSlide/${item.id}`)}
                                             />
                                         </CTooltip>
                                         <CTooltip content={`View Slide`} placement={"top-start"}>
@@ -290,7 +287,7 @@ function ListInfromativeSlides() {
                                                 style={{ cursor: "pointer" }}
                                                 onClick={() =>
                                                 history.push({
-                                                    pathname: `/viewKnowledgeBlog/${item.id}`,
+                                                    pathname: `/viewInformativeSlide/${item.id}`,
                                                 })
                                                 }
                                                 icon={faEye}

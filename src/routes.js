@@ -154,8 +154,16 @@ const GetAnalytics = React.lazy(() =>
   import("./views/analytics/GetAnalytics")
 );
 
-const ListInfromativeSlides=React.lazy(()=>
+const ListInformativeSlides=React.lazy(()=>
   import("./views/informativeSlides/ListInformativeSlides")
+);
+
+const AddEditInformativeSlide=React.lazy(()=>
+  import("./views/informativeSlides/AddEditInformativeSlide")
+);
+
+const ViewInformativeSlide=React.lazy(()=>
+  import("./views/informativeSlides/ViewInformativeSlide")
 );
 
 
@@ -498,7 +506,28 @@ const routes = [
     path: `/listInformativeSlides`,
     exact: true,
     name: "List Informative Slides",
-    component: ListInfromativeSlides,
+    component: ListInformativeSlides,
+  },
+
+  {
+    path: `/viewInformativeSlide/:id`,
+    exact: true,
+    name: "View Informative Slide",
+    component: ViewInformativeSlide,
+  },
+
+  {
+    path: `/editInformativeSlide/:id`,
+    exact: true,
+    name: "Edit Informative Slide",
+    component: AddEditInformativeSlide,
+  },
+
+  {
+    path: `/addInformativeSlide`,
+    exact: true,
+    name: "Add Informative Slide",
+    component: AddEditInformativeSlide,
   },
 
   { component: Page404 },

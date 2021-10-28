@@ -101,3 +101,104 @@ export const changeSlideOrder = (req = {}) => {
     })
 
 }
+
+export const getSlide = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await api.get(
+                `${apiConstant.getSlide}/${req.pathParams.id}`,
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+        }
+        
+    })
+
+}
+
+export const editSlide = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await api.put(
+                `${apiConstant.editSlide}/${req.pathParams.id}`,
+                JSON.stringify(req.data),
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+        }
+        
+    })
+
+}
+
+export const addSlide = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log(req)
+            let response = await api.post(
+                `${apiConstant.addSlide}`,
+                JSON.stringify(req.data),
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+        }
+        
+    })
+
+}
+
+export const addSection = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log(req)
+            let response = await api.post(
+                `${apiConstant.addSection}`,
+                JSON.stringify(req.data),
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+        }
+        
+    })
+
+}

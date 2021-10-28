@@ -89,7 +89,7 @@ const _nav = [
     _tag: "CSidebarNavItem",
     name: "List Informative Slides",
     to: "/listInformativeSlides",
-    icon: <CIcon content={freeSet.cilWeightlifitng} customClasses="c-sidebar-nav-icon" />,
+    icon: <CIcon content={freeSet.cilImageBroken} customClasses="c-sidebar-nav-icon" />,
   },
 
   

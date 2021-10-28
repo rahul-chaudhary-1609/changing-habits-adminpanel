@@ -102,7 +102,12 @@ const apiConstant = {
   listSlides:"/api/v1/admin/listSlides",
   deleteSlide:"/api/v1/admin/deleteSlide",
   getSectionList:"/api/v1/admin/getSlideCategoryList",
-  changeSlideOrder:"/api/v1/admin/changeSlideOrder"
+  changeSlideOrder:"/api/v1/admin/changeSlideOrder",
+  getSlide:"/api/v1/admin/getSlide",
+  addSection:"/api/v1/admin/addSlideCategory",
+  addSlide:"/api/v1/admin/addSlide",
+  editSlide:"/api/v1/admin/editSlide",
+
 };
 
 export default apiConstant;
