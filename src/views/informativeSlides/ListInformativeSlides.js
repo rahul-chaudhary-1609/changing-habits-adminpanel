@@ -48,7 +48,7 @@ function ListInfromativeSlides() {
     let [deleteModal, setDeleteModal] = useState(false);
     let [toggleDeleteData, setToggleDeleteData] = useState(null);
 
-    let [section,setSection]=useState(0);
+    let [section,setSection]=useState(1);
     let [sections,setSections]=useState([]);
 
 
@@ -218,14 +218,14 @@ function ListInfromativeSlides() {
                                 >
                                     Search
                                 </CButton>
-                                <CButton style={{ marginLeft: "1rem",backgroundColor:"#008080",color:"#fff" }}
+                                {/* <CButton style={{ marginLeft: "1rem",backgroundColor:"#008080",color:"#fff" }}
                                     onClick={() => {
                                         setSearchValue("")
                                         setSearchKey(null)
                                     }}
                                 >
                                     Reset
-                                </CButton>
+                                </CButton> */}
 
                                 <CInputGroupPrepend style={{marginLeft:"3rem",}}>
                                     <CInputGroupText style={{ borderRadius:"2px",backgroundColor:"#008080",color:"#fff"}} >
@@ -240,7 +240,8 @@ function ListInfromativeSlides() {
                                     name="section"
                                     custom
                                     required
-                                    > <option value="0" defaultValue>All Sections</option>
+                                    > 
+                                    {/* <option value="0" defaultValue>All Sections</option> */}
                                     {sections.map((section) => {
                                         return <option key={section.id} value={section.id}> {section.slide_category_name}</option>
                                     })}
@@ -249,7 +250,7 @@ function ListInfromativeSlides() {
                                     onClick={() => {
                                         setSearchValue("")
                                         setSearchKey(null)
-                                        setSection(0)
+                                        setSection(1)
                                     }}
                                 >
                                     Reset
