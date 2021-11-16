@@ -169,7 +169,7 @@ function ListNotification() {
                             return (<td>{ getFormatedDateTime(item.sent_date)}</td>)
                         },
                         sent_to: (item, index) => {
-                            return (<td><span style={{fontWeight:"500"}}>{ item.type==0?"All Users":"Individual User: "}</span>{ item.type==0?null:`${item.sent_to}`}</td>)
+                            return (<td><span style={{fontWeight:"500"}}>{ item.type==0?"All Users":item.reciever_ids.length>1?"Multiple Users":"Individual User: "}</span>{ (item.type==0 || item.reciever_ids.length>1)?null:`${item.sent_to.join("")}`}</td>)
                         },
                         action: (item, index) => {
                             return (

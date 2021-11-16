@@ -33,9 +33,12 @@ export const listNotification = (req = {}) => {
 export const listActiveUser = (req = {}) => {
     return new Promise(async (resolve, reject) => {
         try {
+            let config = {
+                queryParams: req.queryParams
+            }
             let response = await api.get(
                 apiConstant.listActiveUser,
-                getHeader()
+                getHeader(config)
             )
             if (response.status == 200) {
                 resolve(response.data)
@@ -59,7 +62,7 @@ export const sendNotification = (req = {}) => {
         try {
             console.log(req)
             let response = await api.post(
-                `${apiConstant.sendNotification}/${req.pathParams.id}`,
+                `${apiConstant.sendNotification}`,
                 JSON.stringify(req.data),
                 getHeader()
             )

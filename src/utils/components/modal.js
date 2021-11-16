@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react'
 import { CModal, CButton, CModalHeader, CModalFooter, CModalBody,CModalTitle } from '@coreui/react'
+import { CustomEditorViewer } from "src/utils/components/customEditor";
 
 
 export function StatusModal(props) {
@@ -71,6 +72,66 @@ export function DeleteModal(props) {
                         //color="success"
                         style={{backgroundColor:"#008080",color:"#fff"}}
                         onClick={()=>props.deleteQuestion(props.toggleData)}
+                    >Yes</CButton>
+                    <CButton
+                        color="danger"
+                        onClick={props.toggleModal}
+                    >Cancel</CButton>
+                </CModalFooter>
+            </CModal>
+        </>
+    )
+}
+
+export function ConfirmNotificationModal(props) {
+
+    return (
+        <>
+            <CModal
+                show={props.modal}
+                onClose={props.toggleModal}
+                closeOnBackdrop={false}
+                backdrop
+                centered
+                style={{fontFamily: "Poppins"}}
+                
+            >
+                <CModalHeader
+                   style={{ height: "3rem", backgroundColor: "teal", color: "white" }}
+                    
+                    closeButton
+                ><CModalTitle>{`Confirm ${props.info}`}?</CModalTitle></CModalHeader>
+                <CModalBody>
+                    <div ><strong>Title: </strong> { props.title}</div>
+                    <div style={{marginTop:"1rem"}}><strong style={{marginBottom:"1rem"}}>Description: </strong> <CustomEditorViewer description={props.description} minWidth="300px" manWidth="300px"/></div>
+                    <div style={{marginTop:"1rem"}}><strong>Users: </strong>{
+                        (props.subscriptionStatus==-1 && props.selectAll)?"All User":
+                        (props.subscriptionStatus==-1 && !props.selectAll)?
+                        <div style={{maxHeight:"200px", overflow:"scroll",border:"1px solid rgba(0,0,0,0.2)", padding:"10px",borderRadius:"5px",}}>
+                            {props.user.map((u,index)=>{
+                                return <span>{++index}. {u.name}<br/></span>
+                            })}
+                        </div>:
+                        (props.subscriptionStatus==0 && props.selectAll)?"All Free Users":
+                        (props.subscriptionStatus==0 && !props.selectAll)?
+                        <div style={{maxHeight:"200px", overflow:"scroll",border:"1px solid rgba(0,0,0,0.2)", padding:"10px",borderRadius:"5px",}}>
+                            {props.user.map((u,index)=>{
+                                return <span>{++index}. {u.name}<br/></span>
+                            })}
+                        </div>:
+                        (props.subscriptionStatus==1 && props.selectAll)?"All Paid Users":
+                        (props.subscriptionStatus==1 && !props.selectAll)?
+                        <div style={{maxHeight:"200px", overflow:"scroll",border:"1px solid rgba(0,0,0,0.2)", padding:"10px",borderRadius:"5px",}}>
+                            {props.user.map((u,index)=>{
+                                return <span>{++index}. {u.name}<br/></span>
+                            })}
+                        </div>:null}</div>
+          </CModalBody>
+                <CModalFooter>
+                    <CButton
+                        //color="success"
+                        style={{backgroundColor:"#008080",color:"#fff"}}
+                        onClick={props.onYesAction}
                     >Yes</CButton>
                     <CButton
                         color="danger"

@@ -54,8 +54,8 @@ function CustomEditorViewer(props){
                 overflow:"scroll",
                 maxHeight:"150px",
                 minHeight:"150px",
-                maxWidth:"500px",
-                minWidth:"500px",
+                maxWidth:props.maxWidth?props.maxWidth:"500px",
+                minWidth:props.minWidth?props.minWidth:"500px",
                 border:"1px solid rgba(0,0,0,0.2)",
                 borderRadius:"5px",
                 padding:"10px"

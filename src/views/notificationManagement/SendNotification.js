@@ -17,11 +17,13 @@ import {
   CInputCheckbox,
   CInputFile,
   CSpinner,
-  CFormText
+  CFormText,
    
 } from "@coreui/react"
+import Select from 'react-select';
 import { sendNotification,listActiveUser } from "src/data/notificationManagement";
 import {CustomEditor} from "src/utils/components/customEditor";
+import {ConfirmNotificationModal} from "src/utils/components/modal"
 
 function SendNotification(props) {
   let history = useHistory();
@@ -31,10 +33,11 @@ function SendNotification(props) {
   let [titleCheck,setTitleCheck ] = useState(false);
   let [description, setDescription] = useState("");
   let [descriptionCheck,setDescriptionCheck] = useState(false);
-  let [user, setUser] = useState(null);
-    let [userCheck, setUserCheck] = useState(false);
-    
-    let [userList, setUserList] = useState([]);
+  let [user, setUser] = useState([]);
+  let [subscriptionStatus, setSubscriptionStatus] = useState(-1);
+  let [userCheck, setUserCheck] = useState(false);  
+  let [userList, setUserList] = useState([]);
+  let [selectAll,setSelectAll]=useState(false);
   let [errorResponse, setErrorResponse] = useState({
         message: null,
         code: null,
@@ -47,8 +50,20 @@ function SendNotification(props) {
         isFound: true,
   });
 
+  let subscriptionStatusList=[
+    {
+      id:0,
+      name:"Free"
+    },
+    {
+      id:1,
+      name:"Paid"
+    },
+  ]
+
 
   let [spinnerShow,setSpinnerShow]=useState(false)
+  let [modal,setModal]=useState(false);
 
   useEffect(() => {
     setErrorResponse({ message: null, code: null, isFound: false })
@@ -57,16 +72,33 @@ function SendNotification(props) {
     
   
     useEffect(() => {
+        let req = {
+            queryParams: {
+              subscription_type:subscriptionStatus==-1?null:subscriptionStatus,
+            }
+        }
         setSpinnerShow(true)
-        listActiveUser().then((response) => {
+        listActiveUser(req).then((response) => {
             setSpinnerShow(false)
-            setUserList(response.activeUsers)
+            
+
+            setUserList(response.activeUsers.map((user)=>{
+              return {
+               ...user,
+               value:user.id,
+               label:`${user.name} (${user.email})`
+             }
+           }))
         }).catch((error) => {
             setSpinnerShow(false)
             setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
         })
 
-    },[])
+    },[subscriptionStatus])
+
+  let toggleModal=()=>{
+    setModal(!modal);
+  }
 
   
   let validateField = () => {
@@ -82,7 +114,7 @@ function SendNotification(props) {
     if(!customEditorRef.current.validateEditorValue()){
       result=false
     }
-    if (!user || user == null) {
+    if (user.length==0 && !selectAll) {
       setUserCheck(true)
       result=false
     }
@@ -90,31 +122,35 @@ function SendNotification(props) {
     return result
   }
 
-
-  let handleSubmit = (e) => {
+  let handleSend=(e)=>{
     e.preventDefault();
     if (!validateField()) {
       return
     }
+    toggleModal();
+  }
+
+  let handleSubmit = () => {
     setSpinnerShow(true)
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
     
     
-    let data = {
-      title: title,
-      description: description,      
+    let req={
+      data : {
+        title: title,
+        description: description,      
+      }
+    } 
+    
+    if(subscriptionStatus==0 || subscriptionStatus==1){
+      if(selectAll){
+        req.data.user_ids=userList.map(user=>user.id);
+      }else{
+        req.data.user_ids=user.map(user=>user.id);
+      }
     }
-    // if (mediaInput.type == "image" || mediaInput.type == "video") {
-    //   data[`${mediaInput.type}_url`]=mediaInput.source
-    // }
-
-    let req = {
-      pathParams: {
-          id: user,
-        },
-      data
-    }
+  
     sendNotification(req).then((response) => {
     setSpinnerShow(false)
     setErrorResponse({ message: null, code: null, isFound: false })
@@ -130,6 +166,20 @@ function SendNotification(props) {
 
     return (
     <CContainer fluid>
+      <ConfirmNotificationModal
+            {...{
+              modal,
+              toggleModal,
+              info:"Notification",
+              title,
+              description,
+              user,
+              userList,
+              selectAll,
+              subscriptionStatus,
+              onYesAction:handleSubmit,
+            }}
+      />
       <CRow>
           <CCol sm="12">
             <CCard>
@@ -155,7 +205,7 @@ function SendNotification(props) {
                 <div style={{color:"green",fontSize:"1rem", display:successResponse.isFound?"flex":"none", justifyContent:"center"}}>
                   <div><h5>{ successResponse.message}</h5></div>
                   </div>
-                  <CForm action="" method="post" onSubmit={handleSubmit}  autoComplete="off">
+                  <CForm action="" method="post" onSubmit={handleSend}  autoComplete="off">
                   <CFormGroup >                    
                       <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="title">Title:</CLabel>
                     <CInput
@@ -202,33 +252,66 @@ function SendNotification(props) {
                       />
                     <div style={{color:"red",marginLeft:"0.1rem", display:descriptionCheck?"":"none"}}>Description is required</div>
                   </CFormGroup>
-                  
-                  <CFormGroup >
+                  <div style={{display:"flex", justifyContent:"space-between"}}>
+                        <div style={{width:"45%"}}>
+                        <CFormGroup >
                     
-                      <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="user">Select User:</CLabel>
-                    <CSelect
-                        onChange={(e) => {
-                          setUserCheck(false)
-                          setUser(e.target.value)
-                        }}
-                      value={user}
-                      id="user"
-                        name="user"
-                        custom
-                      //required
-                    > <option value={null} defaultValue>Select User</option>
-                      <option  value="0" >All Users</option>
-                      {userList.map((user,index) => {
-                        return <option key={index} value={user.id}> {user.name} ( {user.email} )</option>
-                    })}
-                      </CSelect>
-                    <div style={{color:"red",marginLeft:"0.1rem", display:userCheck?"":"none"}}>User is required</div>  
-                    </CFormGroup>
-                   
+                        <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="user">Subscripton Type:</CLabel>
+                          <CSelect
+                              onChange={(e) => {
+                                setUser([])
+                                setSelectAll(false)
+                                setSubscriptionStatus(e.target.value)
+                              }}
+                            value={subscriptionStatus}
+                            id="user"
+                              name="user"
+                              custom
+                            //required
+                          > <option value={-1} defaultValue>All Type</option>
+                            {subscriptionStatusList.map((subscriptionStatus,index) => {
+                              return <option key={index} value={subscriptionStatus.id}> {subscriptionStatus.name}</option>
+                          })}
+                            </CSelect>
+                          </CFormGroup>
+                        </div>
+                      <div style={{width:"45%"}}>
+                      <CFormGroup >
+                    
+                      <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="user">User:</CLabel>
+                        <div style={{display:"flex",justifyContent:"space-between", alignItems:"center",marginLeft:"1.5rem"}}>
+                          <div style={{width:"10%",}}>
+                            <CLabel><CInputCheckbox
+                                checked={selectAll}
+                                onChange={(e)=>{
+                                  console.log(selectAll)
+                                  setUser([])
+                                  setUserCheck(false)
+                                  setSelectAll(!selectAll)
+                                }}
+                            /> All</CLabel>
+                          </div>
+                          <div style={{width:"90%"}}>
+                              <Select 
+                                options={userList}
+                                isMulti
+                                placeholder="Select User"
+                                onChange={(e) => {
+                                  console.log(e)
+                                  setUserCheck(false)
+                                  setUser(e)
+                                }}
+                                value={user}
+                                isDisabled={selectAll}
+                            />
+                          </div>
+                        </div>                          
+                        <div style={{color:"red",marginLeft:"0.1rem", display:userCheck?"":"none"}}>User is required</div>  
+                        </CFormGroup>
+                      </div>
+                </div>
                   
-                  
-                  
-                  <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+                  <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"center",marginTop:"1rem"}}>
                     <CButton
                       disabled={spinnerShow}
                       style={{ width: "5rem", marginRight:"3rem", backgroundColor: "#008080", color: "#fff" }}

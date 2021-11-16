@@ -33,7 +33,8 @@ function ViewNotification(props) {
   let [title, setTitle] = useState("");
   let [description, setDescription] = useState("");
   let [type, setType] = useState(null);
-  let [user, setUser] = useState(null);
+  let [recieverIds, setRecieverIds] = useState([]);
+  let [user, setUser] = useState([]);
   
   let [errorResponse, setErrorResponse] = useState({
         message: null,
@@ -68,8 +69,9 @@ function ViewNotification(props) {
         getNotification(req).then((response)=>{
           setTitle(response.notificationDetails.title)
           setDescription(response.notificationDetails.description)
-          setUser(response.notificationDetails.sent_to)
+          setUser(Array.isArray(response.notificationDetails.sent_to)?response.notificationDetails.sent_to:[])
           setType(response.notificationDetails.type)
+          setRecieverIds(response.notificationDetails.reciever_ids)
           setSpinnerShow(false)
         }).catch((error) => {
           setSpinnerShow(false)
@@ -146,7 +148,14 @@ function ViewNotification(props) {
                     <tr>
                     <td><CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="sent_to">Sent To</CLabel></td>
                     <td>:</td>
-                      <td><span style={{fontWeight:"500"}}>{ type==0?"All Users":"Individual User: "}</span>{ type==0?null:user}</td>
+                      <td>
+                        <div style={(type!=0 && recieverIds.length>1)?{maxHeight:"200px", overflow:"scroll",border:"1px solid rgba(0,0,0,0.2)", padding:"10px",borderRadius:"5px",}:null}>
+                        <span style={{fontWeight:"500"}}>{ type==0?"All Users":recieverIds.length>1?<>Multiple Users: <br/></>:"Individual User: "}</span>
+                        { type==0?null:recieverIds.length>1?user.map((u,index)=>{
+                          return <span>{++index}: {u}<br/></span>
+                        }):user[0]}
+                        </div>
+                      </td>
                       </tr> </table>
                   </div>
               </CCardBody>
