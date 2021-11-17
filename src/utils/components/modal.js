@@ -103,27 +103,27 @@ export function ConfirmNotificationModal(props) {
                 ><CModalTitle>{`Confirm ${props.info}`}?</CModalTitle></CModalHeader>
                 <CModalBody>
                     <div ><strong>Title: </strong> { props.title}</div>
-                    <div style={{marginTop:"1rem"}}><strong style={{marginBottom:"1rem"}}>Description: </strong> <CustomEditorViewer description={props.description} minWidth="300px" manWidth="300px"/></div>
+                    <div style={{marginTop:"1rem"}}><strong style={{marginBottom:"1rem"}}>Description: </strong> <CustomEditorViewer description={props.description} minWidth="300px" maxWidth="500px" maxHeight="150px" minHeight="100px"/></div>
                     <div style={{marginTop:"1rem"}}><strong>Users: </strong>{
                         (props.subscriptionStatus==-1 && props.selectAll)?"All User":
                         (props.subscriptionStatus==-1 && !props.selectAll)?
-                        <div style={{maxHeight:"200px", overflow:"scroll",border:"1px solid rgba(0,0,0,0.2)", padding:"10px",borderRadius:"5px",}}>
+                        <div style={{maxHeight:"150px", minHeight:"50px", overflow:"scroll",border:"1px solid rgba(0,0,0,0.2)", padding:"10px",borderRadius:"5px",}}>
                             {props.user.map((u,index)=>{
-                                return <span>{++index}. {u.name}<br/></span>
+                                return <span>{++index}. {u.name} ({u.email})<br/></span>
                             })}
                         </div>:
                         (props.subscriptionStatus==0 && props.selectAll)?"All Free Users":
                         (props.subscriptionStatus==0 && !props.selectAll)?
-                        <div style={{maxHeight:"200px", overflow:"scroll",border:"1px solid rgba(0,0,0,0.2)", padding:"10px",borderRadius:"5px",}}>
+                        <div style={{maxHeight:"150px", minHeight:"50px", overflow:"scroll",border:"1px solid rgba(0,0,0,0.2)", padding:"10px",borderRadius:"5px",}}>
                             {props.user.map((u,index)=>{
-                                return <span>{++index}. {u.name}<br/></span>
+                                return <span>{++index}. {u.name} ({u.email})<br/></span>
                             })}
                         </div>:
                         (props.subscriptionStatus==1 && props.selectAll)?"All Paid Users":
                         (props.subscriptionStatus==1 && !props.selectAll)?
-                        <div style={{maxHeight:"200px", overflow:"scroll",border:"1px solid rgba(0,0,0,0.2)", padding:"10px",borderRadius:"5px",}}>
+                        <div style={{maxHeight:"150px", minHeight:"50px", overflow:"scroll",border:"1px solid rgba(0,0,0,0.2)", padding:"10px",borderRadius:"5px",}}>
                             {props.user.map((u,index)=>{
-                                return <span>{++index}. {u.name}<br/></span>
+                                return <span>{++index}. {u.name} ({u.email})<br/></span>
                             })}
                         </div>:null}</div>
           </CModalBody>

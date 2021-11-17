@@ -132,6 +132,7 @@ function SendNotification(props) {
 
   let handleSubmit = () => {
     setSpinnerShow(true)
+    toggleModal();
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
     
