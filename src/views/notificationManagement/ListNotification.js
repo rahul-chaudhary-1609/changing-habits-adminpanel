@@ -175,7 +175,7 @@ function ListNotification() {
                             return (
                                 <td>
                                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
-                                        <CTooltip content={`View Weight Gain Reason`} placement={"top-start"}>
+                                        <CTooltip content={`View Notification`} placement={"top-start"}>
                                             <FontAwesomeIcon
                                                 color="green"
                                                 size="lg"

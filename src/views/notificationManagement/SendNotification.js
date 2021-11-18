@@ -144,13 +144,13 @@ function SendNotification(props) {
       }
     } 
     
-    if(subscriptionStatus==0 || subscriptionStatus==1){
-      if(selectAll){
-        req.data.user_ids=userList.map(user=>user.id);
-      }else{
-        req.data.user_ids=user.map(user=>user.id);
-      }
+    //if(subscriptionStatus==0 || subscriptionStatus==1){
+    if(selectAll){
+      req.data.user_ids=userList.map(user=>user.id);
+    }else{
+      req.data.user_ids=user.map(user=>user.id);
     }
+    //}
   
     sendNotification(req).then((response) => {
     setSpinnerShow(false)
