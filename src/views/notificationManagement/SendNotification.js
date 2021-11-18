@@ -74,7 +74,7 @@ function SendNotification(props) {
     useEffect(() => {
         let req = {
             queryParams: {
-              subscription_type:subscriptionStatus==-1?null:subscriptionStatus,
+              subscription_status:subscriptionStatus==-1?null:subscriptionStatus,
             }
         }
         setSpinnerShow(true)
