@@ -1,4 +1,4 @@
-import { api,getHeader,apiError } from "../utils/helper";
+import { api, getHeader, apiError } from "../utils/helper";
 import apiConstant from "../apiConstants";
 
 
@@ -23,11 +23,37 @@ export const listLearningContent = (req = {}) => {
             } else {
                 reject(error.response.data)
             }
-            
+
         }
-        
+
     })
 }
+
+export const listQuizContentType = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            let response = await api.get(
+                apiConstant.listLearningContent,
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+
+        }
+
+    })
+}
+
 
 export const toggleLearningContentStatus = (req = {}) => {
     return new Promise(async (resolve, reject) => {
@@ -49,7 +75,7 @@ export const toggleLearningContentStatus = (req = {}) => {
                 reject(error.response.data)
             }
         }
-        
+
     })
 
 }
@@ -75,9 +101,9 @@ export const listLearningQuiz = (req = {}) => {
             } else {
                 reject(error.response.data)
             }
-            
+
         }
-        
+
     })
 }
 
@@ -101,7 +127,7 @@ export const toggleLearningQuizStatus = (req = {}) => {
                 reject(error.response.data)
             }
         }
-        
+
     })
 
 }
@@ -125,7 +151,7 @@ export const getPhaseDays = (req = {}) => {
                 reject(error.response.data)
             }
         }
-        
+
     })
 
 }
@@ -149,7 +175,7 @@ export const getLearningContent = (req = {}) => {
                 reject(error.response.data)
             }
         }
-        
+
     })
 
 }
@@ -174,7 +200,7 @@ export const editLearningContent = (req = {}) => {
                 reject(error.response.data)
             }
         }
-        
+
     })
 
 }
@@ -199,7 +225,7 @@ export const addLearningContent = (req = {}) => {
                 reject(error.response.data)
             }
         }
-        
+
     })
 
 }
@@ -223,7 +249,7 @@ export const getLearningQuiz = (req = {}) => {
                 reject(error.response.data)
             }
         }
-        
+
     })
 
 }
@@ -248,7 +274,7 @@ export const editLearningQuiz = (req = {}) => {
                 reject(error.response.data)
             }
         }
-        
+
     })
 
 }
@@ -273,12 +299,12 @@ export const addLearningQuiz = (req = {}) => {
                 reject(error.response.data)
             }
         }
-        
+
     })
 
 }
 
-export const deleteLearningContent= (req = {}) => {
+export const deleteLearningContent = (req = {}) => {
     return new Promise(async (resolve, reject) => {
         try {
             let response = await api.delete(
@@ -297,12 +323,12 @@ export const deleteLearningContent= (req = {}) => {
                 reject(error.response.data)
             }
         }
-        
+
     })
 
 }
 
-export const deleteLearningQuiz= (req = {}) => {
+export const deleteLearningQuiz = (req = {}) => {
     return new Promise(async (resolve, reject) => {
         try {
             let response = await api.delete(
@@ -321,7 +347,32 @@ export const deleteLearningQuiz= (req = {}) => {
                 reject(error.response.data)
             }
         }
-        
+
+    })
+
+}
+
+export const changeContentOrder = (req = {}) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await api.put(
+                `${apiConstant.changeContentOrder}`,
+                JSON.stringify(req.data),
+                getHeader()
+            )
+            if (response.status == 200) {
+                resolve(response.data)
+            } else {
+                reject(response.data)
+            }
+        } catch (error) {
+            if ([401, 403].includes(error.response.status)) {
+                apiError(error)
+            } else {
+                reject(error.response.data)
+            }
+        }
+
     })
 
 }

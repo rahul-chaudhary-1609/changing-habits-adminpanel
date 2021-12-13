@@ -47,6 +47,7 @@ const apiConstant = {
   addLearningQuiz: "/api/v1/admin/addQuiz",
   deleteLearningContent: "/api/v1/admin/deleteLearningContent",
   deleteLearningQuiz: "/api/v1/admin/deleteQuiz",
+  changeContentOrder: "/api/v1/admin/changeContentOrder",
 
   //food log category API's
   listFoodLogCategory: "/api/v1/admin/listFoodType",
@@ -63,15 +64,15 @@ const apiConstant = {
   getOnboardingQuiz: "/api/v1/admin/getOnboardingQuiz",
   editOnboardingQuiz: "api/v1/admin/editOnboardingQuiz",
   addOnboardingQuiz: "api/v1/admin/addOnboardingQuiz",
-  
+
   //knowledge center management API's
   listBlog: "/api/v1/admin/listBlog",
   deleteBlog: "/api/v1/admin/deleteBlog",
   getBlog: "/api/v1/admin/getBlog",
   editBlog: "api/v1/admin/editBlog",
   addBlog: "api/v1/admin/addBlog",
-  listBlogContentType:"api/v1/admin/listBlogContentType",
-  addBlogContentType:"api/v1/admin/addBlogContentType",
+  listBlogContentType: "api/v1/admin/listBlogContentType",
+  addBlogContentType: "api/v1/admin/addBlogContentType",
 
   //notification management API's
   listNotification: "/api/v1/admin/listNotification",
@@ -86,7 +87,7 @@ const apiConstant = {
   addFoodLogSuggestion: "/api/v1/admin/addFoodContent",
   editFoodLogSuggestion: "/api/v1/admin/editFoodContent",
   getFoodTypeByPhaseId: "/api/v1/admin/getFoodTypeByPhase",
-  
+
   //weight gain reason management API's
   listReason: "/api/v1/admin/listReason",
   deleteReason: "/api/v1/admin/deleteReason",
@@ -96,17 +97,17 @@ const apiConstant = {
 
   //user progress management API's
   listUser: "/api/v1/admin/listUsers",
-  getUserProgress:"/api/v1/admin/getUserProgress",
+  getUserProgress: "/api/v1/admin/getUserProgress",
 
   //informative slides API's
-  listSlides:"/api/v1/admin/listSlides",
-  deleteSlide:"/api/v1/admin/deleteSlide",
-  getSectionList:"/api/v1/admin/getSlideCategoryList",
-  changeSlideOrder:"/api/v1/admin/changeSlideOrder",
-  getSlide:"/api/v1/admin/getSlide",
-  addSection:"/api/v1/admin/addSlideCategory",
-  addSlide:"/api/v1/admin/addSlide",
-  editSlide:"/api/v1/admin/editSlide",
+  listSlides: "/api/v1/admin/listSlides",
+  deleteSlide: "/api/v1/admin/deleteSlide",
+  getSectionList: "/api/v1/admin/getSlideCategoryList",
+  changeSlideOrder: "/api/v1/admin/changeSlideOrder",
+  getSlide: "/api/v1/admin/getSlide",
+  addSection: "/api/v1/admin/addSlideCategory",
+  addSlide: "/api/v1/admin/addSlide",
+  editSlide: "/api/v1/admin/editSlide",
 
 };
 
