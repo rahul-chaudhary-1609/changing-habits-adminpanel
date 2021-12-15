@@ -51,7 +51,7 @@ function ListLearningQuiz() {
     let [deleteLog, setDeleteLog] = useState(true);
     let [deleteModal, setDeleteModal] = useState(false);
     let [toggleDeleteData, setToggleDeleteData] = useState(null);
-
+    const [refersh, setRefresh] = useState(false);
 
     const fields = [
         { key: 's_no', label: "S.No.", _style: { width: "4%" } },
@@ -64,6 +64,7 @@ function ListLearningQuiz() {
 
     let toggleModal = (item) => {
         setModal(!modal);
+        setStatus(item.status)
         setToggleData(item);
     }
 
@@ -77,10 +78,12 @@ function ListLearningQuiz() {
                 data: {}
             }
             let response = await toggleLearningQuizStatus(req);
-            setStatus(!status)
+            setRefresh(!refersh)
+            setStatus(null)
             setErrorResponse({ message: null, code: null, isFound: false })
 
         } catch (error) {
+            console.log(error)
             setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
         }
 
@@ -153,7 +156,7 @@ function ListLearningQuiz() {
         getData();
 
 
-    }, [page.number, searchKey, deleteLog, status])
+    }, [page.number, searchKey, deleteLog, refersh])
 
 
     let handleSlideOrderChange = async (item, direction) => {
