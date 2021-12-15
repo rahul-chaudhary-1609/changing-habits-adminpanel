@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
+import {arabToRoman} from 'roman-numbers';
 import {
     CDataTable,
     CBadge,
@@ -48,7 +49,7 @@ function ListInfromativeSlides() {
     let [deleteModal, setDeleteModal] = useState(false);
     let [toggleDeleteData, setToggleDeleteData] = useState(null);
 
-    let [section,setSection]=useState(1);
+    let [section,setSection]=useState(0);
     let [sections,setSections]=useState([]);
 
 
@@ -241,7 +242,7 @@ function ListInfromativeSlides() {
                                     custom
                                     required
                                     > 
-                                    {/* <option value="0" defaultValue>All Sections</option> */}
+                                    <option value="0" defaultValue>All Sections</option>
                                     {sections.map((section) => {
                                         return <option key={section.id} value={section.id}> {section.slide_category_name}</option>
                                     })}
@@ -250,7 +251,7 @@ function ListInfromativeSlides() {
                                     onClick={() => {
                                         setSearchValue("")
                                         setSearchKey(null)
-                                        setSection(1)
+                                        setSection(0)
                                     }}
                                 >
                                     Reset
@@ -270,6 +271,11 @@ function ListInfromativeSlides() {
                         </CCol>
                     }
                     scopedSlots={{
+                        order:(item,index)=>{
+                            return (
+                                <td>{arabToRoman(item.order)}</td>
+                            )
+                        },
                         action: (item, index) => {
                             return (
                                 <td>
@@ -301,21 +307,21 @@ function ListInfromativeSlides() {
                                                 onClick={()=>toggleModal(item)}
                                             />
                                         </CTooltip>
-                                        <CTooltip content={item.order>1?`Move Slide Up`:`Not Allowed`} placement={"top-start"}>
+                                        <CTooltip content={item.order>1 && section>0?`Move Slide Up`:section<=0?`Please select specific section to perform this`:`Not Allowed`} placement={"top-start"}>
                                             <FontAwesomeIcon
-                                                    color={item.order>1?"#008080":"gray"}
+                                                    color={item.order>1 && section>0?"#008080":"gray"}
                                                     size="lg"
-                                                    style={{ cursor:item.order>1?"pointer":"not-allowed" }}
-                                                    onClick={()=>item.order>1?handleSlideOrderChange(item,"up"):""}
+                                                    style={{ cursor:item.order>1 && section>0?"pointer":"not-allowed" }}
+                                                    onClick={()=>item.order>1 && section>0?handleSlideOrderChange(item,"up"):""}
                                                     icon={faChevronCircleUp}
                                                 />
                                         </CTooltip>
-                                        <CTooltip content={item.order<item.maxOrder?`Move Slide Down`:`Not Allowed`} placement={"top-start"}>
+                                        <CTooltip content={item.order<item.maxOrder && section>0?`Move Slide Down`:section<=0?`Please select specific section to perform this`:`Not Allowed`} placement={"top-start"}>
                                             <FontAwesomeIcon
-                                                    color={item.order<item.maxOrder?"#008080":"gray"}
+                                                    color={item.order<item.maxOrder && section>0?"#008080":"gray"}
                                                     size="lg"
-                                                    style={{ cursor:item.order<item.maxOrder?"pointer":"not-allowed" }}
-                                                    onClick={()=>item.order<item.maxOrder?handleSlideOrderChange(item,"down"):""}
+                                                    style={{ cursor:item.order<item.maxOrder  && section>0?"pointer":"not-allowed" }}
+                                                    onClick={()=>item.order<item.maxOrder && section>0?handleSlideOrderChange(item,"down"):""}
                                                     icon={faChevronCircleDown}
                                                 />
                                         </CTooltip>

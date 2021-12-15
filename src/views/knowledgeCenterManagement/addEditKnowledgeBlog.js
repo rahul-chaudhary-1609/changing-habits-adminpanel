@@ -42,8 +42,8 @@ function AddEditKnowledgeBlog(props) {
   let [descriptionCheck, setDescriptionCheck] = useState(false);
   let [phase, setPhase] = useState([]);
   let [phaseCheck, setPhaseCheck] = useState(false);
-  let [externalLink, setExternalLink] = useState("");
-  let [externalLinkCheck, setExternalLinkCheck] = useState(false);
+  // let [externalLink, setExternalLink] = useState("");
+  // let [externalLinkCheck, setExternalLinkCheck] = useState(false);
   let [contentTypeCheck, setContentTypeCheck] = useState(false);
   let [contentTypeList, setContentTypeList] = useState([]);
   let [contentType, setContentType] = useState([]);
@@ -77,10 +77,10 @@ function AddEditKnowledgeBlog(props) {
   useEffect(() => {
     setErrorResponse({ message: null, code: null, isFound: false })
     setSuccessResponse({ message: null, code: null, isFound: false })
-  }, [title, description, mediaInput, phase, externalLink, contentType])
+  }, [title, description, mediaInput, phase, contentType])
 
   let handleUpload = (e) => {
-    setExternalLinkCheck(false)
+    // setExternalLinkCheck(false)
     setMediaInput({ ...mediaInput, type: "image", isError: false, source: "https://changinghabits-dev-backend.s3.amazonaws.com/changinghabits/learning_content/loading-buffering_1625498388794.gif" })
     if (e.target.files[0]) {
       let fileType = e.target.files[0].type.split("/")[0];
@@ -183,7 +183,7 @@ function AddEditKnowledgeBlog(props) {
         // else{
         //   setContentType([...contentType])
         // }
-        setExternalLink(response.blogDetails.external_link)
+        // setExternalLink(response.blogDetails.external_link)
         setContentTypeCheck(false)
         if (response.blogDetails.image_url || response.blogDetails.video_url || response.blogDetails.audio_url) {
           setMediaInput({
@@ -249,11 +249,11 @@ function AddEditKnowledgeBlog(props) {
     //   setExternalLinkCheck(true)
     //   result=false
     // }
-    if ((!externalLink || externalLink == "") && (mediaInput.source == "https://changinghabits-dev-backend.s3.amazonaws.com/changinghabits/learning_content/loading-buffering_1625498388794.gif" || !mediaInput.source)) {
-      setMediaInput({ ...mediaInput, isError: true });
-      setExternalLinkCheck(true)
-      result = false
-    }
+    // if ((!externalLink || externalLink == "") && (mediaInput.source == "https://changinghabits-dev-backend.s3.amazonaws.com/changinghabits/learning_content/loading-buffering_1625498388794.gif" || !mediaInput.source)) {
+    //   setMediaInput({ ...mediaInput, isError: true });
+    //   setExternalLinkCheck(true)
+    //   result = false
+    // }
 
     return result
   }
@@ -273,7 +273,7 @@ function AddEditKnowledgeBlog(props) {
       title: title,
       description: description,
       phase_id: phase.map(ph => ph.id),
-      external_link: externalLink,
+      // external_link: externalLink,
       content_type: contentType.map(content => content.id),
       image_url: mediaInput.type == "image" ? mediaInput.source : null,
       video_url: mediaInput.type == "video" ? mediaInput.source : null,

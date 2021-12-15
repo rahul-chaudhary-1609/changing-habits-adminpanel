@@ -144,3 +144,40 @@ export function ConfirmNotificationModal(props) {
         </>
     )
 }
+
+export function InfoModal(props) {
+    console.log(props)
+    return (
+        <>
+            <CModal
+                show={props.modal}
+                onClose={props.toggleModal}
+                closeOnBackdrop={false}
+                backdrop
+                centered
+                style={{ fontFamily: "Poppins" }}
+            //color={props.status == 1 ? "danger" : "success" }
+            //color="warning"
+
+            >
+                <CModalHeader
+                    style={{ height: "3rem", backgroundColor: "teal", color: "white" }}
+
+                    closeButton
+                ><CModalTitle>Info</CModalTitle></CModalHeader>
+                <CModalBody>
+                    
+                    {props.toggleData?.message}
+
+                </CModalBody>
+                <CModalFooter>
+                    <CButton
+                        //color="success"
+                        style={{ backgroundColor: "#008080", color: "#fff" }}
+                        onClick={props.toggleModal}
+                    >Ok</CButton>
+                </CModalFooter>
+            </CModal>
+        </>
+    )
+}

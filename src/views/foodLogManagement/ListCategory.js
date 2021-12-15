@@ -274,6 +274,13 @@ function ListFoodLogCategory() {
                         </CCol>
                     }
                     scopedSlots={{
+                        // food_type:(item,index)=>{
+                        //     return(
+                        //         <div>
+                        //             {item.food_type}
+                        //         </div>
+                        //     )
+                        // },
                         action: (item, index) => {
                             return (
                                 <td>

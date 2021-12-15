@@ -20,6 +20,7 @@ import { GetRecipeDetail, ToggleRecipeStatus } from "../../api";
 import { useHistory, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { CustomEditorViewer } from "src/utils/components/customEditor";
 
 export default function ViewRecipe() {
   const history = useHistory();
@@ -336,7 +337,10 @@ export default function ViewRecipe() {
                         </CLabel>
                       </CCol>
                       <CCol xs="4" md="9" style={{ whiteSpace: "pre-line" }}>
-                        {show.recipe_methods}
+                        {/* {show.recipe_methods} */}
+                        <CustomEditorViewer
+                        description={show.recipe_methods?show.recipe_methods:""}
+                      />
                       </CCol>
                     </CFormGroup>
                     <CFormGroup row>

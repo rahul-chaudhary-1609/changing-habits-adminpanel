@@ -177,44 +177,44 @@ const Recipes = () => {
       value: null,
     },
     {
-      label: "kickstart",
+      label: "Kickstart",
       value: 1,
     },
     {
-      label: "phase 1",
+      label: "Phase 1",
       value: 2,
     },
     {
-      label: "phase 2",
+      label: "Phase 2",
       value: 3,
     },
     {
-      label: "phase 3",
+      label: "Phase 3",
       value: 4,
     },
     {
-      label: "phase 4",
+      label: "Phase 4",
       value: 5,
     },
     {
-      label: "phase 4 eva",
+      label: "Phase 4 eva",
       value: 6,
     },
   ];
   const phaseShow = (phase) => {
     switch (phase) {
       case 1:
-        return "kisckstart";
+        return "Kisckstart";
       case 2:
-        return "phase 1";
+        return "Phase 1";
       case 3:
-        return "phase 2";
+        return "Phase 2";
       case 4:
-        return "phase 3";
+        return "Phase 3";
       case 5:
-        return "phase 4";
+        return "Phase 4";
       default:
-        return "phase 4 eva";
+        return "Phase 4 eva";
     }
   };
 
@@ -349,6 +349,10 @@ const Recipes = () => {
 
   const handleReset = () => {
     setOnSearchChange("");
+    setRecipeType({value:null});
+    setRecipeStatus({value:null});
+    setPhaseId({value:null});
+    setSubType({value:null});
     let newPage = page;
     if (newPage === 0) {
       newPage = 1;
@@ -633,7 +637,7 @@ const Recipes = () => {
                         {item.name}
                       </>
                     ) : (
-                      `Admin : ${item.name}`
+                      <><b>Admin :</b> {item.name}</>
                     )}
                   </td>
                 ),

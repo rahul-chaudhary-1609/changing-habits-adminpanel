@@ -379,6 +379,7 @@ function AddEditLearningQuiz() {
       setErrorResponse({ message: null, code: null, isFound: false })
       setQuestion("")
       setDescription("")
+      customEditorRef.current.updateEditorValue()
       setCorrectOption(0)
       setOptionInputFields([
         { option_no: 1, option_value: "", isRequired: false, check: false },
@@ -433,8 +434,8 @@ function AddEditLearningQuiz() {
                   show={successResponse.isFound}
                   autohide="5000"
                 >
-                  {/* <CToastHeader style={{backgroundColor:"#008080",color:"#fff"}} ></CToastHeader> */}
-                  <CToastBody>
+                  {/* <CToastHeader style={{backgroundColor:"#008080",color:"#fff"}} >Info</CToastHeader> */}
+                  <CToastBody style={{backgroundColor:"#008080",color:"#fff"}}>
                     <strong>{successResponse.message}</strong>
                   </CToastBody>
                 </CToast>

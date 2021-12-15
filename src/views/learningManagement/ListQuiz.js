@@ -24,6 +24,7 @@ import CIcon from "@coreui/icons-react";
 import { listLearningQuiz, toggleLearningQuizStatus, deleteLearningQuiz, changeContentOrder } from "../../data/learningContentManagement"
 import { DeleteModal } from "src/utils/components/modal";
 import { StatusModal } from "src/utils/components/modal";
+import { InfoModal } from "src/utils/components/modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
@@ -51,6 +52,12 @@ function ListLearningQuiz() {
     let [deleteLog, setDeleteLog] = useState(true);
     let [deleteModal, setDeleteModal] = useState(false);
     let [toggleDeleteData, setToggleDeleteData] = useState(null);
+
+    let [infoModalStatus, setInfoModalStatus] = useState(true);
+    let [infoModal, setInfoModal] = useState(false);
+    let [infoData, setInfoData] = useState(null);
+
+
     const [refersh, setRefresh] = useState(false);
 
     const fields = [
@@ -84,6 +91,7 @@ function ListLearningQuiz() {
 
         } catch (error) {
             console.log(error)
+            toggleInfoModal(error);
             setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
         }
 
@@ -109,6 +117,11 @@ function ListLearningQuiz() {
             setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
         })
 
+    }
+
+    let toggleInfoModal = (info) => {
+        setInfoModal(!infoModal);
+        setInfoData(info);
     }
 
 
@@ -205,6 +218,12 @@ function ListLearningQuiz() {
                 status={deleteLog}
                 info={"Learning Quiz"}
             />
+            <InfoModal
+                toggleModal={toggleInfoModal}
+                modal={infoModal}
+                toggleData={infoData}
+            />
+            
 
 
             <CDataTable

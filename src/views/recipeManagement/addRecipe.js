@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import {
   CButton,
   CCard,
@@ -22,36 +22,38 @@ import { useLocation, useHistory, useParams } from "react-router-dom";
 import FormData from "form-data";
 import { unitList } from "../../utils/helper";
 import { FaPlus, FaMinus } from "react-icons/fa";
+import { CustomEditor } from "src/utils/components/customEditor";
 
 export default function AddRecipe() {
   const location = useLocation();
   const history = useHistory();
   const params = useParams();
+  let customEditorRef = useRef();
 
   var phase = [
     {
-      label: "kisckstart",
+      label: "Kickstart",
       value: 1,
     },
     {
-      label: "phase 1",
+      label: "Phase 1",
       value: 2,
     },
 
     {
-      label: "phase 2",
+      label: "Phase 2",
       value: 3,
     },
     {
-      label: "phase 3",
+      label: "Phase 3",
       value: 4,
     },
     {
-      label: "phase 4",
+      label: "Phase 4",
       value: 5,
     },
     {
-      label: "phase 4 eva",
+      label: "Phase 4 eva",
       value: 6,
     },
   ];
@@ -135,6 +137,8 @@ export default function AddRecipe() {
   const [disable, setDisable] = useState(false);
   const [recipeType, setRecipeType] = useState(1);
   const [image, setImage] = useState({});
+  let [description, setDescription] = useState("");
+  let [descriptionCheck, setDescriptionCheck] = useState(false);
 
   let [quantityInputFields, setQuantityInputFields] = useState([
     {
@@ -154,7 +158,7 @@ export default function AddRecipe() {
     recipe_image_url: "",
     serves_quantity: null,
     recipe_title: "",
-    recipe_methods: "",
+    // recipe_methods: "",
   });
 
   const [error, setError] = useState({
@@ -197,6 +201,8 @@ export default function AddRecipe() {
         const result = await GetRecipeDetail(params.id);
         if (result) {
           setShow(result.recipeDetails);
+          setDescription(result.recipeDetails.recipe_methods)
+          customEditorRef.current.updateEditorValue()
           let currentQuantityInputFields = result.recipeDetails.recipe_ingredients.map(
             (data, index) => {
               return {
@@ -241,8 +247,12 @@ export default function AddRecipe() {
         showSubType = "Please select Recipe Sub Type";
       }
     }
-    if (show.recipe_methods === "") {
-      valid = false;
+    // if (show.recipe_methods === "") {
+    //   valid = false;
+    //   showMethod = "Please enter Recipe Methods";
+    // }
+    if (!customEditorRef.current.validateEditorValue()) {
+      valid = false
       showMethod = "Please enter Recipe Methods";
     }
     if (show.recipe_title === "") {
@@ -376,23 +386,23 @@ export default function AddRecipe() {
     setShow({ ...show, serves_quantity: e.target.value });
   };
 
-  const handleMethodsChange = (e) => {
-    setError({
-      ...error,
-      recipe_methods: { ...error.recipe_methods, error: "" },
-    });
+  // const handleMethodsChange = (e) => {
+  //   setError({
+  //     ...error,
+  //     recipe_methods: { ...error.recipe_methods, error: "" },
+  //   });
 
-    if (e.target.value === "") {
-      setError({
-        ...error,
-        recipe_methods: {
-          ...error.recipe_methods,
-          error: "Please enter a Description",
-        },
-      });
-    }
-    setShow({ ...show, recipe_methods: e.target.value });
-  };
+  //   if (e.target.value === "") {
+  //     setError({
+  //       ...error,
+  //       recipe_methods: {
+  //         ...error.recipe_methods,
+  //         error: "Please enter a Description",
+  //       },
+  //     });
+  //   }
+  //   setShow({ ...show, recipe_methods: e.target.value });
+  // };
   const handleTypeChange = (e) => {
     setRecipeType(e.target.value);
     setError({
@@ -560,7 +570,8 @@ export default function AddRecipe() {
           : null;
       body.recipe_title = show.recipe_title;
       body.serves_quantity = Number(show.serves_quantity);
-      body.recipe_methods = show.recipe_methods;
+      // body.recipe_methods = show.recipe_methods;
+      body.recipe_methods = description;
       body.recipe_ingredients = quantityInputFields.map(
         (quantityInputField) => {
           return {
@@ -586,7 +597,8 @@ export default function AddRecipe() {
       body.recipe_type = Number(show.recipe_type);
       body.recipe_title = show.recipe_title;
       body.serves_quantity = Number(show.serves_quantity);
-      body.recipe_methods = show.recipe_methods;
+      // body.recipe_methods = show.recipe_methods;
+      body.recipe_methods = description;
       body.recipe_ingredients = quantityInputFields.map(
         (quantityInputField) => {
           return {
@@ -737,9 +749,10 @@ export default function AddRecipe() {
                           </h6>
                         </CLabel>
                       </CCol>
+                      <CCol xs="4" md="9">
                       {quantityInputFields.map((quantityInputField, index) => {
                         return (
-                          <CCol xs="4" md="9">
+                          <CCol xs="4" md="12">
                             <CInputGroup
                               style={{
                                 display: "flex",
@@ -750,7 +763,7 @@ export default function AddRecipe() {
                                     : "none",
                                 marginLeft:
                                   quantityInputField.quantity_no > 1
-                                    ? "12.5rem"
+                                    ? ""
                                     : "",
                               }}
                             >
@@ -896,11 +909,11 @@ export default function AddRecipe() {
                           </CCol>
                         );
                       })}
-                      <CCol xs="12" md="9">
+                      <CCol xs="12" md="12">
                         <CBadge
                           style={{
                             marginTop: "0.5rem",
-                            marginLeft: "11.5rem",
+                            marginLeft: "",
                             cursor: "pointer",
                           }}
                           color="secondary"
@@ -908,6 +921,7 @@ export default function AddRecipe() {
                         >
                           <FaPlus />
                         </CBadge>
+                      </CCol>
                       </CCol>
                     </CFormGroup>
                     <CFormGroup row>
@@ -922,7 +936,7 @@ export default function AddRecipe() {
                         </CLabel>
                       </CCol>
                       <CCol xs="4" md="9">
-                        <CTextarea
+                        {/* <CTextarea
                           type="text"
                           id="recipe_methods"
                           name="recipe_methods"
@@ -930,12 +944,26 @@ export default function AddRecipe() {
                           value={show.recipe_methods}
                           onChange={handleMethodsChange}
                           rows="6"
+                        /> */}
+                        <CustomEditor
+                          {...{
+                            description,
+                            setDescription,
+                            descriptionCheck,
+                            setDescriptionCheck,
+                          }}
+                          ref={customEditorRef}
                         />
                         {error.recipe_methods.error && (
                           <div className="email-validate">
                             {error.recipe_methods.error}
                           </div>
                         )}
+                        {/* {descriptionCheck && (
+                          <div className="email-validate">
+                          Description is required
+                          </div>
+                        )} */}
                       </CCol>
                     </CFormGroup>
                     <CFormGroup row>
@@ -995,12 +1023,13 @@ export default function AddRecipe() {
                             {error.recipe_type.error}
                           </div>
                         )}
-                      </CCol>
+                      
+                      
                       {show.recipe_type == 1 || show.recipe_type == 2 ? (
                         <CCol
                           xs="12"
-                          md="9"
-                          style={{ marginLeft: "12.5rem", marginTop: "0.5rem" }}
+                          md="12"
+                          style={{ marginLeft: "", marginTop: "0.5rem" }}
                         >
                           <CSelect
                             value={show.recipe_sub_type}
@@ -1041,7 +1070,7 @@ export default function AddRecipe() {
                         </CCol>
                       ) : (
                         ""
-                      )}
+                      )}</CCol>
                     </CFormGroup>
                     <CFormGroup row>
                       <CCol md="3">
