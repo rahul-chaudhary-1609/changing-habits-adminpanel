@@ -442,7 +442,7 @@ function AddEditLearningQuiz() {
               </CToaster>
               <CForm action="" method="post" onSubmit={handleSubmit} autoComplete="off">
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  {!params.id && <CFormGroup style={{ width: "30%" }}>
+                  {!params.id && <CFormGroup style={{ width: "100%" }}>
 
                     <CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="phase">Content:</CLabel>
                     <CSelect

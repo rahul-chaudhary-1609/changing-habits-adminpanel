@@ -204,7 +204,7 @@ const Recipes = () => {
   const phaseShow = (phase) => {
     switch (phase) {
       case 1:
-        return "Kisckstart";
+        return "Kickstart";
       case 2:
         return "Phase 1";
       case 3:

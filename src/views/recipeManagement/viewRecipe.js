@@ -31,7 +31,7 @@ export default function ViewRecipe() {
   const phase = (label) => {
     switch (label) {
       case 1:
-        return "kisckstart";
+        return "kickstart";
       case 2:
         return "phase 1";
       case 3:
