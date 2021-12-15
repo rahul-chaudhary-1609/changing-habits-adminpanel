@@ -64,6 +64,8 @@ const apiConstant = {
   getOnboardingQuiz: "/api/v1/admin/getOnboardingQuiz",
   editOnboardingQuiz: "api/v1/admin/editOnboardingQuiz",
   addOnboardingQuiz: "api/v1/admin/addOnboardingQuiz",
+  listQuizContentType: "/api/v1/admin/listQuizContentType",
+
 
   //knowledge center management API's
   listBlog: "/api/v1/admin/listBlog",

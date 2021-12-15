@@ -184,6 +184,7 @@ function ListLearningContent() {
                 setStatus={setStatus}
                 status={status}
                 info={"learning content"}
+                message={"Note: This will effect all the quiz related with this learning content"}
             />
             <DeleteModal
                 toggleModal={toggleDeleteModal}
@@ -193,7 +194,7 @@ function ListLearningContent() {
                 setStatus={setDeleteLog}
                 status={deleteLog}
                 info={"Learning Content"}
-                message={"Note: This will delete all the quiz related with this learning content"}
+                message={"Note: This will effect all the quiz related with this learning content"}
             />
 
             <CDataTable

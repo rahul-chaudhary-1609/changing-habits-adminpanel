@@ -184,7 +184,7 @@ function AddEditLearningQuiz() {
         //  setLoading(true)
         let response = await listQuizContentType(req);
         console.log(response)
-        setData(response.rows);
+        setData(response.quizContentTypes);
         // setLoading(false)
         setErrorResponse({ message: null, code: null, isFound: false })
 
@@ -362,6 +362,7 @@ function AddEditLearningQuiz() {
       phase_id: phase,
       phase_day: phaseDay,
       correct_option: correctOption,
+      content_id: content
     }
 
     optionInputFields.forEach((optionInputField) => {
@@ -460,49 +461,6 @@ function AddEditLearningQuiz() {
                     </CSelect>
                     <div style={{ color: "red", marginLeft: "0.1rem", display: contentCheck ? "" : "none" }}>Content is required</div>
                   </CFormGroup>}
-
-                  <CFormGroup style={{ width: "30%" }}>
-
-                    <CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="phase">Phase:</CLabel>
-                    <CSelect
-                      onChange={(e) => {
-                        setPhaseDay(0)
-                        setPhaseCheck(false)
-                        setPhase(e.target.value)
-                      }}
-                      value={phase}
-                      id="phase"
-                      name="phase"
-                      custom
-                    //required
-                    > <option value="0" defaultValue>Select Phase</option>
-                      {phases.map((phase) => {
-                        return <option key={phase.id} value={phase.id}> {phase.name}</option>
-                      })}
-                    </CSelect>
-                    <div style={{ color: "red", marginLeft: "0.1rem", display: phaseCheck ? "" : "none" }}>Phase is required</div>
-                  </CFormGroup>
-
-                  <CFormGroup style={{ width: "30%" }}>
-
-                    <CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="phase_day">Phase Day:</CLabel>
-                    <CSelect
-                      onChange={(e) => {
-                        setPhaseDayCheck(false)
-                        setPhaseDay(e.target.value)
-                      }}
-                      value={phaseDay}
-                      id="phase_day"
-                      name="phase_day"
-                      custom
-                    //required
-                    > <option value="0" defaultValue>Select Day</option>
-                      {phaseDaysList.map((day) => {
-                        return <option key={day} value={day}> {day}</option>
-                      })}
-                    </CSelect>
-                    <div style={{ color: "red", marginLeft: "0.1rem", display: phaseDayCheck ? "" : "none" }}>Phase day is required</div>
-                  </CFormGroup>
                 </div>
                 <CFormGroup >
                   <CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="question">Question:</CLabel>

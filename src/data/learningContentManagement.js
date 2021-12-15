@@ -34,7 +34,7 @@ export const listQuizContentType = (req = {}) => {
         try {
 
             let response = await api.get(
-                apiConstant.listLearningContent,
+                apiConstant.listQuizContentType,
                 getHeader()
             )
             if (response.status == 200) {
