@@ -64,33 +64,7 @@ function AddEditLearningContent(props) {
     errorMessage: "Image/Video is Required",
   })
 
-  let phases = [
-    {
-      id: 1,
-      name: "Kickstart"
-    },
-    {
-      id: 2,
-      name: "Phase 1"
-    },
-    {
-      id: 3,
-      name: "Phase 2"
-    },
-    {
-      id: 4,
-      name: "Phase 3"
-    },
-    {
-      id: 5,
-      name: "Phase 4"
-    },
-    {
-      id: 6,
-      name: "Phase 4 EVA"
-    }
 
-  ]
 
   let [phaseDaysList, setPhaseDaysList] = useState([]);
   let [spinnerShow, setSpinnerShow] = useState(false)
@@ -203,21 +177,11 @@ function AddEditLearningContent(props) {
       setTitleCheck(true)
       result = false
     }
-    // if (!description || description.trim() == "<p></p>" || description.trim() == "") {
-    //   setDescriptionCheck(true)
-    //   result=false
-    // }
+
     if (!customEditorRef.current.validateEditorValue()) {
       result = false
     }
-    // if (!phase || phase == 0) {
-    //   setPhaseCheck(true)
-    //   result=false
-    // }
-    // if (!phaseDay || phaseDay == 0) {
-    //   setPhaseDayCheck(true)
-    //   result=false
-    // }
+
     if (mediaInput.source == "https://changinghabits-dev-backend.s3.amazonaws.com/changinghabits/learning_content/loading-buffering_1625498388794.gif" || !mediaInput.source) {
       setMediaInput({ ...mediaInput, isError: true });
       result = false
@@ -244,8 +208,6 @@ function AddEditLearningContent(props) {
     let data = {
       title: title,
       description: description,
-      phase_id: phase,
-      phase_day: phaseDay,
       content_type: phychologicalContentTypeCheck ? 1 : 2,
       image_url: mediaInput.type == "image" ? mediaInput.source : null,
       video_url: mediaInput.type == "video" ? mediaInput.source : null,
@@ -405,49 +367,6 @@ function AddEditLearningContent(props) {
                   <div style={{ color: "red", marginLeft: "0.1rem", display: descriptionCheck ? "" : "none" }}>Description is required</div>
                 </CFormGroup>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <CFormGroup style={{ width: "45%" }}>
-
-                    <CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="phase">Phase:</CLabel>
-                    <CSelect
-                      onChange={(e) => {
-                        setPhaseDay(0)
-                        setPhaseCheck(false)
-                        setPhase(e.target.value)
-                      }}
-                      value={phase}
-                      id="phase"
-                      name="phase"
-                      custom
-                    //required
-                    > <option value="0" defaultValue>Select Phase</option>
-                      {phases.map((phase) => {
-                        return <option key={phase.id} value={phase.id}> {phase.name}</option>
-                      })}
-                    </CSelect>
-                    <div style={{ color: "red", marginLeft: "0.1rem", display: phaseCheck ? "" : "none" }}>Phase is required</div>
-                  </CFormGroup>
-
-                  <CFormGroup style={{ width: "45%" }}>
-
-                    <CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="phase_day">Phase Day:</CLabel>
-                    <CSelect
-                      onChange={(e) => {
-                        setPhaseDayCheck(false)
-                        setPhaseDay(e.target.value)
-                      }}
-                      value={phaseDay}
-                      id="phase_day"
-                      name="phase_day"
-                      custom
-                    //required
-                    > <option value="0" defaultValue>Select Day</option>
-                      {phaseDaysList.map((day) => {
-                        return <option key={day} value={day}> {day}</option>
-                      })}
-                    </CSelect>
-                    <div style={{ color: "red", marginLeft: "0.1rem", display: phaseDayCheck ? "" : "none" }}>Phase Day is required</div>
-                  </CFormGroup>
-
                 </div>
                 <CFormGroup >
                   <CLabel style={{ fontWeight: "600", fontSize: "1rem" }} htmlFor="title">External Link:</CLabel>

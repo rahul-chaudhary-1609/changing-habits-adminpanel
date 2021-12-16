@@ -51,7 +51,6 @@ function ListLearningContent() {
     const fields = [
         { key: 's_no', label: "S.No.", _style: { width: "4%" } },
         { key: 'title', label: "Title", _style: { width: "26%" } },
-        { key: 'phase_id', label: "Phase", _style: { width: "12%" } },
         { key: 'content_type', label: "Content Type", _style: { width: "12%" } },
         { key: 'external_link', label: "External Link", _style: { width: "12%" } },
         { key: 'status', label: "Status", _style: { width: "6%" } },
@@ -325,24 +324,7 @@ function ListLearningContent() {
                             </td>
                         )
                     },
-                    phase_id: (item, index) => {
-                        switch (item.phase_id) {
-                            case 1:
-                                return (<td>Kickstart</td>)
-                            case 2:
-                                return (<td>Phase 1</td>)
-                            case 3:
-                                return (<td>Phase 2</td>)
-                            case 4:
-                                return (<td>Phase 3</td>)
-                            case 5:
-                                return (<td>Phase 4</td>)
-                            case 6:
-                                return (<td>Phase 4 EVA</td>)
-                            default:
-                                return (<td>Phase 4 EVA</td>)
-                        }
-                    },
+
                     status: (item, index) => {
                         return (
                             <td>
