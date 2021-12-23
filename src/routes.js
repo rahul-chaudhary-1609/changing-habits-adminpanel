@@ -154,15 +154,15 @@ const GetAnalytics = React.lazy(() =>
   import("./views/analytics/GetAnalytics")
 );
 
-const ListInformativeSlides=React.lazy(()=>
+const ListInformativeSlides = React.lazy(() =>
   import("./views/informativeSlides/ListInformativeSlides")
 );
 
-const AddEditInformativeSlide=React.lazy(()=>
+const AddEditInformativeSlide = React.lazy(() =>
   import("./views/informativeSlides/AddEditInformativeSlide")
 );
 
-const ViewInformativeSlide=React.lazy(()=>
+const ViewInformativeSlide = React.lazy(() =>
   import("./views/informativeSlides/ViewInformativeSlide")
 );
 
@@ -322,6 +322,7 @@ const routes = [
     component: AddEditLearningQuiz,
   },
 
+
   {
     path: `/listFoodLogCategory`,
     exact: true,
@@ -355,14 +356,14 @@ const routes = [
     name: "List Onboarding Quiz",
     component: ListOnboardingQuiz,
   },
-    
+
   {
     path: `/viewOnboardingQuiz/:id`,
     exact: true,
     name: "View Onboarding Quiz",
     component: ViewOnboardingQuiz,
   },
-    
+
   {
     path: `/addOnboardingQuiz`,
     exact: true,
@@ -389,7 +390,7 @@ const routes = [
     name: "View Knowledge Blog",
     component: ViewKnowledgeBlog,
   },
-   {
+  {
     path: `/addKnowledgeBlog`,
     exact: true,
     name: "Add Knowledge Blog",
@@ -403,13 +404,13 @@ const routes = [
     component: AddEditKnowledgeBlog,
   },
 
-   {
+  {
     path: `/listNotification`,
     exact: true,
     name: "List Notification",
     component: ListNotification,
   },
-   
+
   {
     path: `/sendNotification`,
     exact: true,
