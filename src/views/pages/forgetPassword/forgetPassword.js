@@ -121,6 +121,7 @@ export default function Forgetpassword() {
                                 backgroundColor: "teal",
                                 color: "white",
                               }}
+                              disabled={!formik.values.email}
                             >
                               Submit
                             </CButton>

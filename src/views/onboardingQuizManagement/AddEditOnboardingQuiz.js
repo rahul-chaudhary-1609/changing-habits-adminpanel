@@ -189,16 +189,19 @@ function AddEditOnboardingQuiz() {
           }
           setOptionInputFields(currentOptionInputFields);
 
-          let modifiedCorrectOptions = []
+          let modifiedCorrectOptions = [];
 
           response?.onboardingQuizDetails?.correct_option?.map((item) => {
             modifiedCorrectOptions.push({
               label: response.onboardingQuizDetails[`option_${item}`],
-              value: item
-            })
-          })
+              value: item,
+            });
+          });
 
-          console.log(modifiedCorrectOptions, "modifiedCorrectOptionsmodifiedCorrectOptions")
+          console.log(
+            modifiedCorrectOptions,
+            "modifiedCorrectOptionsmodifiedCorrectOptions"
+          );
 
           setCorrectOption(modifiedCorrectOptions);
 
@@ -274,19 +277,19 @@ function AddEditOnboardingQuiz() {
       setQuestionTypeCheck(true);
       result = false;
     }
-    // if (!description || description.trim() == "") {
-    //   setDescriptionCheck(true)
-    //   result=false
-    // }
+    if (!description || description.trim() == "") {
+      setDescriptionCheck(true);
+      result = false;
+    }
 
-    // if(!customEditorRef.current.validateEditorValue()){
-    //   result=false
-    // }
+    if (!customEditorRef.current.validateEditorValue()) {
+      result = false;
+    }
 
-    // if (!correctOption || correctOption == 0) {
-    //   setCorrectOptionCheck(true)
-    //   result=false
-    // }
+    if ((!correctOption || correctOption == 0) && questionType !== "3") {
+      setCorrectOptionCheck(true);
+      result = false;
+    }
 
     let currentOptionInputFields = [...optionInputFields];
     for (let optionInputField of currentOptionInputFields) {
@@ -579,7 +582,7 @@ function AddEditOnboardingQuiz() {
                       value={category}
                       id="phase"
                       name="phase"
-                    //required
+                      //required
                     >
                       {" "}
                       <option value="0" defaultValue>
@@ -623,7 +626,7 @@ function AddEditOnboardingQuiz() {
                       value={questionType}
                       id="phase"
                       name="phase"
-                    //required
+                      //required
                     >
                       {" "}
                       <option value="0" defaultValue>
@@ -670,7 +673,7 @@ function AddEditOnboardingQuiz() {
                     id="question"
                     name="question"
                     placeholder="Enter question"
-                  //required
+                    //required
                   />
                   <div
                     style={{
@@ -716,7 +719,7 @@ function AddEditOnboardingQuiz() {
                             id={`option${optionInputField.option_no}`}
                             name={`option${optionInputField.option_no}`}
                             placeholder={`Enter option ${optionInputField.option_no}`}
-                          //required
+                            //required
                           />
                           <CInputGroupAppend
                             style={{
@@ -784,10 +787,14 @@ function AddEditOnboardingQuiz() {
 
                   <Select
                     options={correctOptionList}
-                    isMulti={questionType === "2" || correctOption.length > 1 ? true : false}
+                    isMulti={
+                      questionType === "2" || correctOption.length > 1
+                        ? true
+                        : false
+                    }
                     placeholder="Select Correct Option"
                     onChange={(e) => {
-                      console.log(e, "eeeeeeeeeeeeeee")
+                      console.log(e, "eeeeeeeeeeeeeee");
                       setCorrectOptionCheck(false);
                       setCorrectOption(e);
                     }}
@@ -829,7 +836,15 @@ function AddEditOnboardingQuiz() {
                       }
                     })}
                   </CSelect> */}
-                  {/* <div style={{color:"red",marginLeft:"0.1rem", display:correctOptionCheck?"":"none"}}>Correct option is required</div> */}
+                  <div
+                    style={{
+                      color: "red",
+                      marginLeft: "0.1rem",
+                      display: correctOptionCheck ? "" : "none",
+                    }}
+                  >
+                    Correct option is required
+                  </div>
                 </CFormGroup>
 
                 <CFormGroup>
@@ -860,7 +875,15 @@ function AddEditOnboardingQuiz() {
                     }}
                     ref={customEditorRef}
                   />
-                  {/* <div style={{color:"red",marginLeft:"0.1rem", display:descriptionCheck?"":"none"}}>Description is required</div> */}
+                  <div
+                    style={{
+                      color: "red",
+                      marginLeft: "0.1rem",
+                      display: descriptionCheck ? "" : "none",
+                    }}
+                  >
+                    Description is required
+                  </div>
                 </CFormGroup>
 
                 <CFormGroup

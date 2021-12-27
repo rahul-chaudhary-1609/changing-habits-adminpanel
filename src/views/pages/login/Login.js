@@ -213,6 +213,10 @@ const Login = () => {
                             className="px-4"
                             type="submit"
                             style={{ backgroundColor: "teal", color: "white" }}
+                            disabled={
+                              !formik.values.email_phone ||
+                              !formik.values.password
+                            }
                           >
                             Login
                           </CButton>
