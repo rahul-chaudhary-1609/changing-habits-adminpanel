@@ -96,6 +96,8 @@ function AddEditOnboardingQuiz() {
     isFound: false,
   });
 
+  console.log(correctOption, "correctOptioncorrectOption");
+
   let [successResponse, setSuccessResponse] = useState({
     message: null,
     code: 200,
@@ -187,7 +189,18 @@ function AddEditOnboardingQuiz() {
           }
           setOptionInputFields(currentOptionInputFields);
 
-          setCorrectOption(response.onboardingQuizDetails.correct_option);
+          let modifiedCorrectOptions = []
+
+          response?.onboardingQuizDetails?.correct_option?.map((item) => {
+            modifiedCorrectOptions.push({
+              label: response.onboardingQuizDetails[`option_${item}`],
+              value: item
+            })
+          })
+
+          console.log(modifiedCorrectOptions, "modifiedCorrectOptionsmodifiedCorrectOptions")
+
+          setCorrectOption(modifiedCorrectOptions);
 
           setSpinnerShow(false);
         })
@@ -566,7 +579,7 @@ function AddEditOnboardingQuiz() {
                       value={category}
                       id="phase"
                       name="phase"
-                      //required
+                    //required
                     >
                       {" "}
                       <option value="0" defaultValue>
@@ -610,7 +623,7 @@ function AddEditOnboardingQuiz() {
                       value={questionType}
                       id="phase"
                       name="phase"
-                      //required
+                    //required
                     >
                       {" "}
                       <option value="0" defaultValue>
@@ -657,7 +670,7 @@ function AddEditOnboardingQuiz() {
                     id="question"
                     name="question"
                     placeholder="Enter question"
-                    //required
+                  //required
                   />
                   <div
                     style={{
@@ -703,7 +716,7 @@ function AddEditOnboardingQuiz() {
                             id={`option${optionInputField.option_no}`}
                             name={`option${optionInputField.option_no}`}
                             placeholder={`Enter option ${optionInputField.option_no}`}
-                            //required
+                          //required
                           />
                           <CInputGroupAppend
                             style={{
@@ -771,9 +784,10 @@ function AddEditOnboardingQuiz() {
 
                   <Select
                     options={correctOptionList}
-                    isMulti={questionType === "2" ? true : false}
+                    isMulti={questionType === "2" || correctOption.length > 1 ? true : false}
                     placeholder="Select Correct Option"
                     onChange={(e) => {
+                      console.log(e, "eeeeeeeeeeeeeee")
                       setCorrectOptionCheck(false);
                       setCorrectOption(e);
                     }}
