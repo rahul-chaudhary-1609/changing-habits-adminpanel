@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   CButton,
   CCard,
@@ -23,6 +23,7 @@ import FormData from "form-data";
 import { unitList } from "../../utils/helper";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { CustomEditor } from "src/utils/components/customEditor";
+import Select from "react-select";
 
 export default function AddRecipe() {
   const location = useLocation();
@@ -201,10 +202,10 @@ export default function AddRecipe() {
         const result = await GetRecipeDetail(params.id);
         if (result) {
           setShow(result.recipeDetails);
-          setDescription(result.recipeDetails.recipe_methods)
-          customEditorRef.current.updateEditorValue()
-          let currentQuantityInputFields = result.recipeDetails.recipe_ingredients.map(
-            (data, index) => {
+          setDescription(result.recipeDetails.recipe_methods);
+          customEditorRef.current.updateEditorValue();
+          let currentQuantityInputFields =
+            result.recipeDetails.recipe_ingredients.map((data, index) => {
               return {
                 quantity_no: ++index,
                 ingredient: data.ingredient,
@@ -213,8 +214,7 @@ export default function AddRecipe() {
                 check: false,
                 validationMsg: null,
               };
-            }
-          );
+            });
           setQuantityInputFields([...currentQuantityInputFields]);
         }
       } catch (error) {
@@ -252,7 +252,7 @@ export default function AddRecipe() {
     //   showMethod = "Please enter Recipe Methods";
     // }
     if (!customEditorRef.current.validateEditorValue()) {
-      valid = false
+      valid = false;
       showMethod = "Please enter Recipe Methods";
     }
     if (show.recipe_title === "") {
@@ -658,6 +658,7 @@ export default function AddRecipe() {
                         <CLabel>
                           <h6>
                             <strong>Enter Recipe Title:</strong>
+                            <b style={{ color: "red" }}>*</b>
                           </h6>
                         </CLabel>
                       </CCol>
@@ -683,6 +684,7 @@ export default function AddRecipe() {
                         <CLabel htmlFor="hf-recipe_image_url">
                           <h6>
                             <strong>Upload Recipe Image:</strong>
+                            <b style={{ color: "red" }}>*</b>
                           </h6>
                         </CLabel>
                       </CCol>
@@ -721,6 +723,8 @@ export default function AddRecipe() {
                           id="recipe_image_url"
                           name="recipe_image_url"
                           type="file"
+                          style={{ cursor: "pointer" }}
+                          accept=".png, .jpg"
                           onChange={(e) => {
                             const id = `recipe_image_url`;
                             showFile(e);
@@ -746,185 +750,193 @@ export default function AddRecipe() {
                         >
                           <h6>
                             <strong>Enter Recipe Ingredients:</strong>
+                            <b style={{ color: "red" }}>*</b>
                           </h6>
                         </CLabel>
                       </CCol>
                       <CCol xs="4" md="9">
-                      {quantityInputFields.map((quantityInputField, index) => {
-                        return (
-                          <CCol xs="4" md="12">
-                            <CInputGroup
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                marginTop:
-                                  quantityInputField.quantity_no > 1
-                                    ? "0.5rem"
-                                    : "none",
-                                marginLeft:
-                                  quantityInputField.quantity_no > 1
-                                    ? ""
-                                    : "",
-                              }}
-                            >
-                              <CInput
-                                onChange={(e) =>
-                                  handleChangeQuantityFieldValue(
-                                    index,
-                                    e,
-                                    "ingredient"
-                                  )
-                                }
-                                autoComplete="off"
-                                value={quantityInputField.ingredient}
-                                type="text"
-                                id={`ingredient${quantityInputField.quantity_no}`}
-                                name={`ingredient${quantityInputField.quantity_no}`}
-                                placeholder="Ingredient name"
-                              />
-                              <CInput
-                                onChange={(e) =>
-                                  handleChangeQuantityFieldValue(
-                                    index,
-                                    e,
-                                    "quantity"
-                                  )
-                                }
-                                autoComplete="off"
-                                value={quantityInputField.quantity}
-                                type="number"
-                                id={`quantity${quantityInputField.quantity_no}`}
-                                name={`quantity${quantityInputField.quantity_no}`}
-                                placeholder="Ingredient quantity"
-                              />
-                              <CInputGroupAppend
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "start",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <div>
-                                  <CSelect
-                                    custom
-                                    className="selectpicker"
+                        {quantityInputFields.map(
+                          (quantityInputField, index) => {
+                            return (
+                              <CCol xs="4" md="12">
+                                <CInputGroup
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    marginTop:
+                                      quantityInputField.quantity_no > 1
+                                        ? "0.5rem"
+                                        : "none",
+                                    marginLeft:
+                                      quantityInputField.quantity_no > 1
+                                        ? ""
+                                        : "",
+                                  }}
+                                >
+                                  <CInput
                                     onChange={(e) =>
                                       handleChangeQuantityFieldValue(
                                         index,
                                         e,
-                                        "unit"
+                                        "ingredient"
                                       )
                                     }
-                                    value={quantityInputField.unit}
-                                    id={`unit${quantityInputField.quantity_no}`}
-                                    name={`unit${quantityInputField.quantity_no}`}
-                                    custom
-                                    required
-                                  >
-                                    <option value="none" defaultValue>
-                                      Select Unit
-                                    </option>
-                                    <optgroup label="Volume">
-                                      {unitList
-                                        .filter(
-                                          (unit) => unit.label == "volume"
-                                        )
-                                        .map((unit) => {
-                                          return (
-                                            <option
-                                              key={unit.id}
-                                              value={unit.name}
-                                            >
-                                              {unit.name}
-                                            </option>
-                                          );
-                                        })}
-                                    </optgroup>
-                                    <optgroup label="Weight">
-                                      {unitList
-                                        .filter(
-                                          (unit) => unit.label == "weight"
-                                        )
-                                        .map((unit) => {
-                                          return (
-                                            <option
-                                              key={unit.id}
-                                              value={unit.name}
-                                            >
-                                              {unit.name}
-                                            </option>
-                                          );
-                                        })}
-                                    </optgroup>
-                                    <optgroup label="Other">
-                                      {unitList
-                                        .filter((unit) => unit.label == "other")
-                                        .map((unit) => {
-                                          return (
-                                            <option
-                                              key={unit.id}
-                                              value={unit.name}
-                                            >
-                                              {unit.name}
-                                            </option>
-                                          );
-                                        })}
-                                    </optgroup>
-                                  </CSelect>
-                                </div>
-                                <div>
-                                  <CBadge
-                                    style={{
-                                      marginLeft: "0.5rem",
-                                      cursor: "pointer",
-                                      display:
-                                        quantityInputFields.length > 1
-                                          ? ""
-                                          : "none",
-                                    }}
-                                    color="danger"
-                                    onClick={() =>
-                                      handleRemoveQuantityField(index)
+                                    autoComplete="off"
+                                    value={quantityInputField.ingredient}
+                                    type="text"
+                                    id={`ingredient${quantityInputField.quantity_no}`}
+                                    name={`ingredient${quantityInputField.quantity_no}`}
+                                    placeholder="Ingredient name"
+                                  />
+                                  <CInput
+                                    onChange={(e) =>
+                                      handleChangeQuantityFieldValue(
+                                        index,
+                                        e,
+                                        "quantity"
+                                      )
                                     }
+                                    autoComplete="off"
+                                    value={quantityInputField.quantity}
+                                    type="number"
+                                    min={0}
+                                    id={`quantity${quantityInputField.quantity_no}`}
+                                    name={`quantity${quantityInputField.quantity_no}`}
+                                    placeholder="Ingredient quantity"
+                                  />
+                                  <CInputGroupAppend
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "start",
+                                      alignItems: "center",
+                                    }}
                                   >
-                                    <FaMinus />
-                                  </CBadge>
+                                    <div>
+                                      <CSelect
+                                        custom
+                                        className="selectpicker"
+                                        onChange={(e) =>
+                                          handleChangeQuantityFieldValue(
+                                            index,
+                                            e,
+                                            "unit"
+                                          )
+                                        }
+                                        value={quantityInputField.unit}
+                                        id={`unit${quantityInputField.quantity_no}`}
+                                        name={`unit${quantityInputField.quantity_no}`}
+                                        custom
+                                        required
+                                      >
+                                        <option value="none" defaultValue>
+                                          Select Unit
+                                        </option>
+                                        <optgroup label="Volume">
+                                          {unitList
+                                            .filter(
+                                              (unit) => unit.label == "volume"
+                                            )
+                                            .map((unit) => {
+                                              return (
+                                                <option
+                                                  key={unit.id}
+                                                  value={unit.name}
+                                                >
+                                                  {unit.name}
+                                                </option>
+                                              );
+                                            })}
+                                        </optgroup>
+                                        <optgroup label="Weight">
+                                          {unitList
+                                            .filter(
+                                              (unit) => unit.label == "weight"
+                                            )
+                                            .map((unit) => {
+                                              return (
+                                                <option
+                                                  key={unit.id}
+                                                  value={unit.name}
+                                                >
+                                                  {unit.name}
+                                                </option>
+                                              );
+                                            })}
+                                        </optgroup>
+                                        <optgroup label="Other">
+                                          {unitList
+                                            .filter(
+                                              (unit) => unit.label == "other"
+                                            )
+                                            .map((unit) => {
+                                              return (
+                                                <option
+                                                  key={unit.id}
+                                                  value={unit.name}
+                                                >
+                                                  {unit.name}
+                                                </option>
+                                              );
+                                            })}
+                                        </optgroup>
+                                      </CSelect>
+                                    </div>
+                                    <div>
+                                      <CBadge
+                                        style={{
+                                          marginLeft: "0.5rem",
+                                          cursor: "pointer",
+                                          display:
+                                            quantityInputFields.length > 1
+                                              ? ""
+                                              : "none",
+                                        }}
+                                        color="danger"
+                                        onClick={() =>
+                                          handleRemoveQuantityField(index)
+                                        }
+                                      >
+                                        <FaMinus />
+                                      </CBadge>
+                                    </div>
+                                  </CInputGroupAppend>
+                                </CInputGroup>
+                                <div
+                                  style={{
+                                    color: "red",
+                                    marginLeft:
+                                      quantityInputField.quantity_no > 1
+                                        ? "11.5rem"
+                                        : "",
+                                    display: quantityInputField.check
+                                      ? ""
+                                      : "none",
+                                  }}
+                                >
+                                  {quantityInputField.validationMsg
+                                    ? quantityInputField.validationMsg
+                                    : `ingredient  ${quantityInputField.quantity_no} is required`}
                                 </div>
-                              </CInputGroupAppend>
-                            </CInputGroup>
-                            <div
-                              style={{
-                                color: "red",
-                                marginLeft:
-                                  quantityInputField.quantity_no > 1
-                                    ? "11.5rem"
-                                    : "",
-                                display: quantityInputField.check ? "" : "none",
-                              }}
-                            >
-                              {quantityInputField.validationMsg
-                                ? quantityInputField.validationMsg
-                                : `ingredient  ${quantityInputField.quantity_no} is required`}
-                            </div>
-                          </CCol>
-                        );
-                      })}
-                      <CCol xs="12" md="12">
-                        <CBadge
-                          style={{
-                            marginTop: "0.5rem",
-                            marginLeft: "",
-                            cursor: "pointer",
-                          }}
-                          color="secondary"
-                          onClick={handleAddQuantityField}
-                        >
-                          <FaPlus />
-                        </CBadge>
-                      </CCol>
+                              </CCol>
+                            );
+                          }
+                        )}
+                        <CCol xs="12" md="12">
+                          <CBadge
+                            style={{
+                              marginTop: "0.5rem",
+                              marginLeft: "",
+                              cursor: "pointer",
+                            }}
+                            color="secondary"
+                            onClick={handleAddQuantityField}
+                          >
+                            <FaPlus />
+                          </CBadge>
+                        </CCol>
                       </CCol>
                     </CFormGroup>
-                    <CFormGroup row>
+                    <CFormGroup row style={{ cursor: "text" }}>
                       <CCol md="3">
                         <CLabel
                           style={{ fontFamily: "Poppins" }}
@@ -932,6 +944,7 @@ export default function AddRecipe() {
                         >
                           <h6>
                             <strong>Enter Recipe Methods:</strong>
+                            <b style={{ color: "red" }}>*</b>
                           </h6>
                         </CLabel>
                       </CCol>
@@ -971,6 +984,7 @@ export default function AddRecipe() {
                         <CLabel>
                           <h6>
                             <strong>Quantity served:</strong>
+                            <b style={{ color: "red" }}>*</b>
                           </h6>
                         </CLabel>
                       </CCol>
@@ -998,11 +1012,13 @@ export default function AddRecipe() {
                         <CLabel htmlFor="recipe_type">
                           <h6>
                             <strong>Recipe Type:</strong>
+                            <b style={{ color: "red" }}>*</b>
                           </h6>
                         </CLabel>
                       </CCol>
                       <CCol xs="12" md="9">
                         <CSelect
+                          style={{ cursor: "pointer" }}
                           value={show.recipe_type}
                           onChange={handleTypeChange}
                           onBlur={handleTypeChange}
@@ -1023,65 +1039,69 @@ export default function AddRecipe() {
                             {error.recipe_type.error}
                           </div>
                         )}
-                      
-                      
-                      {show.recipe_type == 1 || show.recipe_type == 2 ? (
-                        <CCol
-                          xs="12"
-                          md="12"
-                          style={{ marginLeft: "", marginTop: "0.5rem" }}
-                        >
-                          <CSelect
-                            value={show.recipe_sub_type}
-                            onChange={handleSubTypeChange}
-                            onBlur={handleSubTypeChange}
-                            custom
-                            name="recipe_sub_type"
-                            id="recipe_sub_type"
-                            options={
-                              show.recipe_type
+
+                        {show.recipe_type == 1 || show.recipe_type == 2 ? (
+                          <CCol
+                            xs="12"
+                            md="12"
+                            style={{ marginLeft: "", marginTop: "0.5rem" }}
+                          >
+                            <CSelect
+                              value={show.recipe_sub_type}
+                              onChange={handleSubTypeChange}
+                              onBlur={handleSubTypeChange}
+                              custom
+                              name="recipe_sub_type"
+                              id="recipe_sub_type"
+                              options={
+                                show.recipe_type
+                                  ? show.recipe_type == 1
+                                    ? vegType
+                                    : nonVegType
+                                  : recipeType == 1
+                                  ? vegType
+                                  : nonVegType
+                              }
+                            >
+                              <option value="none">
+                                Select recipe sub type
+                              </option>
+                              {(show.recipe_type
                                 ? show.recipe_type == 1
                                   ? vegType
                                   : nonVegType
                                 : recipeType == 1
                                 ? vegType
                                 : nonVegType
-                            }
-                          >
-                            <option value="none">Select recipe sub type</option>
-                            {(show.recipe_type
-                              ? show.recipe_type == 1
-                                ? vegType
-                                : nonVegType
-                              : recipeType == 1
-                              ? vegType
-                              : nonVegType
-                            ).map((item, index) => (
-                              <option key={index} value={item.value}>
-                                {item.label}
-                              </option>
-                            ))}
-                          </CSelect>
-                          {error.recipe_sub_type.error && (
-                            <div className="email-validate">
-                              {error.recipe_sub_type.error}
-                            </div>
-                          )}
-                        </CCol>
-                      ) : (
-                        ""
-                      )}</CCol>
+                              ).map((item, index) => (
+                                <option key={index} value={item.value}>
+                                  {item.label}
+                                </option>
+                              ))}
+                            </CSelect>
+                            {error.recipe_sub_type.error && (
+                              <div className="email-validate">
+                                {error.recipe_sub_type.error}
+                              </div>
+                            )}
+                          </CCol>
+                        ) : (
+                          ""
+                        )}
+                      </CCol>
                     </CFormGroup>
                     <CFormGroup row>
                       <CCol md="3">
                         <CLabel htmlFor="hf-category">
                           <h6>
                             <strong>Phase:</strong>
+                            <b style={{ color: "red" }}>*</b>
                           </h6>
                         </CLabel>
                       </CCol>
                       <CCol xs="12" md="9">
                         <CSelect
+                          style={{ cursor: "pointer" }}
                           value={show.phase_id}
                           onChange={handleCategoryIdChange}
                           onBlur={handleCategoryIdChange}

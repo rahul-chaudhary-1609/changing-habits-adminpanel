@@ -288,7 +288,6 @@ export default function ViewRecipe() {
                                 backgroundColor: "lightgray",
                                 textAlign: "center",
                                 height: "100px",
-                                cursor: "pointer",
                               }}
                               src={show.recipe_image_url}
                               title={show.recipe_image_url}

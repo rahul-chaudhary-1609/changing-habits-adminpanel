@@ -119,6 +119,19 @@ function AddEditOnboardingQuiz() {
   }, [optionInputFields]);
 
   useEffect(() => {
+    if (questionType == "1") {
+      setCorrectOption([]);
+    }
+    if (questionType == "3") {
+      setCorrectOption([]);
+      setOptionInputFields([
+        { option_no: 1, option_value: "", isRequired: false, check: false },
+        { option_no: 2, option_value: "", isRequired: false, check: false },
+      ]);
+    }
+  }, [questionType]);
+
+  useEffect(() => {
     setErrorResponse({ message: null, code: null, isFound: false });
     setSuccessResponse({ message: null, code: null, isFound: false });
   }, [question, description, correctOption, optionInputFields]);
@@ -135,7 +148,7 @@ function AddEditOnboardingQuiz() {
         .then((response) => {
           setErrorResponse({ message: null, code: null, isFound: false });
           setCategory(response.onboardingQuizDetails.category_type);
-          setQuestionType(response.onboardingQuizDetails.question_type);
+          setQuestionType(String(response.onboardingQuizDetails.question_type));
           setQuestion(response.onboardingQuizDetails.question);
           setDescription(response.onboardingQuizDetails.description);
           customEditorRef.current.updateEditorValue();
@@ -216,6 +229,9 @@ function AddEditOnboardingQuiz() {
           });
         });
     }
+  }, []);
+
+  useEffect(() => {
     handleQuestionTypes();
   }, [category]);
 
@@ -633,15 +649,44 @@ function AddEditOnboardingQuiz() {
                         Select Question Type
                       </option>
                       {listQuestionTypes.map((listQuestion) => {
-                        return (
-                          <option
-                            key={listQuestion.option_no}
-                            value={listQuestion.option_no}
-                          >
-                            {" "}
-                            {listQuestion.option_value}
-                          </option>
-                        );
+                        if (!params.id) {
+                          return (
+                            <option
+                              key={listQuestion.option_no}
+                              value={listQuestion.option_no}
+                            >
+                              {" "}
+                              {listQuestion.option_value}
+                            </option>
+                          );
+                        } else {
+                          if (category == "3" || category == "0") {
+                            return (
+                              <option
+                                key={listQuestion.option_no}
+                                value={listQuestion.option_no}
+                              >
+                                {" "}
+                                {listQuestion.option_value}
+                              </option>
+                            );
+                          } else if (
+                            questionType != "3" &&
+                            listQuestion.option_no == "3"
+                          ) {
+                            return null;
+                          } else {
+                            return (
+                              <option
+                                key={listQuestion.option_no}
+                                value={listQuestion.option_no}
+                              >
+                                {" "}
+                                {listQuestion.option_value}
+                              </option>
+                            );
+                          }
+                        }
                       })}
                     </CSelect>
                     <div
