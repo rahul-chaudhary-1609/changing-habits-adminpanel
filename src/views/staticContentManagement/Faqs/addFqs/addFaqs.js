@@ -21,10 +21,10 @@ const AddFaqs = () => {
 
   const handleValidation = () => {
     let error = false;
-    if (data.question === "") {
+    if (data.question.trim() === "") {
       setError("Please fill the question ");
       error = true;
-    } else if (data.answer === "") {
+    } else if (data.answer.trim() === "") {
       setError("Please fill the answer ");
       error = true;
     }

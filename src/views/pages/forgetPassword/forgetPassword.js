@@ -41,7 +41,7 @@ export default function Forgetpassword() {
         );
         setTimeout(() => {
           history.push("/login");
-        }, 1500);
+        }, 5000);
       }
     } catch (error) {
       setLoading(false);

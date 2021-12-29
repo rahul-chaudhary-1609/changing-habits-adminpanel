@@ -66,7 +66,9 @@ function ViewOnboardingQuiz(props) {
           setQuestionType(questionTypeDisplay[0].option_value);
           // setQuestionTypeNumber(questionTypeDisplay[0].option_no);
           setQuestion(response.onboardingQuizDetails.question);
-          setDescription(response.onboardingQuizDetails.description);
+          if (response.onboardingQuizDetails.description !== null) {
+            setDescription(response.onboardingQuizDetails.description);
+          }
           let currentOptionInputFields = [
             {
               option_no: 1,
@@ -107,7 +109,7 @@ function ViewOnboardingQuiz(props) {
               isRequired: false,
             });
           }
-          console.log("input fields===========  ", currentOptionInputFields);
+          //console.log("input fields===========  ", currentOptionInputFields);
 
           setOptionInputFields(currentOptionInputFields);
           // let answer = currentOptionInputFields.find(
@@ -116,23 +118,25 @@ function ViewOnboardingQuiz(props) {
           //     response.onboardingQuizDetails.correct_option
           // );
           console.log(response);
-          if (response.onboardingQuizDetails.question_type !== 3) {
-            let answer = [];
-            for (let i = 0; i < currentOptionInputFields.length; i++) {
-              for (
-                let j = 0;
-                j < response.onboardingQuizDetails.correct_option.length;
-                j++
-              ) {
-                if (
-                  response.onboardingQuizDetails.correct_option[j] ==
-                  currentOptionInputFields[i].option_no
+          if (response.onboardingQuizDetails.correct_option !== null) {
+            if (response.onboardingQuizDetails.question_type !== 3) {
+              let answer = [];
+              for (let i = 0; i < currentOptionInputFields.length; i++) {
+                for (
+                  let j = 0;
+                  j < response.onboardingQuizDetails.correct_option.length;
+                  j++
                 ) {
-                  answer.push(currentOptionInputFields[i].option_value);
+                  if (
+                    response.onboardingQuizDetails.correct_option[j] ==
+                    currentOptionInputFields[i].option_no
+                  ) {
+                    answer.push(currentOptionInputFields[i].option_value);
+                  }
                 }
               }
+              setCorrectOption(answer.toString());
             }
-            setCorrectOption(answer.toString());
           }
           //console.log(correctOption);
           setSpinnerShow(false);

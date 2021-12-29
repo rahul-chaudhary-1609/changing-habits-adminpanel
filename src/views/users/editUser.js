@@ -282,6 +282,7 @@ export default function EditUser(props) {
                         name="profile_picture_url"
                         type="file"
                         className="hidden"
+                        accept=".png, .jpg"
                         onChange={(e) => {
                           formik.setFieldValue("profile_picture_url", "");
 
@@ -507,6 +508,7 @@ export default function EditUser(props) {
                       <CInputFile
                         name="profile_picture_url"
                         type="file"
+                        accept=".png, .jpg"
                         className="hidden"
                         onChange={(e) => {
                           formik.setFieldValue("profile_picture_url", "");

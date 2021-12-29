@@ -349,10 +349,10 @@ const Recipes = () => {
 
   const handleReset = () => {
     setOnSearchChange("");
-    setRecipeType({value:null});
-    setRecipeStatus({value:null});
-    setPhaseId({value:null});
-    setSubType({value:null});
+    setRecipeType({ value: null });
+    setRecipeStatus({ value: null });
+    setPhaseId({ value: null });
+    setSubType({ value: null });
     let newPage = page;
     if (newPage === 0) {
       newPage = 1;
@@ -637,7 +637,9 @@ const Recipes = () => {
                         {item.name}
                       </>
                     ) : (
-                      <><b>Admin :</b> {item.name}</>
+                      <>
+                        <b>Admin :</b> {item.name}
+                      </>
                     )}
                   </td>
                 ),

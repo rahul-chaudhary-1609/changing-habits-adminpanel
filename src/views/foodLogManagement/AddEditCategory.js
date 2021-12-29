@@ -1,238 +1,342 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useHistory,useParams } from "react-router-dom";
-import Select from 'react-select';
-import {    
-    CCardBody,
-    CContainer,
-    CRow,
-    CCol,
-    CCard,
-    CCardHeader,
-    CForm,
-    CFormGroup,
-    CLabel,
-    CInput,
+import { useHistory, useParams } from "react-router-dom";
+import Select from "react-select";
+import {
+  CCardBody,
+  CContainer,
+  CRow,
+  CCol,
+  CCard,
+  CCardHeader,
+  CForm,
+  CFormGroup,
+  CLabel,
+  CInput,
   CButton,
   CSelect,
-  CSpinner
-} from "@coreui/react"
-import {listPhases,getFoodLogCategory,addFoodLogCategory,editFoodLogCategory} from "../../data/foodLogManagement"
-import {phaseList} from "../../utils/helper";
+  CSpinner,
+} from "@coreui/react";
+import {
+  listPhases,
+  getFoodLogCategory,
+  addFoodLogCategory,
+  editFoodLogCategory,
+} from "../../data/foodLogManagement";
+import { phaseList } from "../../utils/helper";
 
 function AddEditFoodLogCategory() {
   let history = useHistory();
   let params = useParams();
 
   let [categoryName, setCategoryName] = useState("");
-  let [categoryNameCheck,setCategoryNameCheck ] = useState(false);
+  let [categoryNameCheck, setCategoryNameCheck] = useState(false);
   let [phase, setPhase] = useState([]);
-  let [phaseCheck,setPhaseCheck] = useState(false);
+  let [phaseCheck, setPhaseCheck] = useState(false);
   let [errorResponse, setErrorResponse] = useState({
-        message: null,
-        code: null,
-        isFound: false,
-  });
-  
-  let [successResponse, setSuccessResponse] = useState({
-        message: null,
-        code: 200,
-        isFound: true,
+    message: null,
+    code: null,
+    isFound: false,
   });
 
-  let [spinnerShow,setSpinnerShow]=useState(false)
+  let [successResponse, setSuccessResponse] = useState({
+    message: null,
+    code: 200,
+    isFound: true,
+  });
+
+  let [spinnerShow, setSpinnerShow] = useState(false);
   //let spinnerShow = false;
 
   useEffect(() => {
-    console.log("phase",phase)
-    setErrorResponse({ message: null, code: null, isFound: false })
-    setSuccessResponse({ message: null, code: null, isFound: false })
-  },[categoryName,phase])
+    console.log("phase", phase);
+    setErrorResponse({ message: null, code: null, isFound: false });
+    setSuccessResponse({ message: null, code: null, isFound: false });
+  }, [categoryName, phase]);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (params.id) {
       let req = {
         pathParams: {
-            id: params.id,
+          id: params.id,
         },
-      }
-      setSpinnerShow(true)
-      getFoodLogCategory(req).then((response) => {
-        setErrorResponse({ message: null, code: null, isFound: false })
-        setCategoryName(response.foodType.food_type)
-        setPhase([phaseList.find(ph=>ph.id==response.foodType.phase_id)])
-        setSpinnerShow(false)
-        
-      }).catch((error) => {
-        setSpinnerShow(false)
-        setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
-      })
+      };
+      setSpinnerShow(true);
+      getFoodLogCategory(req)
+        .then((response) => {
+          setErrorResponse({ message: null, code: null, isFound: false });
+          setCategoryName(response.foodType.food_type);
+          setPhase([
+            phaseList.find((ph) => ph.id == response.foodType.phase_id),
+          ]);
+          setSpinnerShow(false);
+        })
+        .catch((error) => {
+          setSpinnerShow(false);
+          setErrorResponse({
+            message: error.message || null,
+            code: error.status || null,
+            isFound: true,
+          });
+        });
     }
-  }, [])
+  }, []);
 
   let validateField = () => {
     let result = true;
     if (!categoryName || categoryName.trim() == "") {
-      setCategoryNameCheck(true)
-      result=false
+      setCategoryNameCheck(true);
+      result = false;
     }
     if (phase.length == 0) {
-      setPhaseCheck(true)
-      result=false
+      setPhaseCheck(true);
+      result = false;
     }
 
-    return result
-  }
-
-
+    return result;
+  };
 
   let handleSubmit = (e) => {
     e.preventDefault();
     if (!validateField()) {
-      return
+      return;
     }
-    setSpinnerShow(true)
-    setErrorResponse({ message: null, code: null, isFound: false })
-    setSuccessResponse({ message: null, code: null, isFound: false })
+    setSpinnerShow(true);
+    setErrorResponse({ message: null, code: null, isFound: false });
+    setSuccessResponse({ message: null, code: null, isFound: false });
 
-    
     let data = {
       food_type: categoryName,
-    }
-    
-    if (params.id) {
+    };
 
-      data={
+    if (params.id) {
+      data = {
         ...data,
-        phase_id: phase[0].id//phase
-      }
+        phase_id: phase[0].id, //phase
+      };
 
       let req = {
         pathParams: {
           id: params.id,
         },
-        data
-      }
+        data,
+      };
 
-      editFoodLogCategory(req).then((response) => {
-        setSpinnerShow(false)
-        setErrorResponse({ message: null, code: null, isFound: false })
-        setSuccessResponse({ message: "Updated Successfully" || null, code: 200 || null, isFound: true })
-        history.push('/listFoodLogCategory')
-      }).catch((error) => {
-        setSpinnerShow(false)
-        setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
-      })
+      editFoodLogCategory(req)
+        .then((response) => {
+          setSpinnerShow(false);
+          setErrorResponse({ message: null, code: null, isFound: false });
+          setSuccessResponse({
+            message: "Updated Successfully" || null,
+            code: 200 || null,
+            isFound: true,
+          });
+          history.push("/listFoodLogCategory");
+        })
+        .catch((error) => {
+          setSpinnerShow(false);
+          setErrorResponse({
+            message: error.message || null,
+            code: error.status || null,
+            isFound: true,
+          });
+        });
     } else {
-
-      data={
+      data = {
         ...data,
-        phase_id: phase.map(ph=>ph.id)//phase
-      }
+        phase_id: phase.map((ph) => ph.id), //phase
+      };
 
       let req = {
-        data
-      }
-      addFoodLogCategory(req).then((response) => {
-        setSpinnerShow(false)
-        setErrorResponse({ message: null, code: null, isFound: false })
-        setSuccessResponse({ message: "Saved Successfully" || null, code: 200 || null, isFound: true })
-        history.push('/listFoodLogCategory')
-      }).catch((error) => {
-        setSpinnerShow(false)
-        setErrorResponse({ message: error.message || null, code: error.status || null, isFound: true })
-      })
-    }    
-  }
+        data,
+      };
+      addFoodLogCategory(req)
+        .then((response) => {
+          setSpinnerShow(false);
+          setErrorResponse({ message: null, code: null, isFound: false });
+          setSuccessResponse({
+            message: "Saved Successfully" || null,
+            code: 200 || null,
+            isFound: true,
+          });
+          history.push("/listFoodLogCategory");
+        })
+        .catch((error) => {
+          setSpinnerShow(false);
+          setErrorResponse({
+            message: error.message || null,
+            code: error.status || null,
+            isFound: true,
+          });
+        });
+    }
+  };
 
   let handleReset = (e) => {
     e.preventDefault();
-    setSpinnerShow(false)
-    setCategoryName("")
-    setPhase(1)
-    setPhaseCheck(false)
-    setCategoryNameCheck(false)
-  }
+    setSpinnerShow(false);
+    setCategoryName("");
+    setPhase(1);
+    setPhaseCheck(false);
+    setCategoryNameCheck(false);
+  };
 
-    return (
+  return (
     <CContainer fluid>
       <CRow>
-          <CCol sm="12">
-            <CCard>
-              <CCardHeader>
-                <div style={{display:"flex", justifyContent:"space-between"}}>
-                  <h2>{history.location.pathname == "/addFoodLogCategory" ? "Add Food Log Category" : "Edit Food Log Category"}
-                  <CSpinner style={{color:"#008080", marginLeft:"2rem", display:spinnerShow?"":"none"}} /></h2>
-                    {/* <CButton
+        <CCol sm="12">
+          <CCard>
+            <CCardHeader>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <h2>
+                  {history.location.pathname == "/addFoodLogCategory"
+                    ? "Add Food Log Category"
+                    : "Edit Food Log Category"}
+                  <CSpinner
+                    style={{
+                      color: "#008080",
+                      marginLeft: "2rem",
+                      display: spinnerShow ? "" : "none",
+                    }}
+                  />
+                </h2>
+                {/* <CButton
                         style={{ width: "5rem",backgroundColor:"#008080",color:"#fff"}}
                         onClick={()=>history.goBack()}
                     >
                         <strong>Back</strong>
                     </CButton> */}
+              </div>
+            </CCardHeader>
+            <CCardBody>
+              <div
+                style={{
+                  color: "red",
+                  fontSize: "1rem",
+                  display: errorResponse.isFound ? "flex" : "none",
+                  justifyContent: "center",
+                }}
+              >
+                <div>
+                  <h5>{errorResponse.message}</h5>
                 </div>
-                                            
-              </CCardHeader>
-              <CCardBody>
-                <div style={{color:"red",fontSize:"1rem", display:errorResponse.isFound?"flex":"none", justifyContent:"center"}}>
-                  <div><h5>{ errorResponse.message}</h5></div>
+              </div>
+              <div
+                style={{
+                  color: "green",
+                  fontSize: "1rem",
+                  display: successResponse.isFound ? "flex" : "none",
+                  justifyContent: "center",
+                }}
+              >
+                <div>
+                  <h5>{successResponse.message}</h5>
                 </div>
-                <div style={{color:"green",fontSize:"1rem", display:successResponse.isFound?"flex":"none", justifyContent:"center"}}>
-                  <div><h5>{ successResponse.message}</h5></div>
-                  </div>
-                  <CForm action="" method="post" onSubmit={handleSubmit}  autoComplete="off">
-                      <CFormGroup>
-          
-                          <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="phase">Phase:</CLabel>
-                          
-                    <Select 
-                        options={phaseList}
-                        isMulti={params.id?false:true}
-                        placeholder="Select Phase"
-                        onChange={(e) => {
-                          console.log(e)
-                          console.log(e)
-                          setPhaseCheck(false)
-                          params.id?setPhase([e]):setPhase(e)
-                        }}
-                        value={phase}/>
-                    <div style={{color:"red",marginLeft:"0.1rem", display:phaseCheck?"":"none"}}>Phase is required</div>
-                      </CFormGroup>
-                                
-                  <CFormGroup >                    
-                      <CLabel style={{fontWeight:"600",fontSize:"1rem"}} htmlFor="category_name">Category Name:</CLabel>
-                    <CInput
-                      onChange={(e) => {
-                        setCategoryNameCheck(false)
-                        setCategoryName(e.target.value)
-                      }}
-                      value={categoryName}
-                      type="text"
-                      id="category_name"
-                      name="category_name"
-                      placeholder="Enter Category Name"
-                      //required
-                    />
-                    <div style={{color:"red",marginLeft:"0.1rem", display:categoryNameCheck?"":"none"}}>Category name is required</div>
-                  </CFormGroup>
+              </div>
+              <CForm
+                action=""
+                method="post"
+                onSubmit={handleSubmit}
+                autoComplete="off"
+              >
+                <CFormGroup>
+                  <CLabel
+                    style={{ fontWeight: "600", fontSize: "1rem" }}
+                    htmlFor="phase"
+                  >
+                    Phase:
+                  </CLabel>
 
-                  
-                  
-                 <CFormGroup style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
-                    <CButton
-                      disabled={spinnerShow}
-                      style={{ width: "5rem", marginRight:"3rem",backgroundColor: "#008080", color: "#fff" }}
-                      type="submit"
-                    >{spinnerShow?<CSpinner style={{ color: "#fff"}} size="sm" />:"Save"}</CButton>
-                    <CButton style={{width:"5rem",marginLeft:"3rem"}} color="danger" onClick={(e)=>history.goBack()} >Cancel</CButton>
-                  </CFormGroup>
-                  
-                  </CForm>
-              </CCardBody>
-            </CCard>
+                  <Select
+                    options={phaseList}
+                    isMulti={params.id ? false : true}
+                    placeholder="Select Phase"
+                    onChange={(e) => {
+                      console.log(e);
+                      console.log(e);
+                      setPhaseCheck(false);
+                      params.id ? setPhase([e]) : setPhase(e);
+                    }}
+                    value={phase}
+                  />
+                  <div
+                    style={{
+                      color: "red",
+                      marginLeft: "0.1rem",
+                      display: phaseCheck ? "" : "none",
+                    }}
+                  >
+                    Phase is required
+                  </div>
+                </CFormGroup>
+
+                <CFormGroup>
+                  <CLabel
+                    style={{ fontWeight: "600", fontSize: "1rem" }}
+                    htmlFor="category_name"
+                  >
+                    Category Name:
+                  </CLabel>
+                  <CInput
+                    onChange={(e) => {
+                      setCategoryNameCheck(false);
+                      setCategoryName(e.target.value);
+                    }}
+                    value={categoryName}
+                    type="text"
+                    id="category_name"
+                    name="category_name"
+                    placeholder="Enter Category Name"
+                    //required
+                  />
+                  <div
+                    style={{
+                      color: "red",
+                      marginLeft: "0.1rem",
+                      display: categoryNameCheck ? "" : "none",
+                    }}
+                  >
+                    Category name is required
+                  </div>
+                </CFormGroup>
+
+                <CFormGroup
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <CButton
+                    disabled={spinnerShow}
+                    style={{
+                      width: "5rem",
+                      marginRight: "3rem",
+                      backgroundColor: "#008080",
+                      color: "#fff",
+                    }}
+                    type="submit"
+                  >
+                    {spinnerShow ? (
+                      <CSpinner style={{ color: "#fff" }} size="sm" />
+                    ) : (
+                      "Save"
+                    )}
+                  </CButton>
+                  <CButton
+                    style={{ width: "5rem", marginLeft: "3rem" }}
+                    color="danger"
+                    onClick={(e) => history.goBack()}
+                  >
+                    Cancel
+                  </CButton>
+                </CFormGroup>
+              </CForm>
+            </CCardBody>
+          </CCard>
         </CCol>
       </CRow>
     </CContainer>
-  )
-  
+  );
 }
 
-export default AddEditFoodLogCategory
+export default AddEditFoodLogCategory;

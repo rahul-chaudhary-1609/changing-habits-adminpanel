@@ -197,8 +197,8 @@ const Users = () => {
 
   const handleReset = () => {
     setOnSearchChange("");
-    setAccountType({value:null});
-    setUsersType({value:null});
+    setAccountType({ value: null });
+    setUsersType({ value: null });
     let newPage = page;
     if (newPage === 0) {
       newPage = 1;

@@ -96,7 +96,7 @@ function AddEditOnboardingQuiz() {
     isFound: false,
   });
 
-  console.log(correctOption, "correctOptioncorrectOption");
+  //console.log(correctOption, "correctOptioncorrectOption");
 
   let [successResponse, setSuccessResponse] = useState({
     message: null,
@@ -293,19 +293,19 @@ function AddEditOnboardingQuiz() {
       setQuestionTypeCheck(true);
       result = false;
     }
-    if (!description || description.trim() == "") {
-      setDescriptionCheck(true);
-      result = false;
-    }
+    // if (!description || description.trim() == "") {
+    //   setDescriptionCheck(true);
+    //   result = false;
+    // }
 
-    if (!customEditorRef.current.validateEditorValue()) {
-      result = false;
-    }
+    // if (!customEditorRef.current.validateEditorValue()) {
+    //   result = false;
+    // }
 
-    if ((!correctOption || correctOption == 0) && questionType !== "3") {
-      setCorrectOptionCheck(true);
-      result = false;
-    }
+    // if ((!correctOption || correctOption == 0) && questionType !== "3") {
+    //   setCorrectOptionCheck(true);
+    //   result = false;
+    // }
 
     let currentOptionInputFields = [...optionInputFields];
     for (let optionInputField of currentOptionInputFields) {
@@ -440,7 +440,7 @@ function AddEditOnboardingQuiz() {
       category_type: category,
       question_type: questionType,
       question: question,
-      description: description,
+      description: description && description != "" ? description : null,
       correct_option:
         correctOptionArrayOtherQuestion && correctOptionArrayOtherQuestion != 0
           ? correctOptionArrayOtherQuestion
@@ -468,6 +468,7 @@ function AddEditOnboardingQuiz() {
         setQuestionType(""); //
         setQuestion("");
         setDescription("");
+        customEditorRef.current.updateEditorValue();
         setCorrectOption(0); //
         setOptionInputFields([
           { option_no: 1, option_value: "", isRequired: false, check: false },
@@ -516,6 +517,7 @@ function AddEditOnboardingQuiz() {
         return null;
       }
     });
+    correctOptionList = correctOptionList.filter((op) => op);
     correctOptionList.forEach((element) => console.log(element));
   };
 
@@ -839,7 +841,7 @@ function AddEditOnboardingQuiz() {
                     }
                     placeholder="Select Correct Option"
                     onChange={(e) => {
-                      console.log(e, "eeeeeeeeeeeeeee");
+                      console.log("eeeeeeeeeeeeeee", e);
                       setCorrectOptionCheck(false);
                       setCorrectOption(e);
                     }}
@@ -892,7 +894,7 @@ function AddEditOnboardingQuiz() {
                   </div>
                 </CFormGroup>
 
-                <CFormGroup>
+                <CFormGroup style={{ position: "sticky" }}>
                   <CLabel
                     style={{ fontWeight: "600", fontSize: "1rem" }}
                     htmlFor="description"
