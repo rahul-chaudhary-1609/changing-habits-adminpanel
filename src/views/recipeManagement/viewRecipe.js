@@ -310,7 +310,10 @@ export default function ViewRecipe() {
                         </CLabel>
                       </CCol>
                       <CCol xs="4" md="9" style={{ whiteSpace: "pre-line" }}>
-                        <ul className="flex flex-row md:flex-col">
+                        <ul
+                          className="flex flex-row md:flex-col"
+                          style={{ paddingLeft: "2%" }}
+                        >
                           {show &&
                             show.recipe_ingredients &&
                             show.recipe_ingredients.map((item, index) => {
@@ -338,8 +341,10 @@ export default function ViewRecipe() {
                       <CCol xs="4" md="9" style={{ whiteSpace: "pre-line" }}>
                         {/* {show.recipe_methods} */}
                         <CustomEditorViewer
-                        description={show.recipe_methods?show.recipe_methods:""}
-                      />
+                          description={
+                            show.recipe_methods ? show.recipe_methods : ""
+                          }
+                        />
                       </CCol>
                     </CFormGroup>
                     <CFormGroup row>
@@ -349,7 +354,7 @@ export default function ViewRecipe() {
                           htmlFor="recipe_type"
                         >
                           <h6>
-                            <strong>Recipe type : </strong>
+                            <strong>Recipe Type : </strong>
                           </h6>
                         </CLabel>
                       </CCol>

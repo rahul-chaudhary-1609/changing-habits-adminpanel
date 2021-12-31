@@ -123,7 +123,13 @@ const User = () => {
                     </td>
                     <td style={{ marginLeft: "10.4rem", borderTop: "none" }}>
                       <>
-                        {userData["email"] ? String(userData["email"]) : "N/A"}
+                        {userData["country_code"] + "-" + userData["phone_no"]
+                          ? String(
+                              userData["country_code"] +
+                                "-" +
+                                userData["phone_no"]
+                            )
+                          : "N/A"}
                       </>
                     </td>
                   </tr>

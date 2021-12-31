@@ -619,8 +619,7 @@ const Recipes = () => {
               underTableSlot={
                 <div style={{ marginBottom: "1rem" }}>
                   Showing {page * 10 - 9}-
-                  {page * 10 < data.length ? page * 10 : data.length} of{" "}
-                  {data.length}
+                  {page * 10 < data.length ? page * 10 : data.length} of {count}
                 </div>
               }
               scopedSlots={{

@@ -813,7 +813,7 @@ export default function AddRecipe() {
                                   >
                                     <div>
                                       <CSelect
-                                        custom
+                                        //custom
                                         className="selectpicker"
                                         onChange={(e) =>
                                           handleChangeQuantityFieldValue(
@@ -825,7 +825,7 @@ export default function AddRecipe() {
                                         value={quantityInputField.unit}
                                         id={`unit${quantityInputField.quantity_no}`}
                                         name={`unit${quantityInputField.quantity_no}`}
-                                        custom
+                                        // custom
                                         required
                                       >
                                         <option value="none" defaultValue>
@@ -1022,7 +1022,7 @@ export default function AddRecipe() {
                           value={show.recipe_type}
                           onChange={handleTypeChange}
                           onBlur={handleTypeChange}
-                          custom
+                          // custom
                           name="recipe_type"
                           id="recipe_type"
                           options={type}
@@ -1050,7 +1050,7 @@ export default function AddRecipe() {
                               value={show.recipe_sub_type}
                               onChange={handleSubTypeChange}
                               onBlur={handleSubTypeChange}
-                              custom
+                              // custom
                               name="recipe_sub_type"
                               id="recipe_sub_type"
                               options={
@@ -1105,7 +1105,7 @@ export default function AddRecipe() {
                           value={show.phase_id}
                           onChange={handleCategoryIdChange}
                           onBlur={handleCategoryIdChange}
-                          custom
+                          // custom
                           name="phase_id"
                           id="phase_id"
                           options={phase}

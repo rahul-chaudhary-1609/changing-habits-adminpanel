@@ -83,6 +83,7 @@ export default function EditUser(props) {
       const res = await ViewUserDetails(params.id);
       if (res.status == 200) {
         setUserDetails(res);
+        setCode(userDetails.country_code);
       }
     } catch (error) {
       console.log(error);
@@ -440,7 +441,7 @@ export default function EditUser(props) {
                   <CButton
                     style={{ width: "5rem" }}
                     color="danger"
-                    onClick={() => history.goBack()}
+                    onClick={() => history.push("/users")}
                   >
                     <strong>Cancel</strong>
                   </CButton>

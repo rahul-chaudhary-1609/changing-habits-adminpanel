@@ -7,7 +7,19 @@ export const loginValidation = () => {
       .required("Email or Phone is required")
       .trim()
       .nullable(),
-    password: yup.string().required("Password is required").trim().nullable(),
+    password: yup
+      .string()
+      .test(
+        "regex",
+        "Password must be min 6 characters and max 15 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
+        (val) => {
+          let regExp = new RegExp(
+            "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{6,15}$"
+          );
+
+          return regExp.test(val);
+        }
+      ),
   });
 };
 
@@ -17,10 +29,10 @@ export const newpasswordValidation = () => {
       .string()
       .test(
         "regex",
-        "Password must be min 8 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
+        "Password must be min 6 characters and max 15 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
         (val) => {
           let regExp = new RegExp(
-            "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+            "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{6,15}$"
           );
 
           return regExp.test(val);
@@ -52,10 +64,10 @@ export const ChangePasswordValidation = () => {
       .required("Old Password is required")
       .test(
         "regex",
-        "Password must be min 8 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
+        "Password must be min 6 characters and max 15 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
         (val) => {
           let regExp = new RegExp(
-            "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+            "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{6,15}$"
           );
 
           return regExp.test(val);
@@ -66,10 +78,10 @@ export const ChangePasswordValidation = () => {
       .required("New Password is required")
       .test(
         "regex",
-        "Password must be min 8 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
+        "Password must be min 6 characters and max 15 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
         (val) => {
           let regExp = new RegExp(
-            "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+            "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{6,15}$"
           );
 
           return regExp.test(val);
@@ -95,7 +107,8 @@ export const OTPvalidation = () => {
 };
 
 export const updateEmail = () => {
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
   return yup.object({
     name: yup
@@ -118,7 +131,8 @@ export const updateEmail = () => {
 };
 
 export const UserValidation = (subscriptionStatus) => {
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   return yup.object({
     name: yup
       .string()
@@ -153,11 +167,9 @@ export const ChangeUserPasswordValidation = () => {
       .required("New Password is required")
       .test(
         "regex",
-        "Password must be min 8 characters, and have 1 Special Character, 1 Uppercase, 1 Number and 1 Lowercase",
+        "Password must have minimum 6 and maximum 15 characters",
         (val) => {
-          let regExp = new RegExp(
-            "^(?=.*\\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
-          );
+          let regExp = new RegExp("^.{6,15}$");
 
           return regExp.test(val);
         }

@@ -53,7 +53,7 @@ export default function ChangePassword() {
         setModal(!modal);
         setLoading(false);
         setTimeout(() => {
-          history.push("/users");
+          history.push(`/editUser/${Number(params.id)}`);
         }, 1200);
       }
     } catch (error) {
