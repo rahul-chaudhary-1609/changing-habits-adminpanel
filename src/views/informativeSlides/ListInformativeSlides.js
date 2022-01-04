@@ -344,9 +344,9 @@ function ListInfromativeSlides() {
                   </CCol>
                 }
                 scopedSlots={{
-                  order: (item, index) => {
-                    //return <td>{arabToRoman(item.order)}</td>;
-                  },
+                  // order: (item, index) => {
+                  //   //return <td>{arabToRoman(item.order)}</td>;
+                  // },
                   action: (item, index) => {
                     return (
                       <td>
@@ -403,8 +403,8 @@ function ListInfromativeSlides() {
                               item.order > 1 && section > 0
                                 ? `Move Slide Up`
                                 : section <= 0
-                                ? `Please select specific section to perform this`
-                                : `Not Allowed`
+                                  ? `Please select specific section to perform this`
+                                  : `Not Allowed`
                             }
                             placement={"top-start"}
                           >
@@ -434,8 +434,8 @@ function ListInfromativeSlides() {
                               item.order < item.maxOrder && section > 0
                                 ? `Move Slide Down`
                                 : section <= 0
-                                ? `Please select specific section to perform this`
-                                : `Not Allowed`
+                                  ? `Please select specific section to perform this`
+                                  : `Not Allowed`
                             }
                             placement={"top-start"}
                           >
