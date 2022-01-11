@@ -87,7 +87,7 @@ const ListOnboardingQuiz = React.lazy(() =>
 );
 
 const AddEditOnbordingQuiz = React.lazy(() =>
-  import('./views/onboardingQuizManagement/AddEditOnboardingQuiz')
+  import("./views/onboardingQuizManagement/AddEditOnboardingQuiz")
 );
 
 const ViewOnboardingQuiz = React.lazy(() =>
@@ -99,11 +99,11 @@ const ListKnowledgeBlog = React.lazy(() =>
 );
 
 const AddEditKnowledgeBlog = React.lazy(() =>
-  import('./views/knowledgeCenterManagement/addEditKnowledgeBlog')
+  import("./views/knowledgeCenterManagement/addEditKnowledgeBlog")
 );
 
 const ViewKnowledgeBlog = React.lazy(() =>
-  import('./views/knowledgeCenterManagement/ViewKnowledgeBlog')
+  import("./views/knowledgeCenterManagement/ViewKnowledgeBlog")
 );
 
 const ListNotification = React.lazy(() =>
@@ -132,7 +132,7 @@ const ListFoodLogSuggestion = React.lazy(() =>
 
 const AddEditFoodLogSuggestion = React.lazy(() =>
   import("./views/foodLogManagement/AddEditSuggestion")
-)
+);
 
 const ViewFoodLogSuggestion = React.lazy(() =>
   import("./views/foodLogManagement/ViewSuggestion")
@@ -150,9 +150,7 @@ const ViewWeightGainReason = React.lazy(() =>
   import("./views/weightGainReasonManagement/ViewWeightGainReason")
 );
 
-const GetAnalytics = React.lazy(() =>
-  import("./views/analytics/GetAnalytics")
-);
+const GetAnalytics = React.lazy(() => import("./views/analytics/GetAnalytics"));
 
 const ListInformativeSlides = React.lazy(() =>
   import("./views/informativeSlides/ListInformativeSlides")
@@ -165,8 +163,6 @@ const AddEditInformativeSlide = React.lazy(() =>
 const ViewInformativeSlide = React.lazy(() =>
   import("./views/informativeSlides/ViewInformativeSlide")
 );
-
-
 
 const routes = [
   { path: "/", exact: true, name: "Users", component: User },
@@ -322,7 +318,6 @@ const routes = [
     component: AddEditLearningQuiz,
   },
 
-
   {
     path: `/listFoodLogCategory`,
     exact: true,
@@ -439,9 +434,8 @@ const routes = [
     component: ViewUserProgress,
   },
 
-
   {
-    path: `/listFoodLogSuggestion`,
+    path: `/listFoodLogSuggestion/:type`,
     exact: true,
     name: "List Food Log Suggestion",
     component: ListFoodLogSuggestion,

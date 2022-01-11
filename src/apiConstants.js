@@ -66,7 +66,6 @@ const apiConstant = {
   addOnboardingQuiz: "api/v1/admin/addOnboardingQuiz",
   listQuizContentType: "/api/v1/admin/listQuizContentType",
 
-
   //knowledge center management API's
   listBlog: "/api/v1/admin/listBlog",
   deleteBlog: "/api/v1/admin/deleteBlog",
@@ -111,6 +110,10 @@ const apiConstant = {
   addSlide: "/api/v1/admin/addSlide",
   editSlide: "/api/v1/admin/editSlide",
 
+  //suggestion PDFs API's
+  listSuggestionPdf: "/api/v1/admin/listSuggestionPdf",
+  toggleSuggestionPdfStatus: "/api/v1/admin/toggleSuggestionPdfStatus",
+  updateSuggestionPdf: "/api/v1/admin/updateSuggestionPdf",
 };
 
 export default apiConstant;
