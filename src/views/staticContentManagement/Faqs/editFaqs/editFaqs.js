@@ -14,6 +14,7 @@ const EditFqs = () => {
   const [faqs, setFaqs] = useState({});
   const [error, setError] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     faqById();
@@ -42,6 +43,8 @@ const EditFqs = () => {
   };
 
   const handleSubmit = () => {
+    console.log("------------------------");
+    setSubmitting(true);
     if (!handleValidation()) {
       let bodyData = {};
       bodyData.question = faqs.question;
@@ -58,9 +61,11 @@ const EditFqs = () => {
           }
         })
         .catch((error) => {
+          setSubmitting(false)
           setError(error);
         });
     }
+
   };
   return (
     <>
@@ -102,6 +107,7 @@ const EditFqs = () => {
               }}
               title="Click to add"
               onClick={handleSubmit}
+              disabled={submitting}
             >
               <strong>Save</strong>
             </CButton>

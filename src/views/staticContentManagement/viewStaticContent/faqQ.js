@@ -111,8 +111,7 @@ const FAQS = () => {
     setRefresh(!refresh);
     onsearchCHange &&
       history.push(
-        `/viewStaticContent/${id}/faqs?search=${onsearchCHange}&page=${
-          activePage ? activePage : 1
+        `/viewStaticContent/${id}/faqs?search=${onsearchCHange}&page=${activePage ? activePage : 1
         }`
       );
   };
@@ -209,7 +208,7 @@ const FAQS = () => {
                     color: "black",
                   }}
                   icon={faArrowLeft}
-                  onClick={() => history.goBack()}
+                  onClick={() => history.push('/static')}
                 />
               </strong>
             </CButton>
@@ -424,8 +423,8 @@ const FAQS = () => {
                 {qus.length < 1
                   ? 0
                   : qus.length < 11
-                  ? 1
-                  : 10 * (activePage - 1) + 1}{" "}
+                    ? 1
+                    : 10 * (activePage - 1) + 1}{" "}
                 - {qus.length} of {totalItems})
                 <div style={{ textAlign: "right" }}>
                   <CPagination
