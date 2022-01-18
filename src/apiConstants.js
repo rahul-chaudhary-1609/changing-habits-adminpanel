@@ -57,6 +57,8 @@ const apiConstant = {
   addFoodLogCategory: "/api/v1/admin/addFoodType",
   editFoodLogCategory: "/api/v1/admin/editFoodType",
   deleteFoodLogCategory: "/api/v1/admin/deleteFoodType",
+  getCategoryLogo: "/api/v1/admin/listLogos",
+  addCategoryLogo: "/api/v1/admin/addLogo",
 
   //onboarding quiz management API's
   listOnboardingQuiz: "/api/v1/admin/listOnboardingQuiz",
