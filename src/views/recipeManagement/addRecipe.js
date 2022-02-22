@@ -571,7 +571,7 @@ export default function AddRecipe() {
       body.recipe_title = show.recipe_title;
       body.serves_quantity = Number(show.serves_quantity);
       // body.recipe_methods = show.recipe_methods;
-      body.recipe_methods = description;
+      body.recipe_methods = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>${description}</body></html>`;
       body.recipe_ingredients = quantityInputFields.map(
         (quantityInputField) => {
           return {
@@ -598,7 +598,7 @@ export default function AddRecipe() {
       body.recipe_title = show.recipe_title;
       body.serves_quantity = Number(show.serves_quantity);
       // body.recipe_methods = show.recipe_methods;
-      body.recipe_methods = description;
+      body.recipe_methods = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>${description}</body></html>`;
       body.recipe_ingredients = quantityInputFields.map(
         (quantityInputField) => {
           return {
