@@ -298,7 +298,7 @@ function AddEditLearningQuiz() {
     console.log("correctOption", correctOption)
     let data = {
       question: question,
-      description: description,
+      description: `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>${description}</body></html>`,
       phase_id: phase,
       phase_day: phaseDay,
       correct_option: correctOption,
@@ -358,7 +358,7 @@ function AddEditLearningQuiz() {
     console.log("correctOption", correctOption)
     let data = {
       question: question,
-      description: description,
+      description: `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>${description}</body></html>`,
       phase_id: phase,
       phase_day: phaseDay,
       correct_option: correctOption,

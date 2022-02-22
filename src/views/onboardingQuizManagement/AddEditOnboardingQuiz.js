@@ -346,7 +346,7 @@ function AddEditOnboardingQuiz() {
       category_type: category,
       question_type: questionType,
       question: question,
-      description: description && description != "" ? description : null,
+      description: description && description != "" ? `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>${description}</body></html>` : null,
       correct_option:
         correctOptionArray && correctOptionArray != 0
           ? correctOptionArray
@@ -440,7 +440,7 @@ function AddEditOnboardingQuiz() {
       category_type: category,
       question_type: questionType,
       question: question,
-      description: description && description != "" ? description : null,
+      description: description && description != "" ? `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>${description}</body></html>` : null,
       correct_option:
         correctOptionArrayOtherQuestion && correctOptionArrayOtherQuestion != 0
           ? correctOptionArrayOtherQuestion

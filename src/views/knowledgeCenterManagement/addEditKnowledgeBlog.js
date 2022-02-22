@@ -341,7 +341,7 @@ function AddEditKnowledgeBlog(props) {
 
     let data = {
       title: title,
-      description: description,
+      description: `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>${description}</body></html>`,
       phase_id: phase.map((ph) => ph.id),
       // external_link: externalLink,
       content_type: contentType.map((content) => content.id),

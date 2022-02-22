@@ -207,7 +207,7 @@ function AddEditLearningContent(props) {
 
     let data = {
       title: title,
-      description: description,
+      description: `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>${description}</body></html>`,
       content_type: phychologicalContentTypeCheck ? 1 : 2,
       image_url: mediaInput.type == "image" ? mediaInput.source : null,
       video_url: mediaInput.type == "video" ? mediaInput.source : null,

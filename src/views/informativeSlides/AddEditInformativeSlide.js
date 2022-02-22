@@ -307,7 +307,7 @@ function AddEditInformativeSlide(props) {
 
     let data = {
       title: title,
-      description: description,
+      description: `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>${description}</body></html>`,
       section_id: section.id,
       image_url: mediaInput.type == "image" ? mediaInput.source : null,
     };
